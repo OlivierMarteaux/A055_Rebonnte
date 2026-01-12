@@ -24,6 +24,6 @@ class PostModule {
         application: Application
     ): PostRepository {
         val app = application as RebonnteApplication
-        return app.RebonnteContainer.postRepository
+        return app.rebonnteContainer.postRepository
     }
 }

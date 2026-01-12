@@ -24,6 +24,6 @@ class UserModule {
         application: Application
     ): UserRepository {
         val app = application as RebonnteApplication
-        return app.RebonnteContainer.userRepository
+        return app.rebonnteContainer.userRepository
     }
 }

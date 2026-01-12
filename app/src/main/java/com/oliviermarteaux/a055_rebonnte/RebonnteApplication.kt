@@ -21,7 +21,7 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class RebonnteApplication : Application(), SingletonImageLoader.Factory {
 
-    lateinit var RebonnteContainer: RebonnteContainer
+    lateinit var rebonnteContainer: RebonnteContainer
         internal set
 
     /**
@@ -41,7 +41,7 @@ class RebonnteApplication : Application(), SingletonImageLoader.Factory {
     override fun onCreate() {
         super.onCreate()
 
-        RebonnteContainer = createContainer()
+        rebonnteContainer = createContainer()
 
         try {
             //_ Firebase authentification: sign out user at app start
@@ -68,7 +68,7 @@ class RebonnteApplication : Application(), SingletonImageLoader.Factory {
         return try {
             // 👇 class exists ONLY in androidTest
             val androidTestContainerClass = Class.forName(
-                "com.oliviermarteaux.a055_Rebonnte.di.RebonnteTestContainer"
+                "com.oliviermarteaux.a055_rebonnte.di.RebonnteTestContainer"
             )
 
             val androidTestContainerConstructor =
