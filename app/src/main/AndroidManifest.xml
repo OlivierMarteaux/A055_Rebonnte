@@ -34,7 +34,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/a056_rebonnte"
+            android:label="@string/a055_rebonnte"
             android:theme="@style/Theme.A055_Rebonnte">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

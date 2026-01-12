@@ -1,7 +1,7 @@
 package com.oliviermarteaux.a055_rebonnte.di
 
 import android.app.Application
-import com.oliviermarteaux.a054_rebonnte.RebonnteApplication
+import com.oliviermarteaux.a055_rebonnte.RebonnteApplication
 import com.oliviermarteaux.shared.firebase.firestore.data.repository.PostRepository
 import dagger.Module
 import dagger.Provides
@@ -24,6 +24,6 @@ class PostModule {
         application: Application
     ): PostRepository {
         val app = application as RebonnteApplication
-        return app.rebonnteContainer.postRepository
+        return app.RebonnteContainer.postRepository
     }
 }

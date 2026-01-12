@@ -33,7 +33,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.oliviermarteaux.a055_rebonnte.R
-import com.oliviermarteaux.apikeys.GOOGLE_MAPS_API_KEY
 import com.oliviermarteaux.shared.firebase.firestore.domain.model.Post
 import com.oliviermarteaux.shared.firebase.firestore.ui.PostViewModel
 import com.oliviermarteaux.shared.composables.IconSource
@@ -214,14 +213,5 @@ fun DetailAddressCard(post: Post) {
             modifier = Modifier.weight(3/5f)
         )
         Spacer(Modifier.width(SharedPadding.large))
-        StaticGoogleMap(
-            address = post.address.fullAddress,
-            zoom = 16,
-            mapApiKey = GOOGLE_MAPS_API_KEY,
-            modifier = Modifier
-                .weight(2 / 5f)
-                .aspectRatio(149 / 72f)
-                .clip(MaterialTheme.shapes.medium)
-        )
     }
 }
