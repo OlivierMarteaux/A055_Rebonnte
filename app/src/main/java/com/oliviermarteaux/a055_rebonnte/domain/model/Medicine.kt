@@ -15,6 +15,6 @@ data class Medicine(
     val author: User? = User(),
     val creationDate: Date? = null,
     val creationTime: Date? = null,
-    val changeRecord: List<StockChange>
+    val changeRecord: List<StockChange> = emptyList()
 
 ): Serializable

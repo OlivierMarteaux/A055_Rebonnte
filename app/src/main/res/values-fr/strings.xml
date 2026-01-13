@@ -100,4 +100,11 @@
     <string name="enabled">activées</string>
     <string name="disabled">désactivées</string>
     <string name="notifications_setting_notifications_are_double_tap_to_toggle_notifications">Paramètres de notifications. Les notifications sont %1$s. Appuyer deux fois pour activer/désactiver les notifications.</string>
+    <string name="an_account_is_mandatory_to_add_or_edit_a_medicine">An account is mandatory to add or edit a medicine</string>
+    <string name="stock">Stock: %1$d</string>
+    <string name="add_a_new_aisle">Add a new aisle</string>
+    <string name="medicine_list">Medicine list</string>
+    <string name="aisle">Aisle</string>
+    <string name="medicines">Medicines</string>
+    <string name="aisles">Aisles</string>
 </resources>

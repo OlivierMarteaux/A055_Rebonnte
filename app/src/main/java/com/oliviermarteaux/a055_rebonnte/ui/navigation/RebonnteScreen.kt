@@ -1,7 +1,8 @@
 package com.oliviermarteaux.a055_rebonnte.ui.navigation
 
 import androidx.navigation.NamedNavArgument
-import com.oliviermarteaux.shared.compose.R
+import com.oliviermarteaux.a055_rebonnte.R
+import com.oliviermarteaux.shared.navigation.Screen
 
 /**
  * A sealed class that represents the different screens in the application.
@@ -15,11 +16,16 @@ sealed class RebonnteScreen(
     val routeWithArgs: String = "",
     val titleRes: Int = -1,
 ) {
-    /**
-     * The add aisle screen.
-     */
+    data object Home : RebonnteScreen(
+        route = "home",
+        titleRes = R.string.aisle
+    )
     data object AddAisle : RebonnteScreen(
         route = "add_aisle",
-        titleRes = R.string.creation_of_an_event,
+        titleRes = R.string.add_a_new_aisle
+    )
+    data object MedicineList : RebonnteScreen(
+        route = "medicine_list",
+        titleRes = R.string.medicine_list
     )
 }

@@ -7,9 +7,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.account.AccountScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.addAisle.AddAisleScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList.MedicineListScreen
 import com.oliviermarteaux.shared.cameraX.CameraScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.login.LoginScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.password.PasswordScreen
@@ -28,7 +30,8 @@ fun SharedNavGraph(
     navHostController: NavHostController,
     startDestination: String,
     logoRes: Int = -1,
-    aisleViewModel: AisleViewModel = hiltViewModel()
+    aisleViewModel: AisleViewModel = hiltViewModel(),
+    medicineViewModel: MedicineViewModel = hiltViewModel()
 ){
     NavHost(
         navController = navHostController,
@@ -83,13 +86,21 @@ fun SharedNavGraph(
                 logoDrawableRes = logoRes
             )
         }
-        /*_ HOME SCREEN ##############################################################################*/
-        composable(route = Screen.Home.route) {
+        /*_ AISLE SCREEN ##############################################################################*/
+        composable(route = RebonnteScreen.Home.route) {
             HomeScreen(
                 aisleViewModel = aisleViewModel,
                 navController = navHostController,
                 navigateToDetailScreen = {navHostController.navigate(Screen.Detail.route) },
                 navigateToAddScreen = { navHostController.navigate(RebonnteScreen.AddAisle.route) }
+            )
+        }
+        /*_ MEDICINE LIST SCREEN ##############################################################################*/
+        composable(route = RebonnteScreen.MedicineList.route) {
+            MedicineListScreen(
+                medicineViewModel = medicineViewModel,
+                navController = navHostController,
+                navigateToAddOrEditMedicineScreen = {},
             )
         }
         /*_ ACCOUNT SCREEN ###########################################################################*/
