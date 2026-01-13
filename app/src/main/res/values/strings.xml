@@ -1,5 +1,5 @@
 <resources>
-    <string name="a055_Rebonnte">Rebonnte application</string>
+    <string name="a055_rebonnte">Rebonnte application</string>
     <string name="event_list">Event list</string>
     <string name="email">Email</string>
     <string name="network_error_check_your_internet_connection">Network error, check your internet connection</string>

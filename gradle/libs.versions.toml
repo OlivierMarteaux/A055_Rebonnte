@@ -28,7 +28,7 @@ ksp = "2.2.20-2.0.3"
 lifecycleRuntimeKtx = "2.9.4"
 materialIconsExtended = "1.7.8"
 mockitoKotlin = "5.4.0"
-oliviermarteaux = "6.0.1"
+oliviermarteaux = "6.0.2"
 mockkVersion = "1.13.5"
 
 [libraries]

@@ -6,16 +6,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.oliviermarteaux.a055_rebonnte.R
+import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.account.AccountScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.add.AddScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.detail.DetailScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.addAisle.AddAisleScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeScreen
+import com.oliviermarteaux.shared.cameraX.CameraScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.login.LoginScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.password.PasswordScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.reset.ResetScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.splash.SplashScreen
-import com.oliviermarteaux.shared.firebase.firestore.ui.PostViewModel
-import com.oliviermarteaux.shared.cameraX.CameraScreen
 import com.oliviermarteaux.shared.navigation.Screen
 
 /**
@@ -29,7 +28,7 @@ fun SharedNavGraph(
     navHostController: NavHostController,
     startDestination: String,
     logoRes: Int = -1,
-    postViewModel: PostViewModel = hiltViewModel()
+    aisleViewModel: AisleViewModel = hiltViewModel()
 ){
     NavHost(
         navController = navHostController,
@@ -87,17 +86,10 @@ fun SharedNavGraph(
         /*_ HOME SCREEN ##############################################################################*/
         composable(route = Screen.Home.route) {
             HomeScreen(
-                postViewModel = postViewModel,
+                aisleViewModel = aisleViewModel,
                 navController = navHostController,
                 navigateToDetailScreen = {navHostController.navigate(Screen.Detail.route) },
-                navigateToAddScreen = { navHostController.navigate(Screen.Add.route) }
-            )
-        }
-        /*_ DETAIL SCREEN ###########################################################################*/
-        composable(route = Screen.Detail.route){
-            DetailScreen(
-                postViewModel = postViewModel,
-                onBackClick = { navHostController.navigateUp() },
+                navigateToAddScreen = { navHostController.navigate(RebonnteScreen.AddAisle.route) }
             )
         }
         /*_ ACCOUNT SCREEN ###########################################################################*/
@@ -106,11 +98,10 @@ fun SharedNavGraph(
                 navController = navHostController
             )
         }
-        /*_ ADD POST SCREEN ##########################################################################*/
-        composable(route = Screen.Add.route) {
-            AddScreen(
+        /*_ ADD AISLE SCREEN ##########################################################################*/
+        composable(route = RebonnteScreen.AddAisle.route) {
+            AddAisleScreen(
                 navigateBack = { navHostController.navigateUp() },
-                navigateToCamera = { navHostController.navigate(Screen.Camera.route) }
             )
         }
         /*_ CAMERA SCREEN ##########################################################################*/

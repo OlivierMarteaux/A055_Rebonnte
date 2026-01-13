@@ -7,10 +7,9 @@ import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
-import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
-import com.oliviermarteaux.a055_Rebonnte.di.RebonnteAppContainer
-import com.oliviermarteaux.a055_Rebonnte.di.RebonnteContainer
+import com.oliviermarteaux.a055_rebonnte.di.RebonnteAppContainer
+import com.oliviermarteaux.a055_rebonnte.di.RebonnteContainer
 import com.oliviermarteaux.shared.firebase.messaging.subscribeToFcmNotificationTopic
 import dagger.hilt.android.HiltAndroidApp
 
@@ -22,7 +21,7 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class RebonnteApplication : Application(), SingletonImageLoader.Factory {
 
-    lateinit var RebonnteContainer: RebonnteContainer
+    lateinit var rebonnteContainer: RebonnteContainer
         internal set
 
     /**
@@ -42,15 +41,9 @@ class RebonnteApplication : Application(), SingletonImageLoader.Factory {
     override fun onCreate() {
         super.onCreate()
 
-        RebonnteContainer = createContainer()
+        rebonnteContainer = createContainer()
 
         try {
-            //_ firebase init
-            FirebaseApp.initializeApp(this)
-            //_ firebase app check init
-            FirebaseAppCheck.getInstance().installAppCheckProviderFactory(
-                PlayIntegrityAppCheckProviderFactory.getInstance()
-            )
             //_ Firebase authentification: sign out user at app start
             FirebaseAuth.getInstance().signOut()
             val firebaseUser = FirebaseAuth.getInstance().currentUser
@@ -75,7 +68,7 @@ class RebonnteApplication : Application(), SingletonImageLoader.Factory {
         return try {
             // 👇 class exists ONLY in androidTest
             val androidTestContainerClass = Class.forName(
-                "com.oliviermarteaux.a055_Rebonnte.di.RebonnteTestContainer"
+                "com.oliviermarteaux.a055_rebonnte.di.RebonnteTestContainer"
             )
 
             val androidTestContainerConstructor =
