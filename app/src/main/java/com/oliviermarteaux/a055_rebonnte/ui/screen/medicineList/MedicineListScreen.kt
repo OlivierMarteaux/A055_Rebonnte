@@ -83,25 +83,38 @@ fun MedicineListScreen(
     navigateToAddOrEditMedicineScreen: () -> Unit = {}
 ) {
     with(medicineListViewModel) {
-        with (medicineViewModel) {
+        with(medicineViewModel) {
 
             var searchBarDisplayed by rememberSaveable { mutableStateOf(false) }
-            fun toggleSearchBar(){ searchBarDisplayed = !searchBarDisplayed }
-            fun hideSearchBar(){ searchBarDisplayed = false }
+            fun toggleSearchBar() {
+                searchBarDisplayed = !searchBarDisplayed
+            }
+
+            fun hideSearchBar() {
+                searchBarDisplayed = false
+            }
 
             var fabDisplayed by rememberSaveable { mutableStateOf(false) }
-            fun showFab(){ fabDisplayed = true }
-            fun hideFab(){ fabDisplayed = false }
+            fun showFab() {
+                fabDisplayed = true
+            }
 
-            val onSearchFocusRequester = remember{ FocusRequester() }
+            fun hideFab() {
+                fabDisplayed = false
+            }
+
+            val onSearchFocusRequester = remember { FocusRequester() }
             var searchResultFocused by mutableStateOf(false)
-            fun focusOnSearchResult(){
+            fun focusOnSearchResult() {
                 Log.d("OM_TAG", "HomeScreen: focusOnSearchResult")
                 searchResultFocused = !searchResultFocused
             }
             LaunchedEffect(searchResultFocused) {
                 delay(1000)
-                Log.d("OM_TAG", "HomeScreen: LaunchedEffect: searchResultFocused = $searchResultFocused" )
+                Log.d(
+                    "OM_TAG",
+                    "HomeScreen: LaunchedEffect: searchResultFocused = $searchResultFocused"
+                )
                 onSearchFocusRequester.requestFocus()
             }
 
@@ -121,7 +134,7 @@ fun MedicineListScreen(
                 searchLabel = stringResource(R.string.look_for_an_event),
                 searchBarIcon = IconSource.VectorIcon(Icons.Default.Clear),
                 searchBarIconSemantics = cdCustomAccessibilityActionClear,
-                onSearchBarIconClick = {clearQuery(); hideSearchBar()},
+                onSearchBarIconClick = { clearQuery(); hideSearchBar() },
                 toggleSearchBar = ::toggleSearchBar,
                 searchBarDisplayed = searchBarDisplayed,
                 onSearch = { focusOnSearchResult() },
@@ -138,7 +151,11 @@ fun MedicineListScreen(
                 fabModifier = modifier.testTag("Add"),
                 onFabClick = {
                     checkUserState(
-                        onUserLogged = { hideSearchBar(); navigateToAddOrEditMedicineScreen() },
+                        onUserLogged = {
+                            hideSearchBar();
+                            selectMedicine(Medicine())
+                            navigateToAddOrEditMedicineScreen()
+                        },
                         onNoUserLogged = ::showAuthErrorToast
                     )
                 }
@@ -166,10 +183,12 @@ fun MedicineListScreen(
                                 )
                             )
                         }
+
                         is ListUiState.Empty -> {
                             showFab()
                             SharedToast("No medicine available")
                         }
+
                         is ListUiState.Error -> {
                             hideFab()
                             ErrorScreen(
@@ -210,13 +229,6 @@ fun MedicineListScreen(
     }
 }
 
-/**
- * A composable that displays a list of medicines.
- *
- * @param modifier The modifier to apply to this composable.
- * @param medicines The list of medicines to display.
- * @param navigateToDetailScreen A function to call when a medicine is clicked.
- */
 @Composable
 private fun MedicineList(
     modifier: Modifier = Modifier,
@@ -238,9 +250,11 @@ private fun MedicineList(
             itemsIndexed(medicineList) { index, medicine ->
                 MedicineCell(
                     medicine = medicine,
-                    navigateToAddOrEditMedicineScreen = navigateToAddOrEditMedicineScreen,
-                    selectMedicine = selectMedicine,
-                    hideSearchBar = hideSearchBar,
+                    onClick = {
+                        hideSearchBar()
+                        selectMedicine(medicine)
+                        navigateToAddOrEditMedicineScreen()
+                    },
                     modifier = Modifier.semantics {
                         collectionItemInfo = CollectionItemInfo(index, 1, 0, 1)
                     }
@@ -258,9 +272,7 @@ private fun MedicineList(
 @Composable
 private fun MedicineCell(
     medicine: Medicine,
-    navigateToAddOrEditMedicineScreen: () -> Unit,
-    selectMedicine: (Medicine) -> Unit,
-    hideSearchBar: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ElevatedCard(
@@ -268,11 +280,7 @@ private fun MedicineCell(
         modifier = modifier
             .fillMaxWidth()
             .height(80.dp),
-        onClick = {
-            hideSearchBar()
-            selectMedicine(medicine)
-            navigateToAddOrEditMedicineScreen()
-        }
+        onClick = onClick
     ) {
         Row (
             verticalAlignment = Alignment.CenterVertically,

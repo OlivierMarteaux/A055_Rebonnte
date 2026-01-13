@@ -121,6 +121,7 @@ fun SharedNavGraph(
         /*_ ADD OR EDIT MEDICINE SCREEN ##########################################################################*/
         composable(route = RebonnteScreen.AddOrEditMedicine.route) {
             AddOrEditMedicineScreen(
+                medicineViewModel = medicineViewModel,
                 navigateBack = { navHostController.navigateUp() },
             )
         }

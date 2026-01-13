@@ -1,5 +1,6 @@
 package com.oliviermarteaux.a055_rebonnte.ui.screen.addOrEditMedicine
 
+import android.R.attr.enabled
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
+import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Grey40
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Red40
@@ -45,75 +47,85 @@ import com.oliviermarteaux.shared.ui.theme.ToastPadding
 
 @Composable
 fun AddOrEditMedicineScreen(
-    addOrEditMedicineViewModel: AddOrEditMedicineViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
+    medicineViewModel: MedicineViewModel,
     navigateBack: () -> Unit,
 ) {
-    with(addOrEditMedicineViewModel) {
-        val cdAddScreenTitle =
-            stringResource(R.string.creation_of_a_new_event_fill_in_the_event_data_and_validate_to_create_a_new_event)
-        SharedScaffold(
-            title = stringResource(R.string.creation_of_an_event),
-            screenContentDescription = cdAddScreenTitle,
-            onBackClick = navigateBack
-        ) { paddingValues ->
-            Box {
-                var intPickerDialog: Boolean by rememberSaveable { mutableStateOf(false) }
-                fun toggleIntPickerDialog() { intPickerDialog = !intPickerDialog }
+    with(medicineViewModel) {
+//        with(medicineViewModel) {
+            val cdAddScreenTitle =
+                stringResource(R.string.creation_of_a_new_event_fill_in_the_event_data_and_validate_to_create_a_new_event)
+            SharedScaffold(
+                title = stringResource(R.string.creation_of_an_event),
+                screenContentDescription = cdAddScreenTitle,
+                onBackClick = navigateBack
+            ) { paddingValues ->
+                Box {
+                    var intPickerDialog: Boolean by rememberSaveable { mutableStateOf(false) }
+                    fun toggleIntPickerDialog() {
+                        intPickerDialog = !intPickerDialog
+                    }
 
-                var aislePickerDialog: Boolean by rememberSaveable { mutableStateOf(false) }
-                fun toggleAislePickerDialog() { aislePickerDialog = !aislePickerDialog }
+                    var aislePickerDialog: Boolean by rememberSaveable { mutableStateOf(false) }
+                    fun toggleAislePickerDialog() {
+                        aislePickerDialog = !aislePickerDialog
+                    }
 
-                AddScreenBody(
-                    medicine = medicine,
-                    modifier = Modifier.testTag("AddOrEditMedicineScreen"),
-                    updateMedicineName = ::updateMedicineName,
-                    addMedicine = {
-                        addMedicine(medicine.stock){navigateBack()}
-                    },
-                    paddingValues = paddingValues,
-                    toggleIntPickerDialog = ::toggleIntPickerDialog,
-                    toggleAislePickerDialog = ::toggleAislePickerDialog,
-                )
-                when {
-                    addOrEditMedicineUiState is UiState.Loading -> { CenteredCircularProgressIndicator() }
-
-                    networkError -> SharedToast(
-                        text = stringResource(R.string.network_error_check_your_internet_connection),
-                        bottomPadding = ToastPadding.medium
+                    AddScreenBody(
+                        medicine = medicine,
+                        modifier = Modifier.testTag("AddOrEditMedicineScreen"),
+                        updateMedicineName = ::updateMedicineName,
+                        addMedicine = {
+                            addMedicine(medicine.stock) { navigateBack() }
+                        },
+                        paddingValues = paddingValues,
+                        toggleIntPickerDialog = ::toggleIntPickerDialog,
+                        toggleAislePickerDialog = ::toggleAislePickerDialog,
                     )
-
-                    unknownError -> SharedToast(
-                        text = stringResource(R.string.an_unknown_error_occurred),
-                        bottomPadding = ToastPadding.medium
-                    )
-                    intPickerDialog -> IntPickerDialog(
-                        show = true,
-                        value = medicine.stock,
-                        range = 0..50,
-                        onDismiss = { toggleIntPickerDialog() },
-                        onConfirm = {
-                            updateMedicineStock(it)
-                            toggleIntPickerDialog()
+                    when {
+                        addOrEditMedicineUiState is UiState.Loading -> {
+                            CenteredCircularProgressIndicator()
                         }
-                    )
-                    aislePickerDialog -> ItemPickerDialog(
-                        show = true,
-                        visibleCount = 3,
-                        itemList = homeViewModel.aisleList,
-                        selectedItem =  homeViewModel.aisleList[0],
-                        onDismiss =  {
-                            toggleAislePickerDialog()
-                        },
-                        onConfirm = {
-                            updateMedicineAisle(it)
-                            toggleAislePickerDialog()
-                        },
-                        itemLabel = { aisle -> aisle.name }
-                    )
+
+                        networkError -> SharedToast(
+                            text = stringResource(R.string.network_error_check_your_internet_connection),
+                            bottomPadding = ToastPadding.medium
+                        )
+
+                        unknownError -> SharedToast(
+                            text = stringResource(R.string.an_unknown_error_occurred),
+                            bottomPadding = ToastPadding.medium
+                        )
+
+                        intPickerDialog -> IntPickerDialog(
+                            show = true,
+                            value = medicine.stock,
+                            range = 0..50,
+                            onDismiss = { toggleIntPickerDialog() },
+                            onConfirm = {
+                                updateMedicineStock(it)
+                                toggleIntPickerDialog()
+                            }
+                        )
+
+                        aislePickerDialog -> ItemPickerDialog(
+                            show = true,
+                            visibleCount = 3,
+                            itemList = homeViewModel.aisleList,
+                            selectedItem = homeViewModel.aisleList[0],
+                            onDismiss = {
+                                toggleAislePickerDialog()
+                            },
+                            onConfirm = {
+                                updateMedicineAisle(it)
+                                toggleAislePickerDialog()
+                            },
+                            itemLabel = { aisle -> aisle.name }
+                        )
+                    }
                 }
             }
-        }
+//        }
     }
 }
 
@@ -148,8 +160,12 @@ fun AddScreenBody(
         )
 
         AddScreenSaveButton(
-            onClick = addMedicine,
-            medicine = medicine
+            onClick = if (medicine == Medicine()) TODO() else addMedicine,
+            enabled = (
+                medicine.name.isNotEmpty()
+                        && medicine.aisle.name.isNotEmpty()
+                        && medicine.stock.toString().isNotEmpty()
+            )
         )
     }
 }
@@ -204,7 +220,7 @@ fun AddScreenTextForm(
 }
 @Composable
 fun AddScreenSaveButton(
-    medicine: Medicine,
+    enabled: Boolean,
     onClick: () -> Unit
 ){
     SharedButton(
@@ -219,10 +235,6 @@ fun AddScreenSaveButton(
             disabledContainerColor = Grey40,
         ),
         textColor = White,
-        enabled = (
-                medicine.name.isNotEmpty()
-                        && medicine.aisle.name.isNotEmpty()
-                        && medicine.stock.toString().isNotEmpty()
-                ),
+        enabled = enabled,
     )
 }
