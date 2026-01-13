@@ -10,6 +10,7 @@ import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.account.AccountScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.addAisle.AddAisleScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.addOrEditMedicine.AddOrEditMedicineScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList.MedicineListScreen
 import com.oliviermarteaux.shared.cameraX.CameraScreen
@@ -100,7 +101,9 @@ fun SharedNavGraph(
             MedicineListScreen(
                 medicineViewModel = medicineViewModel,
                 navController = navHostController,
-                navigateToAddOrEditMedicineScreen = {},
+                navigateToAddOrEditMedicineScreen = {
+                    navHostController.navigate(RebonnteScreen.AddOrEditMedicine.route)
+                },
             )
         }
         /*_ ACCOUNT SCREEN ###########################################################################*/
@@ -112,6 +115,12 @@ fun SharedNavGraph(
         /*_ ADD AISLE SCREEN ##########################################################################*/
         composable(route = RebonnteScreen.AddAisle.route) {
             AddAisleScreen(
+                navigateBack = { navHostController.navigateUp() },
+            )
+        }
+        /*_ ADD OR EDIT MEDICINE SCREEN ##########################################################################*/
+        composable(route = RebonnteScreen.AddOrEditMedicine.route) {
+            AddOrEditMedicineScreen(
                 navigateBack = { navHostController.navigateUp() },
             )
         }

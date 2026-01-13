@@ -51,7 +51,7 @@ import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Grey40
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Red40
-import com.oliviermarteaux.localshared.composables.SharedBottomAppBar
+import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.composables.SharedButton
@@ -101,7 +101,7 @@ fun HomeScreen(
                 // top app bar
                 topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
                 // bottom app bar
-                bottomBar = { SharedBottomAppBar(navController) },
+                bottomBar = { RebonnteBottomAppBar(navController) },
                 // fab button
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,

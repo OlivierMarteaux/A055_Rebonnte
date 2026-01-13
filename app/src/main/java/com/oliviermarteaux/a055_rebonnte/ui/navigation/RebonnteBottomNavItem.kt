@@ -15,12 +15,12 @@ sealed class RebonnteBottomNavItem(
     val icon: ImageVector,
     @param: StringRes val titleRes: Int
 ) {
-    object Aisle: RebonnteBottomNavItem(
+    object AisleNavItem: RebonnteBottomNavItem(
         screen = RebonnteScreen.Home,
         icon = Icons.Filled.Home,
         titleRes = R.string.aisles)
-    
-    object Medicine: RebonnteBottomNavItem(
+
+    object MedicineNavItem: RebonnteBottomNavItem(
         screen = RebonnteScreen.MedicineList,
         icon = Icons.AutoMirrored.Filled.List,
         titleRes = R.string.medicines)

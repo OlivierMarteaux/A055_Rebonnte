@@ -14,15 +14,14 @@ import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.composables.SharedIcon
 import com.oliviermarteaux.shared.composables.extensions.cdButtonSemantics
 import com.oliviermarteaux.shared.compose.R
-import com.oliviermarteaux.shared.navigation.BottomNavItem
 import kotlin.collections.forEach
 
 @Composable
-fun SharedBottomAppBar(
+fun RebonnteBottomAppBar(
     navController: NavController,
     items: List<RebonnteBottomNavItem> = listOf(
-        RebonnteBottomNavItem.Aisle,
-        RebonnteBottomNavItem.Medicine,
+        RebonnteBottomNavItem.AisleNavItem,
+        RebonnteBottomNavItem.MedicineNavItem,
     )
 ) {
     NavigationBar {

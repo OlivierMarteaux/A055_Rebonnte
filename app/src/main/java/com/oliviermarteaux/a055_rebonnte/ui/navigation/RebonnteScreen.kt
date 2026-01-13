@@ -28,4 +28,8 @@ sealed class RebonnteScreen(
         route = "medicine_list",
         titleRes = R.string.medicine_list
     )
+    data object AddOrEditMedicine : RebonnteScreen(
+        route = "add_or_edit_medicine",
+        titleRes = R.string.medicine_list
+    )
 }

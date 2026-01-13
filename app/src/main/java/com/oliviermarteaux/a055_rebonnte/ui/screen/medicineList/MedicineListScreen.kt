@@ -56,10 +56,10 @@ import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Grey40
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Red40
+import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.composables.SharedAsyncImage
-import com.oliviermarteaux.shared.composables.SharedBottomAppBar
 import com.oliviermarteaux.shared.composables.SharedButton
 import com.oliviermarteaux.shared.composables.SharedIcon
 import com.oliviermarteaux.shared.composables.SharedScaffold
@@ -131,7 +131,7 @@ fun MedicineListScreen(
                 onSortByAscendingStockClick = { sortMedicinesBy(MedicineSortOption.ASCENDING_STOCK) },
                 onSortByDescendingStockClick = { sortMedicinesBy(MedicineSortOption.DESCENDING_STOCK) },
                 // bottom app bar
-                bottomBar = { SharedBottomAppBar(navController) },
+                bottomBar = { RebonnteBottomAppBar(navController) },
                 // fab button
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
