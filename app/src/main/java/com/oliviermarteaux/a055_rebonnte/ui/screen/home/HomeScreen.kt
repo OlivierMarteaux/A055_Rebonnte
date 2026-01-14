@@ -75,7 +75,7 @@ fun HomeScreen(
                     listUiState = homeUiState,
                     listViewModel = homeViewModel,
                     itemList =  aisleList,
-                    itemTitle =  { aisle: Aisle -> aisle.name },
+                    itemTitle =  Aisle::name,
                     reloadItemOnError = ::loadAisles,
                     showFab = ::showFab,
                     hideFab = ::hideFab

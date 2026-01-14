@@ -87,7 +87,7 @@ fun MedicineListScreen(
                 searchBarDisplayed = searchBarDisplayed,
                 onSearch = { focusOnSearchResult() },
                 // sort menu
-                onSortByNoneClick = { sortMedicinesBy(MedicineSortOption.NONE) },
+                onSortByNoneClick = ::loadMedicines,
                 onSortByNameClick = { sortMedicinesBy(MedicineSortOption.NAME) },
                 onSortByAscendingStockClick = { sortMedicinesBy(MedicineSortOption.ASCENDING_STOCK) },
                 onSortByDescendingStockClick = { sortMedicinesBy(MedicineSortOption.DESCENDING_STOCK) },
@@ -122,10 +122,9 @@ fun MedicineListScreen(
                     listUiState = medicineListUiState,
                     listViewModel = medicineListViewModel,
                     itemList =  filteredMedicineList,
-                    itemTitle =  { medicine: Medicine -> medicine.name },
+                    itemTitle =  Medicine::name,
                     itemText = { medicine: Medicine ->
-                        stringResource(R.string.stock, medicine.stock)
-                    },
+                        stringResource(R.string.stock, medicine.stock) },
                     onSearchFocusRequester = onSearchFocusRequester,
                     reloadItemOnError = ::loadMedicines,
                     showFab = ::showFab,

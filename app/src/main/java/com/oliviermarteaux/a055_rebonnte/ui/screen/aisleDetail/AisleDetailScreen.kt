@@ -53,10 +53,10 @@ fun AisleDetailScreen(
                         listUiState = medicineListUiState,
                         listViewModel = medicineListViewModel,
                         itemList = medicineList.filter { it.aisle == aisle },
-                        itemTitle = { medicine: Medicine -> medicine.name },
+                        itemTitle = Medicine::name ,
                         itemText = { medicine: Medicine ->
                             stringResource(R.string.stock, medicine.stock)
-                        },
+                                   },
                         reloadItemOnError = ::loadMedicines,
                     ) { medicine ->
                         selectMedicine(medicine)
