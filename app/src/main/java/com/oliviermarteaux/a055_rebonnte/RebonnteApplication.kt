@@ -5,8 +5,6 @@ import android.content.Context
 import android.util.Log
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
-import com.google.firebase.FirebaseApp
-import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.auth.FirebaseAuth
 import com.oliviermarteaux.a055_rebonnte.di.RebonnteAppContainer
 import com.oliviermarteaux.a055_rebonnte.di.RebonnteContainer

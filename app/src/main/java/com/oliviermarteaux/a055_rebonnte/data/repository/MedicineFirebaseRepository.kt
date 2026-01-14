@@ -1,8 +1,6 @@
 package com.oliviermarteaux.a055_rebonnte.data.repository
 
-import com.oliviermarteaux.a055_rebonnte.data.service.AisleApi
 import com.oliviermarteaux.a055_rebonnte.data.service.MedicineApi
-import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

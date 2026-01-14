@@ -27,7 +27,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-
 @Composable
 fun SharedFilledIntTextField(
     value: Int,
@@ -66,9 +65,9 @@ fun SharedFilledIntTextField(
     tint: Color = LocalContentColor.current,
     bottomPadding: Dp = 0.dp,
     errorText: String? = null,
-    onClick: () -> Unit = {},
-    //_ on value change in trailing lambda
-    onValueChange: (Int) -> Unit = {},
+    onValueChange: (String) -> Unit = {},
+    //_ on value in trailing lambda
+    onConfirm: (Int) -> Unit
 ) {
     var intValue by remember { mutableIntStateOf(value) }
     var textValue by remember { mutableStateOf(intValue.toString()) }
@@ -83,7 +82,7 @@ fun SharedFilledIntTextField(
         onDismiss = { toggleIntPickerDialog() },
         onConfirm = {
             intValue = it
-            onValueChange(it)
+            onConfirm(it)
             toggleIntPickerDialog()
         }
     )
@@ -98,14 +97,7 @@ fun SharedFilledIntTextField(
     ) {
         SharedFilledTextField(
             value = textValue,
-//            onValueChange = { newText ->
-//                // Only allow digits
-//                val filtered = newText.filter { it.isDigit() }
-//                textValue = filtered
-//                // Parse safely to Int
-//                intValue = filtered.toIntOrNull() ?: 0
-//                onValueChange(intValue)
-//            },
+            onValueChange = onValueChange,
             modifier = modifier,
             textFieldModifier = textFieldModifier,
             enabled = enabled,

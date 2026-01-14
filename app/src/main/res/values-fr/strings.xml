@@ -107,4 +107,5 @@
     <string name="aisle">Aisle</string>
     <string name="medicines">Medicines</string>
     <string name="aisles">Aisles</string>
+    <string name="aisle_content">Aisle content</string>
 </resources>

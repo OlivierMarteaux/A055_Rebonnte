@@ -52,9 +52,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
-import com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.MedicineViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.medicineList.MedicineListViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.medicineList.MedicineSortOption
+import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineSortOption
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Grey40
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Red40
 import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
@@ -207,8 +207,8 @@ fun <T> RebonnteItemListBody(
     itemText: @Composable (T) -> String = { "" },
     onSearchFocusRequester: FocusRequester = FocusRequester(),
     reloadItemOnError: () -> Unit,
-    showFab: () -> Unit,
-    hideFab: () -> Unit,
+    showFab: () -> Unit = {},
+    hideFab: () -> Unit = {},
     //_ trailing lambda !
     onItemClick: (T) -> Unit
 ){

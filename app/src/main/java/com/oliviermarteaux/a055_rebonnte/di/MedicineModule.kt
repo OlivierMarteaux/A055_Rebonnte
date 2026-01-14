@@ -3,7 +3,6 @@ package com.oliviermarteaux.a055_rebonnte.di
 import android.app.Application
 import com.oliviermarteaux.a055_rebonnte.RebonnteApplication
 import com.oliviermarteaux.a055_rebonnte.data.repository.MedicineRepository
-import com.oliviermarteaux.shared.firebase.firestore.data.repository.PostRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

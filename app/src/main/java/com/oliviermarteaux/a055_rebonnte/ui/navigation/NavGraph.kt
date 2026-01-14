@@ -7,12 +7,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.MedicineViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.account.AccountScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.addAisle.AddAisleScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.addOrEditMedicine.AddOrEditMedicineScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.addOrEditMedicine.AddOrEditMedicineScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.aisleDetail.AisleDetailScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.medicineList.MedicineListScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList.MedicineListScreen
 import com.oliviermarteaux.shared.cameraX.CameraScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.login.LoginScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.password.PasswordScreen
@@ -32,7 +33,8 @@ fun SharedNavGraph(
     startDestination: String,
     logoRes: Int = -1,
     aisleViewModel: AisleViewModel = hiltViewModel(),
-    medicineViewModel: MedicineViewModel = hiltViewModel()
+    medicineViewModel: MedicineViewModel = hiltViewModel(),
+    medicineListViewModel: MedicineListViewModel = hiltViewModel()
 ){
     NavHost(
         navController = navHostController,
@@ -87,29 +89,36 @@ fun SharedNavGraph(
                 logoDrawableRes = logoRes
             )
         }
-        /*_ AISLE SCREEN ##############################################################################*/
+        /*_ AISLE LIST SCREEN ##############################################################################*/
         composable(route = RebonnteScreen.Home.route) {
             HomeScreen(
                 aisleViewModel = aisleViewModel,
                 navController = navHostController,
-                navigateToDetailScreen = {navHostController.navigate(Screen.Detail.route) },
+                navigateToDetailScreen = {navHostController.navigate(RebonnteScreen.AisleDetail.route) },
                 navigateToAddScreen = { navHostController.navigate(RebonnteScreen.AddAisle.route) }
+            )
+        }
+        /*_ AISLE DETAIL SCREEN ##############################################################################*/
+        composable(route = RebonnteScreen.AisleDetail.route) {
+            AisleDetailScreen(
+                aisleViewModel = aisleViewModel,
+                medicineViewModel = medicineViewModel,
+                medicineListViewModel = medicineListViewModel,
+                navigateToAddOrEditMedicineScreen = {
+                    navHostController.navigate(RebonnteScreen.AddOrEditMedicine.route)
+                },
+                navigateBack = { navHostController.navigateUp() },
             )
         }
         /*_ MEDICINE LIST SCREEN ##############################################################################*/
         composable(route = RebonnteScreen.MedicineList.route) {
             MedicineListScreen(
                 medicineViewModel = medicineViewModel,
+                medicineListViewModel = medicineListViewModel,
                 navController = navHostController,
                 navigateToAddOrEditMedicineScreen = {
                     navHostController.navigate(RebonnteScreen.AddOrEditMedicine.route)
                 },
-            )
-        }
-        /*_ ACCOUNT SCREEN ###########################################################################*/
-        composable(route = Screen.Account.route) {
-            AccountScreen(
-                navController = navHostController
             )
         }
         /*_ ADD AISLE SCREEN ##########################################################################*/

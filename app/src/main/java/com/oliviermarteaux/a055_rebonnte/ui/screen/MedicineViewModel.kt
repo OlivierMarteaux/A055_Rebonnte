@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.medicine
+package com.oliviermarteaux.a055_rebonnte.ui.screen
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -125,11 +125,11 @@ class MedicineViewModel @Inject constructor(
                     medicineRepository.updateMedicine(medicine.copy(
                         author = user,
                         changeRecord = medicine.changeRecord +
-                            MedicineChange(
-                                title = changeRecordTitle,
-                                previousStock = sourceMedicine.stock,
-                                newStock = medicine.stock
-                            )
+                                MedicineChange(
+                                    title = changeRecordTitle,
+                                    previousStock = sourceMedicine.stock,
+                                    newStock = medicine.stock
+                                )
                     )).fold(
                         onSuccess = {
                             log.d("MedicineViewModel::updateMedicine: Successful")
