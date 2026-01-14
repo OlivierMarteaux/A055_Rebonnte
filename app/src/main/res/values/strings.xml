@@ -98,4 +98,11 @@
     <string name="not_editable">Not editable</string>
     <string name="button_double_tap_to_open_the_password_reset_screen">Button: %1$s. Double tap to open the password reset screen.</string>
     <string name="button_double_tap_to_sign_in">Button: %1$s. Double tap to sign in.</string>
+    <string name="an_account_is_mandatory_to_add_or_edit_a_medicine">An account is mandatory to add or edit a medicine</string>
+    <string name="stock">Stock: %1$d</string>
+    <string name="add_a_new_aisle">Add a new aisle</string>
+    <string name="medicine_list">Medicine list</string>
+    <string name="aisle">Aisle</string>
+    <string name="medicines">Medicines</string>
+    <string name="aisles">Aisles</string>
 </resources>
