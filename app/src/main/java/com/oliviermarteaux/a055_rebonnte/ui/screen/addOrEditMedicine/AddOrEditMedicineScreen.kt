@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.addOrEditMedicine
+package com.oliviermarteaux.a055_rebonnte.ui.screen.addOrEditMedicine
 
 import android.content.res.Configuration
 import android.util.Log
@@ -24,8 +24,10 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
+import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
+import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemList
+import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Grey40
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Red40
 import com.oliviermarteaux.localshared.composables.SharedFilledIntTextField
@@ -144,6 +146,14 @@ fun AddScreenBody(
                         && if (!medicineCreation) medicine.stock != sourceMedicine.stock else true
                     )
         )
+
+        with(medicine) {
+            RebonnteItemList(
+                itemList = changeRecord,
+                getItemTitle = MedicineChange::getTitle,
+                itemText = MedicineChange::getDescription
+            )
+        }
     }
 }
 
@@ -187,7 +197,7 @@ fun AddScreenTextForm(
         //_ Medicine stock
         SharedFilledIntTextField(
             value = stock,
-            onValueChange = { updateMedicineStock(it) },
+            onConfirm = { updateMedicineStock(it) },
             label = stringResource(R.string.tap_here_to_enter_your_description),
             textFieldModifier = Modifier.fillMaxWidth(),
             isError = stock.toString().isEmpty(),
@@ -207,6 +217,7 @@ fun AddScreenSaveButton(
         shape = MaterialTheme.shapes.extraSmall,
         modifier = Modifier
             .fillMaxWidth()
+            .padding(bottom = SharedPadding.large)
             .height(SharedSize.medium),
         colors = ButtonDefaults.buttonColors(
             containerColor = Red40,

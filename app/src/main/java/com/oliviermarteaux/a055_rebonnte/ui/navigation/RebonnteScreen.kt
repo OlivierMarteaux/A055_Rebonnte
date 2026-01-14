@@ -2,7 +2,6 @@ package com.oliviermarteaux.a055_rebonnte.ui.navigation
 
 import androidx.navigation.NamedNavArgument
 import com.oliviermarteaux.a055_rebonnte.R
-import com.oliviermarteaux.shared.navigation.Screen
 
 /**
  * A sealed class that represents the different screens in the application.
@@ -19,6 +18,10 @@ sealed class RebonnteScreen(
     data object Home : RebonnteScreen(
         route = "home",
         titleRes = R.string.aisle
+    )
+    data object AisleDetail : RebonnteScreen(
+        route = "aisle_detail",
+        titleRes = R.string.aisle_content
     )
     data object AddAisle : RebonnteScreen(
         route = "add_aisle",

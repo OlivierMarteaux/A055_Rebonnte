@@ -105,4 +105,11 @@
     <string name="aisle">Aisle</string>
     <string name="medicines">Medicines</string>
     <string name="aisles">Aisles</string>
+    <string name="aisle_content">Aisle content</string>
+    <string name="initial_stock_set_to_by">Initial stock set to %1$d by %2$s</string>
+    <string name="stock_decreased_from_to_by">Stock decreased from %1$d to %2$d by %3$s</string>
+    <string name="stock_increased_from_to_by">Stock increased from %1$d to %2$d by %3$s</string>
+    <string name="medicine_entry_creation">%1$s: Medicine entry creation</string>
+    <string name="medicine_stock_decreased">%1$s: Medicine stock decreased</string>
+    <string name="medicine_stock_increased">%1$s: Medicine stock increased</string>
 </resources>

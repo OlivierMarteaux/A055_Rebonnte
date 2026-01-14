@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.storage.FirebaseStorage
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +14,6 @@ import kotlinx.coroutines.tasks.await
 class MedicineFirebaseApi: MedicineApi {
 
     private val firestore = FirebaseFirestore.getInstance()
-    private val storage = FirebaseStorage.getInstance()
     private val medicinesCollection = firestore.collection("medicines")
 
     override fun getMedicineSortedByDescTimestamp(): Flow<Result<List<Medicine>>> = callbackFlow {

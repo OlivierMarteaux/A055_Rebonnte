@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.medicineList
+package com.oliviermarteaux.a055_rebonnte.ui.screen
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,11 +17,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * ViewModel responsible for managing data and events related to the MedicineList screen.
- * This ViewModel retrieves medicines from the MedicineRepository and exposes them as a Flow<List<Medicine>>,
- * allowing UI components to observe and react to changes in the medicines data.
- */
 @HiltViewModel
 class MedicineListViewModel @Inject constructor(
     private val medicineRepository: MedicineRepository,
@@ -36,7 +31,8 @@ class MedicineListViewModel @Inject constructor(
     var medicineListUiState: ListUiState<Medicine> by mutableStateOf(ListUiState.Loading)
         private set
 
-    private var medicineList: List<Medicine> by mutableStateOf(emptyList())
+    var medicineList: List<Medicine> by mutableStateOf(emptyList())
+        private set
 
     var filteredMedicineList: List<Medicine> by mutableStateOf(emptyList())
         private set

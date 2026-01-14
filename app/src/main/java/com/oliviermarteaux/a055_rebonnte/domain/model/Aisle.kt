@@ -2,8 +2,6 @@ package com.oliviermarteaux.a055_rebonnte.domain.model
 
 import com.oliviermarteaux.shared.extensions.toDate
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
-import com.oliviermarteaux.shared.firebase.firestore.domain.model.Address
-import com.oliviermarteaux.shared.firebase.firestore.domain.model.Comment
 import java.io.Serializable
 import java.time.LocalDate
 import java.util.Date

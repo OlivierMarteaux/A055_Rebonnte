@@ -1,6 +1,5 @@
 package com.oliviermarteaux.a055_rebonnte.data.service
 
-import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import kotlinx.coroutines.flow.Flow
 

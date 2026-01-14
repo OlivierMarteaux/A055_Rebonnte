@@ -1,13 +1,9 @@
 package com.oliviermarteaux.a055_rebonnte.data.service
 
 import android.util.Log
-import androidx.core.net.toUri
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.storage.FirebaseStorage
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
-import com.oliviermarteaux.shared.firebase.firestore.domain.model.Post
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -17,7 +13,6 @@ import kotlinx.coroutines.tasks.await
 class AisleFirebaseApi: AisleApi {
 
     private val firestore = FirebaseFirestore.getInstance()
-    private val storage = FirebaseStorage.getInstance()
     private val aislesCollection = firestore.collection("aisles")
 
     override fun getAislesSortedByDescTimestamp(): Flow<Result<List<Aisle>>> = callbackFlow {
