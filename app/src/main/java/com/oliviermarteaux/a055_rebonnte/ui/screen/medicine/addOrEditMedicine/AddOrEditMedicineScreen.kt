@@ -1,6 +1,7 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.addOrEditMedicine
+package com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.addOrEditMedicine
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,8 +24,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Grey40
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Red40
 import com.oliviermarteaux.localshared.composables.SharedFilledIntTextField
@@ -56,13 +57,16 @@ fun AddOrEditMedicineScreen(
             Box {
                 AddScreenBody(
                     medicine = medicine,
+                    sourceMedicine = sourceMedicine,
                     modifier = Modifier.testTag("AddOrEditMedicineScreen"),
                     updateMedicineName = ::updateMedicineName,
-                    addMedicine = { addMedicine(medicine.stock) { navigateBack() } },
+                    addMedicine = { addMedicine { navigateBack() }},
+                    updateMedicine = { updateMedicine { navigateBack() } },
                     paddingValues = paddingValues,
                     updateMedicineStock = ::updateMedicineStock,
                     updateMedicineAisle = ::updateMedicineAisle,
-                    homeViewModel = homeViewModel
+                    homeViewModel = homeViewModel,
+                    medicineCreation = medicineCreation
                 )
                 when {
                     addOrEditMedicineUiState is UiState.Loading -> {
@@ -87,13 +91,16 @@ fun AddOrEditMedicineScreen(
 @Composable
 fun AddScreenBody(
     medicine: Medicine,
+    sourceMedicine: Medicine,
     modifier: Modifier = Modifier,
     updateMedicineName: (String) -> Unit,
     addMedicine: () -> Unit,
+    updateMedicine: () -> Unit,
     paddingValues: PaddingValues,
     updateMedicineStock: (Int) -> Unit,
     updateMedicineAisle: (Aisle) -> Unit,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    medicineCreation: Boolean
 ) {
     val configuration = LocalConfiguration.current
     val orientation = configuration.orientation
@@ -113,16 +120,29 @@ fun AddScreenBody(
             updateMedicineName = updateMedicineName,
             updateMedicineStock = updateMedicineStock,
             updateMedicineAisle = updateMedicineAisle,
-            homeViewModel = homeViewModel
+            homeViewModel = homeViewModel,
+            medicineCreation = medicineCreation
         )
 
         AddScreenSaveButton(
-            onClick = if (medicine == Medicine()) TODO() else addMedicine,
+            onClick = {
+                when (medicineCreation) {
+                    true -> {
+                        Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: AddMedicine()")
+                        addMedicine()
+                    }
+                    false -> {
+                        Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: UpdateMedicine()")
+                        updateMedicine()
+                    }
+                }
+            },
             enabled = (
                 medicine.name.isNotEmpty()
                         && medicine.aisle.name.isNotEmpty()
                         && medicine.stock.toString().isNotEmpty()
-            )
+                        && if (!medicineCreation) medicine.stock != sourceMedicine.stock else true
+                    )
         )
     }
 }
@@ -134,7 +154,8 @@ fun AddScreenTextForm(
     updateMedicineName: (String) -> Unit,
     updateMedicineStock: (Int) -> Unit,
     updateMedicineAisle: (Aisle) -> Unit,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    medicineCreation: Boolean
 ){
     with(medicine) {
         //_ Medicine name
@@ -145,7 +166,8 @@ fun AddScreenTextForm(
             textFieldModifier = Modifier.fillMaxWidth(),
             isError = name.isEmpty(),
             errorText = stringResource(R.string.please_enter_a_title),
-            bottomPadding = SharedPadding.large
+            bottomPadding = SharedPadding.large,
+            enabled = medicineCreation
         )
 
         //_ Medicine aisle
@@ -158,7 +180,8 @@ fun AddScreenTextForm(
             textFieldModifier = Modifier.fillMaxWidth(),
             isError = aisle.name.isEmpty(),
             errorText = stringResource(R.string.please_enter_a_description),
-            bottomPadding = SharedPadding.large
+            bottomPadding = SharedPadding.large,
+            enabled = medicineCreation
         ) { updateMedicineAisle(it) }
 
         //_ Medicine stock

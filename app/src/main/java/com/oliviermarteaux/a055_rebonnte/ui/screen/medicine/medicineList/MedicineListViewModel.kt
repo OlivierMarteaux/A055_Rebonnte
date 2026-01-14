@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList
+package com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.medicineList
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,7 +7,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.oliviermarteaux.a055_rebonnte.data.repository.MedicineRepository
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.localshared.utils.TestConfig
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel

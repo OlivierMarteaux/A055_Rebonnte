@@ -7,12 +7,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.account.AccountScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.addAisle.AddAisleScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.addOrEditMedicine.AddOrEditMedicineScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.addOrEditMedicine.AddOrEditMedicineScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList.MedicineListScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.medicineList.MedicineListScreen
 import com.oliviermarteaux.shared.cameraX.CameraScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.login.LoginScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.password.PasswordScreen

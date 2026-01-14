@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList
+package com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.medicineList
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -53,7 +53,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Grey40
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Red40
 import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
@@ -65,6 +65,7 @@ import com.oliviermarteaux.shared.composables.SharedIcon
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.composables.spacer.SpacerLarge
+import com.oliviermarteaux.shared.composables.spacer.SpacerMedium
 import com.oliviermarteaux.shared.composables.texts.TextTitleMedium
 import com.oliviermarteaux.shared.composables.texts.TextTitleSmall
 import com.oliviermarteaux.shared.navigation.Screen
@@ -154,6 +155,7 @@ fun MedicineListScreen(
                         onUserLogged = {
                             hideSearchBar();
                             selectMedicine(Medicine())
+                            switchToMedicineCreationMode()
                             navigateToAddOrEditMedicineScreen()
                         },
                         onNoUserLogged = ::showAuthErrorToast
@@ -210,6 +212,7 @@ fun MedicineListScreen(
                                     .padding(horizontal = SharedPadding.large),
                                 medicineList = filteredMedicineList,
                                 navigateToAddOrEditMedicineScreen = navigateToAddOrEditMedicineScreen,
+                                switchToMedicineEditionMode = ::switchToMedicineEditionMode,
                                 selectMedicine = ::selectMedicine,
                                 hideSearchBar = ::hideSearchBar
                             )
@@ -233,6 +236,7 @@ fun MedicineListScreen(
 private fun MedicineList(
     modifier: Modifier = Modifier,
     medicineList: List<Medicine>,
+    switchToMedicineEditionMode: () -> Unit,
     navigateToAddOrEditMedicineScreen: () -> Unit,
     selectMedicine: (Medicine) -> Unit,
     hideSearchBar: () -> Unit
@@ -253,6 +257,7 @@ private fun MedicineList(
                     onClick = {
                         hideSearchBar()
                         selectMedicine(medicine)
+                        switchToMedicineEditionMode()
                         navigateToAddOrEditMedicineScreen()
                     },
                     modifier = Modifier.semantics {
@@ -285,13 +290,7 @@ private fun MedicineCell(
         Row (
             verticalAlignment = Alignment.CenterVertically,
         ){
-            SharedAsyncImage(
-                photoUri = medicine.author?.photoUrl,
-                modifier = Modifier
-                    .padding(start = SharedPadding.medium)
-                    .size(40.dp)
-                    .clip(shape = CircleShape)
-            )
+            SpacerMedium()
             Column(
                 modifier = Modifier
                     .weight(1f)

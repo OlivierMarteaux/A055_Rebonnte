@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList
+package com.oliviermarteaux.a055_rebonnte.ui.screen.medicine.medicineList
 
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 
