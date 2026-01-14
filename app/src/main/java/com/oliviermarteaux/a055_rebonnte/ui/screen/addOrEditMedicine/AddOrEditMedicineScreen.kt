@@ -1,8 +1,6 @@
 package com.oliviermarteaux.a055_rebonnte.ui.screen.addOrEditMedicine
 
-import android.R.attr.enabled
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,10 +13,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
@@ -27,14 +21,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.oliviermarteaux.a055_rebonnte.R
+import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Grey40
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Red40
-import com.oliviermarteaux.localshared.composables.IntPickerDialog
-import com.oliviermarteaux.localshared.composables.ItemPickerDialog
 import com.oliviermarteaux.localshared.composables.SharedFilledIntTextField
+import com.oliviermarteaux.localshared.composables.SharedFilledItemTextField
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.SharedButton
 import com.oliviermarteaux.shared.composables.SharedFilledTextField
@@ -52,80 +46,41 @@ fun AddOrEditMedicineScreen(
     navigateBack: () -> Unit,
 ) {
     with(medicineViewModel) {
-//        with(medicineViewModel) {
-            val cdAddScreenTitle =
-                stringResource(R.string.creation_of_a_new_event_fill_in_the_event_data_and_validate_to_create_a_new_event)
-            SharedScaffold(
-                title = stringResource(R.string.creation_of_an_event),
-                screenContentDescription = cdAddScreenTitle,
-                onBackClick = navigateBack
-            ) { paddingValues ->
-                Box {
-                    var intPickerDialog: Boolean by rememberSaveable { mutableStateOf(false) }
-                    fun toggleIntPickerDialog() {
-                        intPickerDialog = !intPickerDialog
+        val cdAddScreenTitle =
+            stringResource(R.string.creation_of_a_new_event_fill_in_the_event_data_and_validate_to_create_a_new_event)
+        SharedScaffold(
+            title = stringResource(R.string.creation_of_an_event),
+            screenContentDescription = cdAddScreenTitle,
+            onBackClick = navigateBack
+        ) { paddingValues ->
+            Box {
+                AddScreenBody(
+                    medicine = medicine,
+                    modifier = Modifier.testTag("AddOrEditMedicineScreen"),
+                    updateMedicineName = ::updateMedicineName,
+                    addMedicine = { addMedicine(medicine.stock) { navigateBack() } },
+                    paddingValues = paddingValues,
+                    updateMedicineStock = ::updateMedicineStock,
+                    updateMedicineAisle = ::updateMedicineAisle,
+                    homeViewModel = homeViewModel
+                )
+                when {
+                    addOrEditMedicineUiState is UiState.Loading -> {
+                        CenteredCircularProgressIndicator()
                     }
 
-                    var aislePickerDialog: Boolean by rememberSaveable { mutableStateOf(false) }
-                    fun toggleAislePickerDialog() {
-                        aislePickerDialog = !aislePickerDialog
-                    }
-
-                    AddScreenBody(
-                        medicine = medicine,
-                        modifier = Modifier.testTag("AddOrEditMedicineScreen"),
-                        updateMedicineName = ::updateMedicineName,
-                        addMedicine = {
-                            addMedicine(medicine.stock) { navigateBack() }
-                        },
-                        paddingValues = paddingValues,
-                        toggleIntPickerDialog = ::toggleIntPickerDialog,
-                        toggleAislePickerDialog = ::toggleAislePickerDialog,
+                    networkError -> SharedToast(
+                        text = stringResource(R.string.network_error_check_your_internet_connection),
+                        bottomPadding = ToastPadding.medium
                     )
-                    when {
-                        addOrEditMedicineUiState is UiState.Loading -> {
-                            CenteredCircularProgressIndicator()
-                        }
 
-                        networkError -> SharedToast(
-                            text = stringResource(R.string.network_error_check_your_internet_connection),
-                            bottomPadding = ToastPadding.medium
-                        )
-
-                        unknownError -> SharedToast(
-                            text = stringResource(R.string.an_unknown_error_occurred),
-                            bottomPadding = ToastPadding.medium
-                        )
-
-                        intPickerDialog -> IntPickerDialog(
-                            show = true,
-                            value = medicine.stock,
-                            range = 0..50,
-                            onDismiss = { toggleIntPickerDialog() },
-                            onConfirm = {
-                                updateMedicineStock(it)
-                                toggleIntPickerDialog()
-                            }
-                        )
-
-                        aislePickerDialog -> ItemPickerDialog(
-                            show = true,
-                            visibleCount = 3,
-                            itemList = homeViewModel.aisleList,
-                            selectedItem = homeViewModel.aisleList[0],
-                            onDismiss = {
-                                toggleAislePickerDialog()
-                            },
-                            onConfirm = {
-                                updateMedicineAisle(it)
-                                toggleAislePickerDialog()
-                            },
-                            itemLabel = { aisle -> aisle.name }
-                        )
-                    }
+                    unknownError -> SharedToast(
+                        text = stringResource(R.string.an_unknown_error_occurred),
+                        bottomPadding = ToastPadding.medium
+                    )
                 }
             }
-//        }
+        }
     }
 }
 
@@ -136,8 +91,9 @@ fun AddScreenBody(
     updateMedicineName: (String) -> Unit,
     addMedicine: () -> Unit,
     paddingValues: PaddingValues,
-    toggleIntPickerDialog: () -> Unit,
-    toggleAislePickerDialog: () -> Unit,
+    updateMedicineStock: (Int) -> Unit,
+    updateMedicineAisle: (Aisle) -> Unit,
+    homeViewModel: HomeViewModel
 ) {
     val configuration = LocalConfiguration.current
     val orientation = configuration.orientation
@@ -155,8 +111,9 @@ fun AddScreenBody(
         AddScreenTextForm(
             medicine = medicine,
             updateMedicineName = updateMedicineName,
-            toggleIntPickerDialog = toggleIntPickerDialog,
-            toggleAislePickerDialog = toggleAislePickerDialog
+            updateMedicineStock = updateMedicineStock,
+            updateMedicineAisle = updateMedicineAisle,
+            homeViewModel = homeViewModel
         )
 
         AddScreenSaveButton(
@@ -175,8 +132,9 @@ fun AddScreenBody(
 fun AddScreenTextForm(
     medicine:Medicine,
     updateMedicineName: (String) -> Unit,
-    toggleIntPickerDialog: () -> Unit,
-    toggleAislePickerDialog: () -> Unit,
+    updateMedicineStock: (Int) -> Unit,
+    updateMedicineAisle: (Aisle) -> Unit,
+    homeViewModel: HomeViewModel
 ){
     with(medicine) {
         //_ Medicine name
@@ -191,30 +149,27 @@ fun AddScreenTextForm(
         )
 
         //_ Medicine aisle
-        SharedFilledTextField(
+        SharedFilledItemTextField (
             value = aisle.name,
-            onValueChange = { },
+            itemList = homeViewModel.aisleList,
+            selectedItem = aisle,
+            itemLabel = {aisle -> aisle.name},
             label = stringResource(R.string.tap_here_to_enter_your_description),
             textFieldModifier = Modifier.fillMaxWidth(),
             isError = aisle.name.isEmpty(),
             errorText = stringResource(R.string.please_enter_a_description),
-            bottomPadding = SharedPadding.large,
-            modifier = Modifier.clickable{ toggleAislePickerDialog() },
-            enabled =  false
-        )
+            bottomPadding = SharedPadding.large
+        ) { updateMedicineAisle(it) }
 
         //_ Medicine stock
         SharedFilledIntTextField(
             value = stock,
-            onValueChange = {},
-            onClick = { toggleIntPickerDialog() },
+            onValueChange = { updateMedicineStock(it) },
             label = stringResource(R.string.tap_here_to_enter_your_description),
             textFieldModifier = Modifier.fillMaxWidth(),
             isError = stock.toString().isEmpty(),
             errorText = stringResource(R.string.please_enter_a_description),
             bottomPadding = SharedPadding.large,
-            readOnly = true,
-            enabled = false
         )
     }
 }

@@ -21,6 +21,7 @@ import kotlin.collections.getOrNull
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.times
+import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 
 @Composable
 fun <T> ItemPickerDialog(
@@ -39,12 +40,12 @@ fun <T> ItemPickerDialog(
         initialFirstVisibleItemIndex = itemList.indexOf(selectedItem).coerceAtLeast(0)
     )
 
-    var currentAisle by remember { mutableStateOf(selectedItem) }
+    var currentItem by remember { mutableStateOf(selectedItem) }
 
     LaunchedEffect(listState.isScrollInProgress) {
         if (!listState.isScrollInProgress) {
             val centerIndex = listState.firstVisibleItemIndex
-            itemList.getOrNull(centerIndex)?.let { currentAisle = it }
+            itemList.getOrNull(centerIndex)?.let { currentItem = it }
         }
     }
     val centerOffset = visibleCount / 2
@@ -68,7 +69,7 @@ fun <T> ItemPickerDialog(
                     val label: String = item?.let { itemLabel(it) }?:""
                     Text(
                         text = label,
-                        style = if (item == currentAisle)
+                        style = if (item == currentItem)
                             MaterialTheme.typography.titleMedium
                         else
                             MaterialTheme.typography.bodyMedium,
@@ -78,7 +79,7 @@ fun <T> ItemPickerDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = { onConfirm(currentAisle) }) { Text("OK") }
+            TextButton(onClick = { onConfirm(currentItem) }) { Text("OK") }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Cancel") }

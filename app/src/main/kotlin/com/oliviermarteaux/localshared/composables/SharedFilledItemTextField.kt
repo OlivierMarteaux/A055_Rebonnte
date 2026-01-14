@@ -8,13 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.text.input.KeyboardType
-import com.oliviermarteaux.shared.composables.SharedFilledTextField
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -23,14 +18,18 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-
+import com.oliviermarteaux.shared.composables.SharedFilledTextField
 
 @Composable
-fun SharedFilledIntTextField(
-    value: Int,
+fun <T> SharedFilledItemTextField (
+    value: String,
+    itemList: List<T>,
+    selectedItem: T,
+    itemLabel: (T) -> String,
     modifier: Modifier = Modifier,
     textFieldModifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -66,46 +65,37 @@ fun SharedFilledIntTextField(
     tint: Color = LocalContentColor.current,
     bottomPadding: Dp = 0.dp,
     errorText: String? = null,
-    onClick: () -> Unit = {},
-    //_ on value change in trailing lambda
-    onValueChange: (Int) -> Unit = {},
+    onValueChange: (String) -> Unit = {},
+    //_ on value in trailing lambda
+    onConfirm: (T) -> Unit
 ) {
-    var intValue by remember { mutableIntStateOf(value) }
-    var textValue by remember { mutableStateOf(intValue.toString()) }
 
-    var intPickerDialog: Boolean by rememberSaveable { mutableStateOf(false) }
-    fun toggleIntPickerDialog() { intPickerDialog = !intPickerDialog }
-
-    IntPickerDialog(
-        show = intPickerDialog,
-        value = value,
-        range = 0..50,
-        onDismiss = { toggleIntPickerDialog() },
-        onConfirm = {
-            intValue = it
-            onValueChange(it)
-            toggleIntPickerDialog()
-        }
-    )
-
-    // 🔑 KEEP TEXT IN SYNC WITH VALUE
-    LaunchedEffect(value) {
-        textValue = value.toString()
+    var itemPickerDialog: Boolean by rememberSaveable { mutableStateOf(false) }
+    fun toggleItemPickerDialog() {
+        itemPickerDialog = !itemPickerDialog
     }
 
+    ItemPickerDialog(
+        show = itemPickerDialog,
+        visibleCount = 3,
+        itemList = itemList,
+        selectedItem = selectedItem,
+        onDismiss = {
+            toggleItemPickerDialog()
+        },
+        onConfirm = {
+            onConfirm(it)
+            toggleItemPickerDialog()
+        },
+        itemLabel = itemLabel
+    )
+
     ClickableReadOnlyField(
-        onClick = { toggleIntPickerDialog() }
+        onClick = { toggleItemPickerDialog() }
     ) {
         SharedFilledTextField(
-            value = textValue,
-//            onValueChange = { newText ->
-//                // Only allow digits
-//                val filtered = newText.filter { it.isDigit() }
-//                textValue = filtered
-//                // Parse safely to Int
-//                intValue = filtered.toIntOrNull() ?: 0
-//                onValueChange(intValue)
-//            },
+            value = value,
+            onValueChange = onValueChange,
             modifier = modifier,
             textFieldModifier = textFieldModifier,
             enabled = enabled,

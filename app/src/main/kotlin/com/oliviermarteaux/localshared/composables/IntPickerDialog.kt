@@ -21,6 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun IntPickerDialog(
@@ -34,8 +35,8 @@ fun IntPickerDialog(
 ) {
     if (!show) return
 
-    val values = remember(range) { range.toList() }
-    val initialIndex = values.indexOf(value).coerceAtLeast(0)
+    val values = remember(range) { List(4) { "min" } + range.toList() + List(4) { "max"} }
+    val initialIndex = values.indexOf(value) - 3 .coerceAtLeast(0)
 
     val listState = rememberLazyListState(
         initialFirstVisibleItemIndex = initialIndex
@@ -45,9 +46,14 @@ fun IntPickerDialog(
 
     LaunchedEffect(listState.isScrollInProgress) {
         if (!listState.isScrollInProgress) {
-            val centerIndex = listState.firstVisibleItemIndex + visibleCount / 2
-            values.getOrNull(centerIndex)?.let {
-                selectedValue = it
+            val centerIndex = listState.firstVisibleItemIndex + ( visibleCount ) / 2
+            values.getOrNull(centerIndex)?.let { item ->
+                selectedValue = when (item) {
+                    is Int -> item
+                    "min" -> range.first
+                    "max" -> range.last
+                    else -> 0
+                }
             }
         }
     }
@@ -62,16 +68,23 @@ fun IntPickerDialog(
             ) {
                 LazyColumn(
                     state = listState,
-                    modifier = Modifier.height((visibleCount * 40).dp),
+                    modifier = Modifier.height((visibleCount * 30).dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     items(values) { item ->
                         Text(
-                            text = item.toString(),
-                            style = if (item == selectedValue)
-                                MaterialTheme.typography.titleMedium
-                            else
-                                MaterialTheme.typography.bodyMedium,
+                            text = when(item) {
+                                is Int -> item.toString()
+                                else -> ""
+                            },
+                            fontSize = when (item){
+                                selectedValue -> 40.sp
+//                                selectedValue - 1 -> 25.sp
+//                                selectedValue + 1 -> 25.sp
+//                                selectedValue - 2 -> 20.sp
+//                                selectedValue + 2 -> 20.sp
+                                else -> 15.sp
+                            },
                             modifier = Modifier.padding(vertical = 4.dp)
                         )
                     }
