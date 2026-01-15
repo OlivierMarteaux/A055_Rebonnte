@@ -44,7 +44,7 @@ fun RebonnteApp(){
             SharedNavGraph(
                 navHostController = navController,
                 startDestination = startDestination,
-                logoRes = R.drawable.eventorias_logo
+                logoRes = R.drawable.rebonnte_logo
             )
         }
     }
