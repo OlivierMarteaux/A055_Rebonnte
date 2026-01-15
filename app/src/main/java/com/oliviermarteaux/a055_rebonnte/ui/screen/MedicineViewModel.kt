@@ -1,7 +1,5 @@
 package com.oliviermarteaux.a055_rebonnte.ui.screen
 
-import android.R.attr.author
-import android.R.attr.type
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue

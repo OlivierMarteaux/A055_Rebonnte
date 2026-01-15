@@ -10,7 +10,7 @@ import java.util.UUID
 data class Aisle(
 
     val id: String = UUID.randomUUID().toString(),
-    val name: String = "Default aisle name",
+    val name: String = "",
     val timestamp: Long = System.currentTimeMillis(),
     val author: User? = User(),
     val creationDate: Date? = LocalDate.now().toDate(),

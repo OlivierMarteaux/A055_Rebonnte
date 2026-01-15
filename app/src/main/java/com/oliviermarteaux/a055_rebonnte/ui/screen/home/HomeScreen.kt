@@ -17,10 +17,10 @@ import androidx.navigation.NavController
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
+import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
 import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
 import com.oliviermarteaux.shared.composables.SharedScaffold
-import com.oliviermarteaux.shared.navigation.Screen
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,13 +40,19 @@ fun HomeScreen(
             fun showFab(){ fabDisplayed = true }
             fun hideFab(){ fabDisplayed = false }
 
-            val cdHomeScreen =
-                stringResource(R.string.you_are_on_the_home_screen_here_you_can_browse_all_the_incoming_events)
-            val cdFabButton = stringResource(R.string.add_button_double_tap_to_add_a_new_event)
+            val cdAisles = stringResource(R.string.aisles)
+            val cdScreenTitle = stringResource(RebonnteScreen.Home.titleRes)
+            val cdScreen = stringResource(
+                R.string.you_are_on_the_screen_here_you_can_browse_all_the,
+                cdScreenTitle,
+                cdAisles
+            )
+            val cdAisle = stringResource(R.string.aisle)
+            val cdFabButton = "Add button. Double tap to add a new $cdAisle"
 
             SharedScaffold(
-                title = stringResource(Screen.Home.titleRes),
-                screenContentDescription = cdHomeScreen,
+                title = stringResource(RebonnteScreen.Home.titleRes),
+                screenContentDescription = cdScreen,
                 // top app bar
                 topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
                 // bottom app bar
@@ -54,7 +60,7 @@ fun HomeScreen(
                 // fab button
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
-                fabModifier = modifier.testTag("Add"),
+                fabModifier = modifier.testTag("HomeScreenFab"),
                 onFabClick = {
                     checkUserState(
                         onUserLogged = { navigateToAddScreen() },
@@ -74,6 +80,7 @@ fun HomeScreen(
                     testTag = "MedicineListScreen",
                     listUiState = homeUiState,
                     listViewModel = homeViewModel,
+                    itemLabel = stringResource(R.string.aisle),
                     itemList =  aisleList,
                     itemTitle =  Aisle::name,
                     reloadItemOnError = ::loadAisles,

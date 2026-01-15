@@ -27,12 +27,14 @@ fun AisleDetailScreen(
     navigateBack: () -> Unit = {},
     navigateToAddOrEditMedicineScreen: () -> Unit
 ) {
-    val cdHomeScreen =
-        stringResource(R.string.you_are_on_the_home_screen_here_you_can_browse_all_the_incoming_events)
+    val cdScreenTitle = stringResource(RebonnteScreen.AisleDetail.titleRes)
+    val cdContainer = stringResource(R.string.aisle)
+    val cdItems = stringResource(R.string.medicines)
+    val cdScreen = "You are on the $cdScreenTitle screen. Here you can browse all the $cdItems in this $cdContainer."
 
     SharedScaffold(
         title = stringResource(RebonnteScreen.AisleDetail.titleRes),
-        screenContentDescription = cdHomeScreen,
+        screenContentDescription = cdScreen,
         onBackClick = navigateBack,
         // top app bar
         topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
@@ -52,6 +54,7 @@ fun AisleDetailScreen(
                         testTag = "AisleDetailScreen",
                         listUiState = medicineListUiState,
                         listViewModel = medicineListViewModel,
+                        itemLabel = stringResource(R.string.medicine),
                         itemList = medicineList.filter { it.aisle == aisle },
                         itemTitle = Medicine::name ,
                         itemText = { medicine: Medicine ->

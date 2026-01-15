@@ -21,6 +21,7 @@ import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.ListUiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import com.oliviermarteaux.shared.ui.theme.ToastPadding
+import com.oliviermarteaux.shared.compose.R as oR
 
 @Composable
 fun <T> RebonnteItemListBody(
@@ -30,6 +31,7 @@ fun <T> RebonnteItemListBody(
     listUiState: ListUiState<T>,
     listViewModel: AuthUserViewModel,
     itemList: List<T>,
+    itemLabel: String,
     itemTitle: (T) -> String,
     itemText: @Composable (T) -> String = { "" },
     onSearchFocusRequester: FocusRequester = FocusRequester(),
@@ -45,7 +47,7 @@ fun <T> RebonnteItemListBody(
         ) {
             //_ UiState management: Empty, Error, Loading, Success
             val cdLoadingState =
-                stringResource(R.string.please_wait_server_connection_in_progress)
+                stringResource(oR.string.please_wait_server_connection_in_progress)
             when (listUiState) {
                 is ListUiState.Loading -> {
                     hideFab()
@@ -90,11 +92,11 @@ fun <T> RebonnteItemListBody(
                 }
             }
             if (authError) SharedToast(
-                text = stringResource(R.string.an_account_is_mandatory_to_add_or_edit_a_medicine),
+                text = stringResource(R.string.an_account_is_mandatory_to_add_or_edit_a, itemLabel),
                 bottomPadding = ToastPadding.high
             )
             if (networkError) SharedToast(
-                text = stringResource(R.string.network_error_check_your_internet_connection),
+                text = stringResource(oR.string.network_error_check_your_internet_connection),
                 bottomPadding = ToastPadding.veryHigh
             )
         }

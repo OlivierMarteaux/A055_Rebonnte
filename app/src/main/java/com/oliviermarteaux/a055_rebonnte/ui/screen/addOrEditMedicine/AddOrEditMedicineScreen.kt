@@ -7,39 +7,37 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.oliviermarteaux.a055_rebonnte.R
+import com.oliviermarteaux.shared.compose.R as oR
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemList
+import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteSaveButton
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.theme.Grey40
-import com.oliviermarteaux.a055_rebonnte.ui.theme.Red40
 import com.oliviermarteaux.localshared.composables.SharedFilledIntTextField
 import com.oliviermarteaux.localshared.composables.SharedFilledItemTextField
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
-import com.oliviermarteaux.shared.composables.SharedButton
 import com.oliviermarteaux.shared.composables.SharedFilledTextField
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.composables.SharedToast
+import com.oliviermarteaux.shared.composables.spacer.SpacerLarge
+import com.oliviermarteaux.shared.composables.spacer.SpacerMedium
+import com.oliviermarteaux.shared.composables.texts.TextTitleLarge
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
-import com.oliviermarteaux.shared.ui.theme.SharedSize
 import com.oliviermarteaux.shared.ui.theme.ToastPadding
 
 @Composable
@@ -48,12 +46,24 @@ fun AddOrEditMedicineScreen(
     medicineViewModel: MedicineViewModel,
     navigateBack: () -> Unit,
 ) {
+    val cdItem = stringResource(R.string.medicine)
+    val cdCreationTitle = stringResource(R.string.add_a_new, cdItem)
+    val cdCreation = stringResource(
+        R.string.creation_of_a_new_fill_in_the_fields_and_validate_to_create_a_new,
+        cdItem,
+        cdItem
+    )
+    val cdEditTitle = stringResource(R.string.edit, medicineViewModel.medicine.name)
+    val cdEdit = stringResource(
+        R.string.edit_the_fill_in_the_fields_and_validate_to_edit_it,
+        medicineViewModel.medicine.name,
+        cdItem
+    )
+
     with(medicineViewModel) {
-        val cdAddScreenTitle =
-            stringResource(R.string.creation_of_a_new_event_fill_in_the_event_data_and_validate_to_create_a_new_event)
         SharedScaffold(
-            title = stringResource(R.string.creation_of_an_event),
-            screenContentDescription = cdAddScreenTitle,
+            title = if (medicineCreation) cdCreationTitle else cdEditTitle,
+            screenContentDescription = if (medicineCreation) cdCreation else cdEdit,
             onBackClick = navigateBack
         ) { paddingValues ->
             Box {
@@ -76,12 +86,12 @@ fun AddOrEditMedicineScreen(
                     }
 
                     networkError -> SharedToast(
-                        text = stringResource(R.string.network_error_check_your_internet_connection),
+                        text = stringResource(oR.string.network_error_check_your_internet_connection),
                         bottomPadding = ToastPadding.medium
                     )
 
                     unknownError -> SharedToast(
-                        text = stringResource(R.string.an_unknown_error_occurred),
+                        text = stringResource(oR.string.an_unknown_error_occurred),
                         bottomPadding = ToastPadding.medium
                     )
                 }
@@ -123,10 +133,12 @@ fun AddScreenBody(
             updateMedicineStock = updateMedicineStock,
             updateMedicineAisle = updateMedicineAisle,
             homeViewModel = homeViewModel,
-            medicineCreation = medicineCreation
+            medicineCreation = medicineCreation,
+            isStockError = medicine.stock.toString().isEmpty()
+                    && if (!medicineCreation) medicine.stock != sourceMedicine.stock else true
         )
 
-        AddScreenSaveButton(
+        RebonnteSaveButton(
             onClick = {
                 when (medicineCreation) {
                     true -> {
@@ -146,6 +158,9 @@ fun AddScreenBody(
                         && if (!medicineCreation) medicine.stock != sourceMedicine.stock else true
                     )
         )
+        SpacerLarge()
+        TextTitleLarge(text = stringResource(R.string.change_record))
+        SpacerMedium()
 
         with(medicine) {
             RebonnteItemList(
@@ -157,7 +172,6 @@ fun AddScreenBody(
     }
 }
 
-
 @Composable
 fun AddScreenTextForm(
     medicine:Medicine,
@@ -165,17 +179,18 @@ fun AddScreenTextForm(
     updateMedicineStock: (Int) -> Unit,
     updateMedicineAisle: (Aisle) -> Unit,
     homeViewModel: HomeViewModel,
-    medicineCreation: Boolean
+    medicineCreation: Boolean,
+    isStockError: Boolean
 ){
     with(medicine) {
         //_ Medicine name
         SharedFilledTextField(
             value = name,
             onValueChange = { updateMedicineName(it) },
-            label = stringResource(R.string.new_event),
+            label = stringResource(oR.string.name),
             textFieldModifier = Modifier.fillMaxWidth(),
             isError = name.isEmpty(),
-            errorText = stringResource(R.string.please_enter_a_title),
+            errorText = stringResource(R.string.please_enter_a_name),
             bottomPadding = SharedPadding.large,
             enabled = medicineCreation
         )
@@ -186,10 +201,10 @@ fun AddScreenTextForm(
             itemList = homeViewModel.aisleList,
             selectedItem = aisle,
             itemLabel = {aisle -> aisle.name},
-            label = stringResource(R.string.tap_here_to_enter_your_description),
+            label = stringResource(R.string.aisle),
             textFieldModifier = Modifier.fillMaxWidth(),
             isError = aisle.name.isEmpty(),
-            errorText = stringResource(R.string.please_enter_a_description),
+            errorText = stringResource(R.string.please_enter_a_name),
             bottomPadding = SharedPadding.large,
             enabled = medicineCreation
         ) { updateMedicineAisle(it) }
@@ -198,32 +213,11 @@ fun AddScreenTextForm(
         SharedFilledIntTextField(
             value = stock,
             onConfirm = { updateMedicineStock(it) },
-            label = stringResource(R.string.tap_here_to_enter_your_description),
+            label = stringResource(R.string.stock_label),
             textFieldModifier = Modifier.fillMaxWidth(),
-            isError = stock.toString().isEmpty(),
-            errorText = stringResource(R.string.please_enter_a_description),
+            isError = isStockError,
+            errorText = stringResource(R.string.please_enter_a_valid_stock),
             bottomPadding = SharedPadding.large,
         )
     }
-}
-@Composable
-fun AddScreenSaveButton(
-    enabled: Boolean,
-    onClick: () -> Unit
-){
-    SharedButton(
-        text = stringResource(R.string.validate),
-        onClick = onClick,
-        shape = MaterialTheme.shapes.extraSmall,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = SharedPadding.large)
-            .height(SharedSize.medium),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Red40,
-            disabledContainerColor = Grey40,
-        ),
-        textColor = White,
-        enabled = enabled,
-    )
 }

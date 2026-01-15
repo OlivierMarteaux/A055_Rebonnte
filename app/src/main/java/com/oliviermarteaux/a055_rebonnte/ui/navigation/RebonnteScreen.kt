@@ -17,7 +17,7 @@ sealed class RebonnteScreen(
 ) {
     data object Home : RebonnteScreen(
         route = "home",
-        titleRes = R.string.aisle
+        titleRes = R.string.aisles
     )
     data object AisleDetail : RebonnteScreen(
         route = "aisle_detail",
