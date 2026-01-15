@@ -30,7 +30,12 @@ fun AisleDetailScreen(
     val cdScreenTitle = stringResource(RebonnteScreen.AisleDetail.titleRes)
     val cdContainer = stringResource(R.string.aisle)
     val cdItems = stringResource(R.string.medicines)
-    val cdScreen = "You are on the $cdScreenTitle screen. Here you can browse all the $cdItems in this $cdContainer."
+    val cdScreen = stringResource(
+        R.string.you_are_on_the_screen_here_you_can_browse_all_the_in_this,
+        cdScreenTitle,
+        cdItems,
+        cdContainer
+    )
 
     SharedScaffold(
         title = stringResource(RebonnteScreen.AisleDetail.titleRes),
@@ -61,6 +66,9 @@ fun AisleDetailScreen(
                             stringResource(R.string.stock, medicine.stock)
                                    },
                         reloadItemOnError = ::loadMedicines,
+                        actionUiState = addOrEditMedicineUiState,
+                        actionCreation = medicineCreation
+
                     ) { medicine ->
                         selectMedicine(medicine)
                         switchToMedicineEditionMode()

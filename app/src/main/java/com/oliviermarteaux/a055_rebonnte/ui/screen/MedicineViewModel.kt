@@ -86,10 +86,15 @@ class MedicineViewModel @Inject constructor(
                             )
                         )
                     )).fold(
-                        onSuccess = { withContext(layoutDispatcher) { onResult() } },
-                        onFailure = { showUnknownErrorToast() }
+                        onSuccess = {
+                            addOrEditMedicineUiState = UiState.Success(Unit)
+                            withContext(layoutDispatcher) { onResult() }
+                                    },
+                        onFailure = {
+                            showUnknownErrorToast()
+                            addOrEditMedicineUiState = UiState.Idle
+                        }
                     )
-                    addOrEditMedicineUiState = UiState.Idle
                 }
             },
             onNoUserLogged = {
@@ -135,14 +140,15 @@ class MedicineViewModel @Inject constructor(
                     )).fold(
                         onSuccess = {
                             log.d("MedicineViewModel::updateMedicine: Successful")
+                            addOrEditMedicineUiState = UiState.Success(Unit)
                             withContext(layoutDispatcher) { onResult() }
                                     },
                         onFailure = {
                             log.d("MedicineViewModel::updateMedicine: failed")
+                            addOrEditMedicineUiState = UiState.Idle
                             showUnknownErrorToast()
                         }
                     )
-                    addOrEditMedicineUiState = UiState.Idle
                     log.d("MedicineViewModel::updateMedicine: addOrEditMedicineUiState = $addOrEditMedicineUiState")
                 }
             },

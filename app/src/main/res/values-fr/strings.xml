@@ -27,4 +27,11 @@
     <string name="stock_label">Stock</string>
     <string name="change_record">Historique des modifications</string>
     <string name="edit">Modifier %1$s</string>
+    <string name="add_an">Ajouter un %1$s</string>
+    <string name="add_a">Ajouter un %1$s</string>
+    <string name="you_are_on_the_screen_here_you_can_browse_all_the_in_this">Vous êtes sur l\'écran %1$s. Ici vous pouvez parcourir les %2$s dans ce %3$s.</string>
+    <string name="medicine_aisle_picker_double_tap_to_select_an_aisle">Sélecteur du rayon du médicament. Appuyer deux fois pour sélectionner un rayon.</string>
+    <string name="medicine_stock_picker_double_tap_to_select_a_quantity_in_stock">Sélecteur de la quantité en stock. Appuyer deux fois pour sélectionner une quantité en stock.</string>
+    <string name="successfully_created">le %1$s a bien été créé</string>
+    <string name="successfully_edited">le %1$s a bien été modifié</string>
 </resources>

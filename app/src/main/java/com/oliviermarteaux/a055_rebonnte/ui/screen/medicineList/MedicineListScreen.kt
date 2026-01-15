@@ -76,7 +76,7 @@ fun MedicineListScreen(
                 cdItems
             )
             val cdItem = stringResource(R.string.medicine)
-            val cdFabLabel = stringResource(R.string.add)
+            val cdFabLabel = stringResource(R.string.add_a, cdItem)
             val cdFabAction = stringResource(R.string.add_a_new, cdItem)
             val cdFabButton =
                 stringResource(R.string.button_double_tap_to, cdFabLabel, cdFabAction)
@@ -140,7 +140,9 @@ fun MedicineListScreen(
                     onSearchFocusRequester = onSearchFocusRequester,
                     reloadItemOnError = ::loadMedicines,
                     showFab = ::showFab,
-                    hideFab = ::hideFab
+                    hideFab = ::hideFab,
+                    actionUiState = addOrEditMedicineUiState,
+                    actionCreation = medicineCreation
                 ){ medicine ->
                     hideSearchBar()
                     selectMedicine(medicine)

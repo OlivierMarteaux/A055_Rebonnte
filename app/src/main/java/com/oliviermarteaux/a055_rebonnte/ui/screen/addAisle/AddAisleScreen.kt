@@ -15,12 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.oliviermarteaux.a055_rebonnte.R
-import com.oliviermarteaux.shared.compose.R as oR
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteSaveButton
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.SharedFilledTextField
 import com.oliviermarteaux.shared.composables.SharedScaffold
@@ -28,13 +27,14 @@ import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import com.oliviermarteaux.shared.ui.theme.ToastPadding
+import com.oliviermarteaux.shared.compose.R as oR
 
 @Composable
 fun AddAisleScreen(
-    addAisleViewModel: AddAisleViewModel = hiltViewModel(),
+    aisleViewModel: AisleViewModel,
     navigateBack: () -> Unit,
 ) {
-    with(addAisleViewModel) {
+    with(aisleViewModel) {
         val cdItem = stringResource(R.string.aisle)
         val cdScreen = stringResource(
             R.string.creation_of_a_new_fill_in_the_fields_and_validate_to_create_a_new,

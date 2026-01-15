@@ -135,6 +135,7 @@ fun SharedNavGraph(
         composable(route = RebonnteScreen.AddAisle.route) {
             AddAisleScreen(
                 navigateBack = { navHostController.navigateUp() },
+                aisleViewModel = aisleViewModel
             )
         }
         /*_ ADD OR EDIT MEDICINE SCREEN ##########################################################################*/

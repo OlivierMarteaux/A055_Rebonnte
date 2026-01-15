@@ -17,13 +17,14 @@ import com.oliviermarteaux.shared.compose.R as oR
 @Composable
 fun RebonnteSaveButton(
     enabled: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ){
     SharedButton(
         text = stringResource(oR.string.validate),
         onClick = onClick,
         shape = MaterialTheme.shapes.extraSmall,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(SharedSize.medium),
         colors = ButtonDefaults.buttonColors(

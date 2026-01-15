@@ -40,15 +40,18 @@ fun HomeScreen(
             fun showFab(){ fabDisplayed = true }
             fun hideFab(){ fabDisplayed = false }
 
-            val cdAisles = stringResource(R.string.aisles)
+            val cdItems = stringResource(R.string.aisles)
             val cdScreenTitle = stringResource(RebonnteScreen.Home.titleRes)
             val cdScreen = stringResource(
                 R.string.you_are_on_the_screen_here_you_can_browse_all_the,
                 cdScreenTitle,
-                cdAisles
+                cdItems
             )
-            val cdAisle = stringResource(R.string.aisle)
-            val cdFabButton = "Add button. Double tap to add a new $cdAisle"
+            val cdItem = stringResource(R.string.aisle)
+            val cdFabLabel = stringResource(R.string.add_an, cdItem)
+            val cdFabAction = stringResource(R.string.add_a_new, cdItem)
+            val cdFabButton =
+                stringResource(R.string.button_double_tap_to, cdFabLabel, cdFabAction)
 
             SharedScaffold(
                 title = stringResource(RebonnteScreen.Home.titleRes),
@@ -63,7 +66,10 @@ fun HomeScreen(
                 fabModifier = modifier.testTag("HomeScreenFab"),
                 onFabClick = {
                     checkUserState(
-                        onUserLogged = { navigateToAddScreen() },
+                        onUserLogged = {
+                            selectAisle(Aisle())
+                            navigateToAddScreen()
+                                       },
                         onNoUserLogged = ::showAuthErrorToast
                     )
                 }
@@ -85,7 +91,8 @@ fun HomeScreen(
                     itemTitle =  Aisle::name,
                     reloadItemOnError = ::loadAisles,
                     showFab = ::showFab,
-                    hideFab = ::hideFab
+                    hideFab = ::hideFab,
+                    actionUiState = addAisleUiState
                 ){ aisle ->
                     selectAisle(aisle)
                     navigateToDetailScreen()
