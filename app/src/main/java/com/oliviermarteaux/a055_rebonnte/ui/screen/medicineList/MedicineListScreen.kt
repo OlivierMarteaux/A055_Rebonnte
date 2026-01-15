@@ -27,6 +27,7 @@ import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
 import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.composables.SharedScaffold
+import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import kotlinx.coroutines.delay
 import com.oliviermarteaux.shared.compose.R as oR
@@ -69,14 +70,23 @@ fun MedicineListScreen(
 
             //_ talkback content descriptions
             val cdScreenTitle = stringResource(RebonnteScreen.MedicineList.titleRes)
-            val cdItems = stringResource(R.string.medicines)
-            val cdScreen = stringResource(
-                R.string.you_are_on_the_screen_here_you_can_browse_all_the,
-                cdScreenTitle,
-                cdItems
-            )
             val cdItem = stringResource(R.string.medicine)
-            val cdFabLabel = stringResource(R.string.add)
+            val cdItems = stringResource(R.string.medicines)
+            val cdScreen =
+                if (addOrEditMedicineUiState is UiState.Success) {
+                    resetAddOrEditMedicineUiState()
+                    if (medicineCreation)
+                        stringResource(R.string.successfully_created, cdItem)
+                    else
+                        stringResource(R.string.successfully_edited, cdItem)
+                }
+                else
+                    stringResource(
+                        R.string.you_are_on_the_screen_here_you_can_browse_all_the,
+                        cdScreenTitle,
+                        cdItems
+                    )
+            val cdFabLabel = stringResource(R.string.add_a, cdItem)
             val cdFabAction = stringResource(R.string.add_a_new, cdItem)
             val cdFabButton =
                 stringResource(R.string.button_double_tap_to, cdFabLabel, cdFabAction)
@@ -140,7 +150,10 @@ fun MedicineListScreen(
                     onSearchFocusRequester = onSearchFocusRequester,
                     reloadItemOnError = ::loadMedicines,
                     showFab = ::showFab,
-                    hideFab = ::hideFab
+                    hideFab = ::hideFab,
+                    actionUiState = addOrEditMedicineUiState,
+                    actionCreation = medicineCreation,
+                    resetUiState = ::resetAddOrEditMedicineUiState
                 ){ medicine ->
                     hideSearchBar()
                     selectMedicine(medicine)

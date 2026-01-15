@@ -27,4 +27,11 @@
     <string name="stock_label">Stock</string>
     <string name="change_record">Change record</string>
     <string name="edit">Edit %1$s</string>
+    <string name="add_an">Add an %1$s</string>
+    <string name="add_a">Add a %1$s</string>
+    <string name="you_are_on_the_screen_here_you_can_browse_all_the_in_this">You are on the %1$s screen. Here you can browse all the %2$s in this %3$s.</string>
+    <string name="medicine_aisle_picker_double_tap_to_select_an_aisle">Medicine aisle picker. Double tap to select an aisle.</string>
+    <string name="medicine_stock_picker_double_tap_to_select_a_quantity_in_stock">Medicine stock picker. Double tap to select a quantity in stock.</string>
+    <string name="successfully_created">%1$s successfully created.</string>
+    <string name="successfully_edited">%1$s successfully edited.</string>
 </resources>

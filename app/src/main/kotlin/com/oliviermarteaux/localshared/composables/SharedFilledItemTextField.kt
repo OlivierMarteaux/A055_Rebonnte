@@ -91,7 +91,10 @@ fun <T> SharedFilledItemTextField (
     )
 
     ClickableReadOnlyField(
-        onClick = { toggleItemPickerDialog() }
+        onClick = { toggleItemPickerDialog() },
+        isError = isError,
+        errorText = errorText?:"",
+        contentDescription = contentDescription?:""
     ) {
         SharedFilledTextField(
             value = value,

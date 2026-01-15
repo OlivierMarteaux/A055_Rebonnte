@@ -21,6 +21,7 @@ import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
 import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
 import com.oliviermarteaux.shared.composables.SharedScaffold
+import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,15 +41,24 @@ fun HomeScreen(
             fun showFab(){ fabDisplayed = true }
             fun hideFab(){ fabDisplayed = false }
 
-            val cdAisles = stringResource(R.string.aisles)
+            val cdItem = stringResource(R.string.aisle)
+            val cdItems = stringResource(R.string.aisles)
             val cdScreenTitle = stringResource(RebonnteScreen.Home.titleRes)
-            val cdScreen = stringResource(
-                R.string.you_are_on_the_screen_here_you_can_browse_all_the,
-                cdScreenTitle,
-                cdAisles
-            )
-            val cdAisle = stringResource(R.string.aisle)
-            val cdFabButton = "Add button. Double tap to add a new $cdAisle"
+            val cdScreen =
+                if (addAisleUiState is UiState.Success) {
+                    resetAddAisleUiState()
+                    stringResource(R.string.successfully_created, cdItem)
+                }
+                else
+                    stringResource(
+                        R.string.you_are_on_the_screen_here_you_can_browse_all_the,
+                        cdScreenTitle,
+                        cdItems
+                    )
+            val cdFabLabel = stringResource(R.string.add_an, cdItem)
+            val cdFabAction = stringResource(R.string.add_a_new, cdItem)
+            val cdFabButton =
+                stringResource(R.string.button_double_tap_to, cdFabLabel, cdFabAction)
 
             SharedScaffold(
                 title = stringResource(RebonnteScreen.Home.titleRes),
@@ -63,7 +73,10 @@ fun HomeScreen(
                 fabModifier = modifier.testTag("HomeScreenFab"),
                 onFabClick = {
                     checkUserState(
-                        onUserLogged = { navigateToAddScreen() },
+                        onUserLogged = {
+                            selectAisle(Aisle())
+                            navigateToAddScreen()
+                                       },
                         onNoUserLogged = ::showAuthErrorToast
                     )
                 }
@@ -85,7 +98,9 @@ fun HomeScreen(
                     itemTitle =  Aisle::name,
                     reloadItemOnError = ::loadAisles,
                     showFab = ::showFab,
-                    hideFab = ::hideFab
+                    hideFab = ::hideFab,
+                    actionUiState = addAisleUiState,
+                    resetUiState = ::resetAddAisleUiState
                 ){ aisle ->
                     selectAisle(aisle)
                     navigateToDetailScreen()

@@ -93,7 +93,10 @@ fun SharedFilledIntTextField(
     }
 
     ClickableReadOnlyField(
-        onClick = { toggleIntPickerDialog() }
+        onClick = { toggleIntPickerDialog() },
+        isError = isError,
+        errorText = errorText?:"",
+        contentDescription = contentDescription?:""
     ) {
         SharedFilledTextField(
             value = textValue,

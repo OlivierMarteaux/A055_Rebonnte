@@ -1,5 +1,6 @@
 package com.oliviermarteaux.a055_rebonnte.ui.composable
 
+import android.util.Log
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +20,7 @@ import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.ListUiState
+import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import com.oliviermarteaux.shared.ui.theme.ToastPadding
 import com.oliviermarteaux.shared.compose.R as oR
@@ -29,6 +31,9 @@ fun <T> RebonnteItemListBody(
     modifier: Modifier = Modifier,
     testTag: String = "MedicineListScreen",
     listUiState: ListUiState<T>,
+    actionUiState: UiState<Unit>,
+    resetUiState: () -> Unit = {},
+    actionCreation: Boolean = true,
     listViewModel: AuthUserViewModel,
     itemList: List<T>,
     itemLabel: String,
@@ -99,6 +104,24 @@ fun <T> RebonnteItemListBody(
                 text = stringResource(oR.string.network_error_check_your_internet_connection),
                 bottomPadding = ToastPadding.veryHigh
             )
+
+            if (actionUiState is UiState.Success) {
+                Log.d("OM_TAG", "RebonnteListBody: actionUiState is success")
+                if (actionCreation) {
+                    Log.d("OM_TAG", "RebonnteListBody: action is creation")
+                    SharedToast(
+                        text = stringResource(R.string.successfully_created, itemLabel),
+                        bottomPadding = ToastPadding.high
+                    )
+                } else {
+                    Log.d("OM_TAG", "RebonnteListBody: action is edition")
+                    SharedToast(
+                        text = stringResource(R.string.successfully_edited, itemLabel),
+                        bottomPadding = ToastPadding.high
+                    )
+                }
+                resetUiState()
+            }
         }
     }
 }
