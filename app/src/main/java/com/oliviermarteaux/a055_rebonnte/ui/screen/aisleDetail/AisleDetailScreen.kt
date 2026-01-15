@@ -14,7 +14,8 @@ import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
-import com.oliviermarteaux.shared.composables.SharedScaffold
+import com.oliviermarteaux.localshared.composables.SharedScaffold
+import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,32 +28,42 @@ fun AisleDetailScreen(
     navigateBack: () -> Unit = {},
     navigateToAddOrEditMedicineScreen: () -> Unit
 ) {
-    val cdScreenTitle = stringResource(RebonnteScreen.AisleDetail.titleRes)
-    val cdContainer = stringResource(R.string.aisle)
-    val cdItems = stringResource(R.string.medicines)
-    val cdScreen = stringResource(
-        R.string.you_are_on_the_screen_here_you_can_browse_all_the_in_this,
-        cdScreenTitle,
-        cdItems,
-        cdContainer
-    )
+    with(medicineViewModel) {
+        val cdScreenTitle = stringResource(RebonnteScreen.AisleDetail.titleRes)
+        val cdContainer = stringResource(R.string.aisle)
+        val cdItem = stringResource(R.string.medicine)
+        val cdItems = stringResource(R.string.medicines)
+        val cdItemAction: String = run {
+            resetAddOrEditMedicineUiState()
+            if (medicineCreation) stringResource(R.string.successfully_created, cdItem)
+            else stringResource(R.string.successfully_edited, cdItem)
+        }
+        val cdScreen = stringResource(
+            R.string.you_are_on_the_screen_here_you_can_browse_all_the_in_this,
+            cdScreenTitle,
+            cdItems,
+            cdContainer
+        )
 
-    SharedScaffold(
-        title = stringResource(RebonnteScreen.AisleDetail.titleRes),
-        screenContentDescription = cdScreen,
-        onBackClick = navigateBack,
-        // top app bar
-        topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
-    ) { contentPadding ->
-        with(medicineListViewModel) {
-            LaunchedEffect(medicineListUiState) {
-                Log.i(
-                    "OM_TAG",
-                    "MedicineListViewModel: LaunchedEffect: medicineListUiState = $medicineListUiState"
-                )
-            }
-            with(aisleViewModel) {
-                with(medicineViewModel) {
+        SharedScaffold(
+            title = stringResource(RebonnteScreen.AisleDetail.titleRes),
+            screenContentDescription = cdScreen,
+            onBackClick = navigateBack,
+            // top app bar
+            topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
+            //_ semantic state
+            semanticState = addOrEditMedicineUiState is UiState.Success,
+            semanticStateText = cdItemAction
+        ) { contentPadding ->
+            with(medicineListViewModel) {
+                LaunchedEffect(medicineListUiState) {
+                    Log.i(
+                        "OM_TAG",
+                        "MedicineListViewModel: LaunchedEffect: medicineListUiState = $medicineListUiState"
+                    )
+                }
+                with(aisleViewModel) {
+
                     RebonnteItemListBody(
                         contentPadding = contentPadding,
                         modifier = modifier,
@@ -67,7 +78,8 @@ fun AisleDetailScreen(
                                    },
                         reloadItemOnError = ::loadMedicines,
                         actionUiState = addOrEditMedicineUiState,
-                        actionCreation = medicineCreation
+                        actionCreation = medicineCreation,
+                        resetUiState = ::resetAddOrEditMedicineUiState
 
                     ) { medicine ->
                         selectMedicine(medicine)

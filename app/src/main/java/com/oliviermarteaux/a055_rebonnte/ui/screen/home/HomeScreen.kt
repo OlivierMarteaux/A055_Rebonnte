@@ -21,6 +21,7 @@ import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
 import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
 import com.oliviermarteaux.shared.composables.SharedScaffold
+import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,14 +41,20 @@ fun HomeScreen(
             fun showFab(){ fabDisplayed = true }
             fun hideFab(){ fabDisplayed = false }
 
+            val cdItem = stringResource(R.string.aisle)
             val cdItems = stringResource(R.string.aisles)
             val cdScreenTitle = stringResource(RebonnteScreen.Home.titleRes)
-            val cdScreen = stringResource(
-                R.string.you_are_on_the_screen_here_you_can_browse_all_the,
-                cdScreenTitle,
-                cdItems
-            )
-            val cdItem = stringResource(R.string.aisle)
+            val cdScreen =
+                if (addAisleUiState is UiState.Success) {
+                    resetAddAisleUiState()
+                    stringResource(R.string.successfully_created, cdItem)
+                }
+                else
+                    stringResource(
+                        R.string.you_are_on_the_screen_here_you_can_browse_all_the,
+                        cdScreenTitle,
+                        cdItems
+                    )
             val cdFabLabel = stringResource(R.string.add_an, cdItem)
             val cdFabAction = stringResource(R.string.add_a_new, cdItem)
             val cdFabButton =
@@ -92,7 +99,8 @@ fun HomeScreen(
                     reloadItemOnError = ::loadAisles,
                     showFab = ::showFab,
                     hideFab = ::hideFab,
-                    actionUiState = addAisleUiState
+                    actionUiState = addAisleUiState,
+                    resetUiState = ::resetAddAisleUiState
                 ){ aisle ->
                     selectAisle(aisle)
                     navigateToDetailScreen()

@@ -32,6 +32,7 @@ fun <T> RebonnteItemListBody(
     testTag: String = "MedicineListScreen",
     listUiState: ListUiState<T>,
     actionUiState: UiState<Unit>,
+    resetUiState: () -> Unit = {},
     actionCreation: Boolean = true,
     listViewModel: AuthUserViewModel,
     itemList: List<T>,
@@ -119,6 +120,7 @@ fun <T> RebonnteItemListBody(
                         bottomPadding = ToastPadding.high
                     )
                 }
+                resetUiState()
             }
         }
     }

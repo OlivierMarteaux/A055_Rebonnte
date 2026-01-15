@@ -46,6 +46,7 @@ fun AddOrEditMedicineScreen(
     medicineViewModel: MedicineViewModel,
     navigateBack: () -> Unit,
 ) {
+
     val cdItem = stringResource(R.string.medicine)
     val cdCreationTitle = stringResource(R.string.add_a_new, cdItem)
     val cdCreation = stringResource(

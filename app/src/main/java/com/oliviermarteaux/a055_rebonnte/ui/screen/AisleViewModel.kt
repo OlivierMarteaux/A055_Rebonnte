@@ -13,6 +13,7 @@ import com.oliviermarteaux.shared.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -39,6 +40,13 @@ class AisleViewModel @Inject constructor(
 
     fun selectAisle(selectedAisle: Aisle) {
         aisle = selectedAisle
+    }
+
+    fun resetAddAisleUiState() {
+        viewModelScope.launch {
+            delay(3000)
+            addAisleUiState = UiState.Idle
+        }
     }
 
     fun updateAisleName(name: String) { aisle = aisle.copy(name = name) }

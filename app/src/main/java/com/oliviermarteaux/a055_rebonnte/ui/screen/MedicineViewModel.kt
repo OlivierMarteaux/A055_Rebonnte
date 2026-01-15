@@ -16,6 +16,7 @@ import com.oliviermarteaux.shared.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,6 +41,13 @@ class MedicineViewModel @Inject constructor(
         private set
     var addOrEditMedicineUiState: UiState<Unit> by mutableStateOf(UiState.Idle)
         private set
+
+    fun resetAddOrEditMedicineUiState() {
+        viewModelScope.launch {
+            delay(3000)
+            addOrEditMedicineUiState = UiState.Idle
+        }
+    }
 
     fun switchToMedicineCreationMode(){
         log.d("MedicineViewModel::switchToMedicineCreationMode")
