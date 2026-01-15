@@ -20,15 +20,16 @@ import androidx.navigation.NavController
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
+import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineSortOption
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
 import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.composables.SharedScaffold
-import com.oliviermarteaux.shared.navigation.Screen
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import kotlinx.coroutines.delay
+import com.oliviermarteaux.shared.compose.R as oR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,20 +67,30 @@ fun MedicineListScreen(
                 onSearchFocusRequester.requestFocus()
             }
 
-            val cdHomeScreen =
-                stringResource(R.string.you_are_on_the_home_screen_here_you_can_browse_all_the_incoming_events)
-            val cdFabButton = stringResource(R.string.add_button_double_tap_to_add_a_new_event)
-            val cdCustomAccessibilityActionClear = stringResource(R.string.clear_all_text)
+            //_ talkback content descriptions
+            val cdScreenTitle = stringResource(RebonnteScreen.MedicineList.titleRes)
+            val cdItems = stringResource(R.string.medicines)
+            val cdScreen = stringResource(
+                R.string.you_are_on_the_screen_here_you_can_browse_all_the,
+                cdScreenTitle,
+                cdItems
+            )
+            val cdItem = stringResource(R.string.medicine)
+            val cdFabLabel = stringResource(R.string.add)
+            val cdFabAction = stringResource(R.string.add_a_new, cdItem)
+            val cdFabButton =
+                stringResource(R.string.button_double_tap_to, cdFabLabel, cdFabAction)
+            val cdCustomAccessibilityActionClear = stringResource(oR.string.clear_all_text)
 
             SharedScaffold(
-                title = stringResource(Screen.Home.titleRes),
-                screenContentDescription = cdHomeScreen,
+                title = stringResource(RebonnteScreen.MedicineList.titleRes),
+                screenContentDescription = cdScreen,
                 // top app bar
                 topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
                 // search bar
                 query = queryFieldValue,
                 onQueryChange = ::filterMedicines,
-                searchLabel = stringResource(R.string.look_for_an_event),
+                searchLabel = stringResource(R.string.look_for_an, cdItem),
                 searchBarIcon = IconSource.VectorIcon(Icons.Default.Clear),
                 searchBarIconSemantics = cdCustomAccessibilityActionClear,
                 onSearchBarIconClick = { clearQuery(); hideSearchBar() },
@@ -96,7 +107,7 @@ fun MedicineListScreen(
                 // fab button
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
-                fabModifier = modifier.testTag("Add"),
+                fabModifier = modifier.testTag("MedicineListScreenFab"),
                 onFabClick = {
                     checkUserState(
                         onUserLogged = {
@@ -121,6 +132,7 @@ fun MedicineListScreen(
                     testTag = "MedicineListScreen",
                     listUiState = medicineListUiState,
                     listViewModel = medicineListViewModel,
+                    itemLabel = stringResource(R.string.medicine),
                     itemList =  filteredMedicineList,
                     itemTitle =  Medicine::name,
                     itemText = { medicine: Medicine ->

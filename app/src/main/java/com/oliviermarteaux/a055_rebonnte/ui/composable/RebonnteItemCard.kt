@@ -20,9 +20,9 @@ import com.oliviermarteaux.shared.ui.theme.SharedPadding
 @Composable
 fun RebonnteItemCard(
     title: String,
+    modifier: Modifier = Modifier,
     text: String = "",
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     ElevatedCard(
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 3.dp),

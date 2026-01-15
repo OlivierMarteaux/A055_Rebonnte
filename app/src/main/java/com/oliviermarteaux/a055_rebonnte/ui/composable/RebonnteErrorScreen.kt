@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.oliviermarteaux.a055_rebonnte.R
+import com.oliviermarteaux.shared.compose.R as oR
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Grey40
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Red40
 import com.oliviermarteaux.shared.composables.IconSource
@@ -61,14 +61,14 @@ fun RebonnteErrorScreen(
             )
         }
         SpacerLarge()
-        TextTitleMedium(text = stringResource(R.string.error))
+        TextTitleMedium(text = stringResource(oR.string.error))
         TextTitleSmall(
-            text = stringResource(R.string.an_error_as_occurred_please_try_again_later),
+            text = stringResource(oR.string.an_error_as_occurred_please_try_again_later),
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(35.dp))
         SharedButton(
-            text = stringResource(R.string.try_again),
+            text = stringResource(oR.string.try_again),
             onClick = loadItems,
             shape = MaterialTheme.shapes.extraSmall,
             colors = ButtonDefaults.buttonColors(containerColor = Red40),
