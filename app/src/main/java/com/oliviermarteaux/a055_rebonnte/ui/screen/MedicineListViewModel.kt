@@ -37,7 +37,7 @@ class MedicineListViewModel @Inject constructor(
     var filteredMedicineList: List<Medicine> by mutableStateOf(emptyList())
         private set
 
-    var currentSortOption: MedicineSortOption? by mutableStateOf(null)
+    var currentSortOption: MedicineSortOption by mutableStateOf(MedicineSortOption.DESCENDING_TIMESTAMP)
         private set
 
     var queryFieldValue: TextFieldValue by mutableStateOf(TextFieldValue(""))
@@ -45,27 +45,53 @@ class MedicineListViewModel @Inject constructor(
 
     fun clearQuery() {
         queryFieldValue = TextFieldValue("")
-        filterMedicines(queryFieldValue)
+        getMedicineSortedAndFiltered()
+//        filterMedicines(queryFieldValue)
     }
 
     fun filterMedicines(query: TextFieldValue) {
         queryFieldValue = query
-        filteredMedicineList = medicineList.filter { medicine ->
-            listOfNotNull(medicine.name, medicine.author?.firstname, medicine.author?.lastname)
-                .any { field -> field.contains(query.text, true) }
-        }.sortedWith ( currentSortOption?.comparator?:compareBy { null } )
+        getMedicineSortedAndFiltered()
+//        filteredMedicineList = medicineList.filter { medicine ->
+//            listOfNotNull(medicine.name, medicine.author?.firstname, medicine.author?.lastname)
+//                .any { field -> field.contains(query.text, true) }
+//        }.sortedWith ( currentSortOption.comparator )
     }
 
     fun sortMedicinesBy(sortOption: MedicineSortOption) {
         currentSortOption = sortOption
-        filteredMedicineList = filteredMedicineList.sortedWith(sortOption.comparator)
+        getMedicineSortedAndFiltered()
+//        filteredMedicineList = filteredMedicineList.sortedWith(sortOption.comparator)
     }
 
-    fun loadMedicines() {
+//    fun loadMedicines() {
+//        viewModelScope.launch {
+//            medicineListUiState = ListUiState.Loading
+////            delay(1500) // simulate network delay for Loading state evidence
+//            medicineRepository.getMedicineSortedBy(currentSortOption).collect { result ->
+//                result
+//                    .onSuccess {
+//                        medicineList = it
+//                        filteredMedicineList = it
+//                        medicineListUiState =
+//                            if (medicineList.isEmpty()) ListUiState.Empty
+//                            else ListUiState.Success(medicineList)
+//                    }
+//                    .onFailure { e ->
+//                        medicineListUiState = ListUiState.Error(e)
+//                    }
+//            }
+//        }
+//    }
+
+    fun getMedicineSortedAndFiltered() {
         viewModelScope.launch {
             medicineListUiState = ListUiState.Loading
 //            delay(1500) // simulate network delay for Loading state evidence
-            medicineRepository.getMedicineSortedByDescTimestamp().collect { result ->
+            medicineRepository.getMedicineSortedAndFilteredBy(
+                query = queryFieldValue.text.lowercase(),
+                medicineSortOption = currentSortOption
+            ).collect { result ->
                 result
                     .onSuccess {
                         medicineList = it
@@ -98,6 +124,6 @@ class MedicineListViewModel @Inject constructor(
         if (TestConfig.isTest) signInTestUser()
 
         // Fetch medicines from the repository
-        loadMedicines()
+        sortMedicinesBy(MedicineSortOption.DESCENDING_TIMESTAMP)
     }
 }

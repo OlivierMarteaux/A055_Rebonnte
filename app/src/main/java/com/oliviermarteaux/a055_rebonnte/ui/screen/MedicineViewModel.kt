@@ -100,6 +100,7 @@ class MedicineViewModel @Inject constructor(
                     //      delay(3000) // simulate network delay for Loading state evidence
                     medicineRepository.addMedicine(medicine.copy(
                         author = user,
+                        nameLowerCase = medicine.name.lowercase(),
                         changeRecord = listOf(
                             MedicineChange(
                                 author = user,
