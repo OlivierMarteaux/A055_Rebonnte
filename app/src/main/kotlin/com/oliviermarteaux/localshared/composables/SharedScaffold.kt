@@ -134,6 +134,8 @@ fun SharedScaffold(
     screenContentDescription: String = "",
     topAppBarModifier: Modifier = Modifier,
     trailingIcon: IconSource? = null,
+    trailingIconAction: (() -> Unit)? = {},
+    trailingIconButtonContentDescription: String = "",
     avatarUrl: String? = null,
     onBackClick: (() -> Unit)? = null,
     //_ Semantic state management
@@ -240,7 +242,15 @@ fun SharedScaffold(
                                 .semantics { hideFromAccessibility() }
                         )
                     }
-                    trailingIcon?.let {
+                    trailingIconAction?.let {
+                        SharedIconButton(
+                            icon  =  trailingIcon?: IconSource.VectorIcon(Icons.Default.MoreVert),
+                            modifier = Modifier
+                                .cdButtonSemantics(trailingIconButtonContentDescription)
+                                .size(48.dp),
+                            onClick = trailingIconAction
+                        )
+                    }?:trailingIcon?.let{
                         SharedIcon(
                             icon  =  trailingIcon,
                             modifier = Modifier

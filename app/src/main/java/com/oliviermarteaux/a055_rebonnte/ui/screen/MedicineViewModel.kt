@@ -12,6 +12,7 @@ import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChangeType
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.UiState
+import com.oliviermarteaux.shared.ui.showToastFlag
 import com.oliviermarteaux.shared.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,6 +22,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+
+enum class CrudAction {
+    NONE, GET, ADD, UPDATE, DELETE
+}
 
 @HiltViewModel
 class MedicineViewModel @Inject constructor(
@@ -37,26 +42,35 @@ class MedicineViewModel @Inject constructor(
         private set
     var sourceMedicine: Medicine by mutableStateOf(Medicine())
         private set
-    var medicineCreation: Boolean by mutableStateOf(true)
+    var medicineCrudAction: CrudAction by mutableStateOf(CrudAction.NONE)
         private set
     var addOrEditMedicineUiState: UiState<Unit> by mutableStateOf(UiState.Idle)
         private set
-
     fun resetAddOrEditMedicineUiState() {
         viewModelScope.launch {
             delay(3000)
             addOrEditMedicineUiState = UiState.Idle
         }
     }
-
+    fun resetMedicineCrudAction() {
+        viewModelScope.launch {
+            delay(3000)
+            medicineCrudAction = CrudAction.NONE
+        }
+    }
     fun switchToMedicineCreationMode(){
         log.d("MedicineViewModel::switchToMedicineCreationMode")
-        medicineCreation = true
+        medicineCrudAction = CrudAction.ADD
     }
     fun switchToMedicineEditionMode(){
         log.d("MedicineViewModel::switchToMedicineEditionMode")
-        medicineCreation = false
+        medicineCrudAction = CrudAction.UPDATE
     }
+    fun switchToMedicineDeletionMode(){
+        log.d("MedicineViewModel::switchToMedicineDeletionMode")
+        medicineCrudAction = CrudAction.DELETE
+    }
+
     fun selectMedicine(selectedMedicine: Medicine) {
         sourceMedicine = selectedMedicine
         medicine = selectedMedicine
@@ -158,6 +172,46 @@ class MedicineViewModel @Inject constructor(
                         }
                     )
                     log.d("MedicineViewModel::updateMedicine: addOrEditMedicineUiState = $addOrEditMedicineUiState")
+                }
+            },
+            onNoUserLogged = {
+                showAuthErrorToast()
+            }
+        )
+    }
+
+    fun deleteMedicine(
+        dataDispatcher: CoroutineDispatcher = Dispatchers.IO,
+        layoutDispatcher: CoroutineDispatcher = Dispatchers.Main,
+        onResult: () -> Unit = {}
+    ) {
+        switchToMedicineDeletionMode()
+        addOrEditMedicineUiState = UiState.Loading
+        log.d("MedicineViewModel::deleteMedicine: addOrEditMedicineUiState = $addOrEditMedicineUiState")
+
+        if (!isOnline) {
+            showNetworkErrorToast()
+            addOrEditMedicineUiState = UiState.Idle
+            return
+        }
+
+        checkUserState(
+            onUserLogged = { user ->
+                viewModelScope.launch(dataDispatcher) {
+
+                    medicineRepository.deleteMedicine(medicine.id).fold(
+                        onSuccess = {
+                            log.d("MedicineViewModel::deleteMedicine: Successful")
+                            addOrEditMedicineUiState = UiState.Success(Unit)
+                            withContext(layoutDispatcher) { onResult() }
+                        },
+                        onFailure = {
+                            log.d("MedicineViewModel::deleteMedicine: failed")
+                            addOrEditMedicineUiState = UiState.Idle
+                            showUnknownErrorToast()
+                        }
+                    )
+                    log.d("MedicineViewModel::deleteMedicine: addOrEditMedicineUiState = $addOrEditMedicineUiState")
                 }
             },
             onNoUserLogged = {

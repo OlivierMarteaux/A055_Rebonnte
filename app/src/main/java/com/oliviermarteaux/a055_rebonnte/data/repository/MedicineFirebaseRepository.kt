@@ -19,4 +19,7 @@ class MedicineFirebaseRepository @Inject constructor(
 
     override suspend fun updateMedicine(medicine: Medicine): Result<Unit> =
         medicineApi.updateMedicine(medicine)
+
+    override suspend fun deleteMedicine(medicineId: String): Result<Unit> =
+        medicineApi.deleteMedicine(medicineId)
 }

@@ -8,4 +8,5 @@ interface MedicineApi {
     fun getMedicineSortedByDescTimestamp(): Flow<Result<List<Medicine>>>
     suspend fun addMedicine(medicine: Medicine): Result<Unit>
     suspend fun updateMedicine(medicine: Medicine): Result<Unit>
+    suspend fun deleteMedicine(medicineId: String): Result<Unit>
 }

@@ -1,5 +1,6 @@
 package com.oliviermarteaux.a055_rebonnte.ui.screen.home
 
+import android.R.attr.name
 import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -95,6 +96,7 @@ fun HomeScreen(
                     listViewModel = homeViewModel,
                     itemLabel = stringResource(R.string.aisle),
                     itemList =  aisleList,
+                    item = aisle,
                     itemTitle =  Aisle::name,
                     reloadItemOnError = ::loadAisles,
                     showFab = ::showFab,

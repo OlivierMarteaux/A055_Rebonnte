@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,13 +25,15 @@ import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemList
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteSaveButton
+import com.oliviermarteaux.a055_rebonnte.ui.screen.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeViewModel
 import com.oliviermarteaux.localshared.composables.SharedFilledIntTextField
 import com.oliviermarteaux.localshared.composables.SharedFilledItemTextField
+import com.oliviermarteaux.localshared.composables.SharedScaffold
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
+import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.composables.SharedFilledTextField
-import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.composables.spacer.SpacerLarge
 import com.oliviermarteaux.shared.composables.spacer.SpacerMedium
@@ -38,7 +42,6 @@ import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import com.oliviermarteaux.shared.ui.theme.ToastPadding
 import com.oliviermarteaux.shared.compose.R as oR
-
 
 @Composable
 fun AddOrEditMedicineScreen(
@@ -60,12 +63,27 @@ fun AddOrEditMedicineScreen(
         medicineViewModel.medicine.name,
         cdItem
     )
+    val cdDeleteAction = stringResource(R.string.delete_the, cdItem)
+    val cdDeleteLabel = stringResource(R.string.delete)
+    val cdDeleteButton =
+        stringResource(R.string.button_double_tap_to, cdDeleteLabel, cdDeleteAction)
 
     with(medicineViewModel) {
         SharedScaffold(
-            title = if (medicineCreation) cdCreationTitle else cdEditTitle,
-            screenContentDescription = if (medicineCreation) cdCreation else cdEdit,
-            onBackClick = navigateBack
+            title = when(medicineCrudAction){
+                CrudAction.ADD -> cdCreationTitle
+                CrudAction.UPDATE -> cdEditTitle
+                else -> ""
+            },
+            screenContentDescription = when(medicineCrudAction){
+                CrudAction.ADD -> cdCreation
+                CrudAction.UPDATE -> cdEdit
+                else -> ""
+            },
+            onBackClick = navigateBack,
+            trailingIcon = IconSource.VectorIcon(Icons.Default.Delete),
+            trailingIconAction = { deleteMedicine { navigateBack() } },
+            trailingIconButtonContentDescription = cdDeleteButton
         ) { paddingValues ->
 
             Box {
@@ -82,7 +100,7 @@ fun AddOrEditMedicineScreen(
                     updateMedicineStock = ::updateMedicineStock,
                     updateMedicineAisle = ::updateMedicineAisle,
                     homeViewModel = homeViewModel,
-                    medicineCreation = medicineCreation,
+                    medicineCrudAction = medicineCrudAction
                 )
                 when {
                     addOrEditMedicineUiState is UiState.Loading -> {
@@ -116,7 +134,7 @@ fun AddScreenBody(
     updateMedicineStock: (Int) -> Unit,
     updateMedicineAisle: (Aisle) -> Unit,
     homeViewModel: HomeViewModel,
-    medicineCreation: Boolean,
+    medicineCrudAction: CrudAction,
 ) {
     val configuration = LocalConfiguration.current
     val orientation = configuration.orientation
@@ -137,29 +155,30 @@ fun AddScreenBody(
             updateMedicineStock = updateMedicineStock,
             updateMedicineAisle = updateMedicineAisle,
             homeViewModel = homeViewModel,
-            medicineCreation = medicineCreation,
+            medicineCreation = medicineCrudAction == CrudAction.ADD,
             isStockError = medicine.stock.toString().isEmpty()
-                    && if (!medicineCreation) medicine.stock != sourceMedicine.stock else true
+                    && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
         )
 
         RebonnteSaveButton(
             onClick = {
-                when (medicineCreation) {
-                    true -> {
+                when (medicineCrudAction) {
+                    CrudAction.ADD -> {
                         Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: AddMedicine()")
                         addMedicine()
                     }
-                    false -> {
+                    CrudAction.UPDATE -> {
                         Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: UpdateMedicine()")
                         updateMedicine()
                     }
+                    else -> {}
                 }
             },
             enabled = (
                 medicine.name.isNotEmpty()
                         && medicine.aisle.name.isNotEmpty()
                         && medicine.stock.toString().isNotEmpty()
-                        && if (!medicineCreation) medicine.stock != sourceMedicine.stock else true
+                        && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
                     )
         )
         SpacerLarge()

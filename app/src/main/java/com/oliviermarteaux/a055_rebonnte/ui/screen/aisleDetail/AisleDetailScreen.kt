@@ -12,6 +12,7 @@ import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
 import com.oliviermarteaux.localshared.composables.SharedScaffold
@@ -35,8 +36,12 @@ fun AisleDetailScreen(
         val cdItems = stringResource(R.string.medicines)
         val cdItemAction: String = run {
             resetAddOrEditMedicineUiState()
-            if (medicineCreation) stringResource(R.string.successfully_created, cdItem)
-            else stringResource(R.string.successfully_edited, cdItem)
+            when (medicineCrudAction) {
+                CrudAction.ADD -> stringResource(R.string.successfully_created, cdItem, medicine.name)
+                CrudAction.UPDATE -> stringResource(R.string.successfully_edited, cdItem, medicine.name)
+                CrudAction.DELETE -> stringResource(R.string.successfully_deleted, cdItem, medicine.name)
+                else -> ""
+            }
         }
         val cdScreen = stringResource(
             R.string.you_are_on_the_screen_here_you_can_browse_all_the_in_this,
@@ -72,13 +77,15 @@ fun AisleDetailScreen(
                         listViewModel = medicineListViewModel,
                         itemLabel = stringResource(R.string.medicine),
                         itemList = medicineList.filter { it.aisle == aisle },
+                        item = medicine,
                         itemTitle = Medicine::name ,
                         itemText = { medicine: Medicine ->
                             stringResource(R.string.stock, medicine.stock)
                                    },
                         reloadItemOnError = ::loadMedicines,
                         actionUiState = addOrEditMedicineUiState,
-                        actionCreation = medicineCreation,
+                        itemCrudAction = medicineCrudAction,
+                        resetItemCrudAction = ::resetMedicineCrudAction,
                         resetUiState = ::resetAddOrEditMedicineUiState
 
                     ) { medicine ->

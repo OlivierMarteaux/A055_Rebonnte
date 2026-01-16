@@ -21,6 +21,7 @@ import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineSortOption
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
@@ -75,12 +76,13 @@ fun MedicineListScreen(
             val cdScreen =
                 if (addOrEditMedicineUiState is UiState.Success) {
                     resetAddOrEditMedicineUiState()
-                    if (medicineCreation)
-                        stringResource(R.string.successfully_created, cdItem)
-                    else
-                        stringResource(R.string.successfully_edited, cdItem)
-                }
-                else
+                    when (medicineCrudAction){
+                        CrudAction.ADD -> stringResource(R.string.successfully_created, cdItem, medicine.name)
+                        CrudAction.UPDATE -> stringResource(R.string.successfully_edited, cdItem, medicine.name)
+                        CrudAction.DELETE -> stringResource(R.string.successfully_deleted, cdItem, medicine.name)
+                        else -> ""
+                    }
+                } else
                     stringResource(
                         R.string.you_are_on_the_screen_here_you_can_browse_all_the,
                         cdScreenTitle,
@@ -144,6 +146,7 @@ fun MedicineListScreen(
                     listViewModel = medicineListViewModel,
                     itemLabel = stringResource(R.string.medicine),
                     itemList =  filteredMedicineList,
+                    item = medicine,
                     itemTitle =  Medicine::name,
                     itemText = { medicine: Medicine ->
                         stringResource(R.string.stock, medicine.stock) },
@@ -152,8 +155,9 @@ fun MedicineListScreen(
                     showFab = ::showFab,
                     hideFab = ::hideFab,
                     actionUiState = addOrEditMedicineUiState,
-                    actionCreation = medicineCreation,
-                    resetUiState = ::resetAddOrEditMedicineUiState
+                    itemCrudAction = medicineCrudAction,
+                    resetUiState = ::resetAddOrEditMedicineUiState,
+                    resetItemCrudAction = ::resetMedicineCrudAction,
                 ){ medicine ->
                     hideSearchBar()
                     selectMedicine(medicine)

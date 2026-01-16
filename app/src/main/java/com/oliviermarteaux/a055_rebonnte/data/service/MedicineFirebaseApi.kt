@@ -16,6 +16,10 @@ class MedicineFirebaseApi: MedicineApi {
     private val firestore = FirebaseFirestore.getInstance()
     private val medicinesCollection = firestore.collection("medicines")
 
+    //_ #############################################
+    //_ # GET MEDICINE
+    //_ #############################################
+
     override fun getMedicineSortedByDescTimestamp(): Flow<Result<List<Medicine>>> = callbackFlow {
 //        throw IllegalStateException("Forced exception for testing")
         val listenerRegistration = medicinesCollection
@@ -50,6 +54,10 @@ class MedicineFirebaseApi: MedicineApi {
         emit(Result.failure(e))
     }
 
+    //_ #############################################
+    //_ # ADD MEDICINE
+    //_ #############################################
+
     override suspend fun addMedicine(medicine: Medicine): Result<Unit> = runCatching {
 
         // throw IllegalStateException("Forced exception for testing")
@@ -67,12 +75,15 @@ class MedicineFirebaseApi: MedicineApi {
         )
     }
 
+    //_ #############################################
+    //_ # UPDATE MEDICINE
+    //_ #############################################
+
     override suspend fun updateMedicine(medicine: Medicine): Result<Unit> = runCatching {
 
         require(medicine.id.isNotBlank()) { "Medicine ID must not be blank" }
 
-        firestore
-            .collection("medicines")
+        medicinesCollection
             .document(medicine.id)
             .set(medicine, SetOptions.merge())
             .await()
@@ -82,6 +93,30 @@ class MedicineFirebaseApi: MedicineApi {
         Log.e(
             "OM_TAG",
             "MedicineFirebaseApi: updateMedicine: failed due to Exception",
+            e
+        )
+    }
+
+    //_ #############################################
+    //_ # DELETE MEDICINE
+    //_ #############################################
+
+    override suspend fun deleteMedicine(medicineId: String): Result<Unit> = runCatching {
+
+        require(medicineId.isNotBlank()) { "Medicine ID must not be blank" }
+
+        medicinesCollection
+            .document(medicineId)
+            .delete()
+            .await()
+
+        Log.d("OM_TAG", "MedicineFirebaseApi: deleteMedicine: success")
+        Unit
+
+    }.onFailure { e ->
+        Log.e(
+            "OM_TAG",
+            "MedicineFirebaseApi: deleteMedicine: failed due to Exception",
             e
         )
     }
