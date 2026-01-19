@@ -2,17 +2,20 @@ package com.oliviermarteaux.a055_rebonnte.data.service
 
 import android.R.attr.direction
 import android.util.Log
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineSortOption
+import com.oliviermarteaux.a055_rebonnte.ui.screen.PagedList
 import com.oliviermarteaux.localshared.extensions.toShiftedAlpha
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
 class MedicineFirebaseApi: MedicineApi {
@@ -58,43 +61,86 @@ class MedicineFirebaseApi: MedicineApi {
 //        emit(Result.failure(e))
 //    }
 
-    override fun getMedicineSortedAndFilteredBy(query:String, medicineSortOption: MedicineSortOption): Flow<Result<List<Medicine>>> = callbackFlow {
-//        throw IllegalStateException("Forced exception for testing")
-        val listenerRegistration = medicinesCollection
-            .orderBy(medicineSortOption.field, medicineSortOption.direction)
+//    override fun getMedicineSortedAndFilteredBy(query:String, medicineSortOption: MedicineSortOption): Flow<Result<List<Medicine>>> = callbackFlow {
+////        throw IllegalStateException("Forced exception for testing")
+//        val listenerRegistration = medicinesCollection
+//            .orderBy(medicineSortOption.field, medicineSortOption.direction)
+//            .whereGreaterThanOrEqualTo("nameLowerCase", query)
+//            .whereLessThanOrEqualTo("nameLowerCase", query.toShiftedAlpha())
+//            .addSnapshotListener { snapshot, error ->
+//                when {
+//                    error != null -> {
+//                        Log.e(
+//                            "OM_TAG",
+//                            "MedicineFirebaseApi: getMedicinesSortedByDescTimestamp(): Firestore listener error: ${error.message}",
+//                            error
+//                        )
+//                        trySend(Result.failure(error))
+//                    }
+//
+//                    snapshot != null -> {
+//                        val medicines = snapshot.documents.mapNotNull { doc ->
+//                            doc.toObject(Medicine::class.java)?.copy(id = doc.id)
+//                        }
+//                        trySend(Result.success(medicines))
+//                    }
+//                }
+//            }
+//        awaitClose { listenerRegistration.remove() }
+//    }.catch { e ->
+//        // catches coroutine/flow cancellation or unexpected exceptions
+//        Log.e(
+//            "OM_TAG",
+//            "MedicineFirebaseApi: getMedicinesSortedByDescTimestamp(): Flow exception: ${e.message}",
+//            e
+//        )
+//        emit(Result.failure(e))
+//    }.distinctUntilChanged { old, new ->
+//        old.getOrNull()?.map { it.id } == new.getOrNull()?.map { it.id }
+//    }
+
+    override fun getMedicinesFilteredSortedPaged(
+        query: String,
+        medicineSortOption: MedicineSortOption,
+        pageSize: Long,
+        lastSnapshot: DocumentSnapshot?
+    ): Flow<Result<PagedList<Medicine>>> = flow {
+
+        var queryRef = medicinesCollection
             .whereGreaterThanOrEqualTo("nameLowerCase", query)
             .whereLessThanOrEqualTo("nameLowerCase", query.toShiftedAlpha())
-            .addSnapshotListener { snapshot, error ->
-                when {
-                    error != null -> {
-                        Log.e(
-                            "OM_TAG",
-                            "MedicineFirebaseApi: getMedicinesSortedByDescTimestamp(): Firestore listener error: ${error.message}",
-                            error
-                        )
-                        trySend(Result.failure(error))
-                    }
+            .orderBy(medicineSortOption.field, medicineSortOption.direction)
+            .limit(pageSize)
 
-                    snapshot != null -> {
-                        val medicines = snapshot.documents.mapNotNull { doc ->
-                            doc.toObject(Medicine::class.java)?.copy(id = doc.id)
-                        }
-                        trySend(Result.success(medicines))
-                    }
-                }
-            }
-        awaitClose { listenerRegistration.remove() }
-    }.catch { e ->
-        // catches coroutine/flow cancellation or unexpected exceptions
-        Log.e(
-            "OM_TAG",
-            "MedicineFirebaseApi: getMedicinesSortedByDescTimestamp(): Flow exception: ${e.message}",
-            e
+//        if (query.isNotBlank()) {
+//            queryRef = queryRef
+//                .whereGreaterThanOrEqualTo("nameLowerCase", query)
+//                .whereLessThanOrEqualTo("nameLowerCase", query.toShiftedAlpha())
+//        }
+
+        if (lastSnapshot != null) {
+            queryRef = queryRef.startAfter(lastSnapshot)
+        }
+
+        val snapshot = queryRef.get().await()
+
+        val medicines = snapshot.documents.mapNotNull {
+            it.toObject(Medicine::class.java)?.copy(id = it.id)
+        }
+
+        emit(
+            Result.success(
+                PagedList(
+                    items = medicines,
+                    lastSnapshot = snapshot.documents.lastOrNull(),
+                    isLastPage = medicines.size < pageSize
+                )
+            )
         )
+    }.catch { e ->
         emit(Result.failure(e))
-    }.distinctUntilChanged { old, new ->
-        old.getOrNull()?.map { it.id } == new.getOrNull()?.map { it.id }
     }
+
 
     //_ #############################################
     //_ # ADD MEDICINE

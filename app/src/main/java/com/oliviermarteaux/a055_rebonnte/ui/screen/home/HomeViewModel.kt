@@ -4,16 +4,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.oliviermarteaux.a055_rebonnte.data.fake.fakeAisleList
 import com.oliviermarteaux.a055_rebonnte.data.repository.AisleRepository
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
+import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
+import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChangeType
 import com.oliviermarteaux.localshared.utils.TestConfig
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.ListUiState
+import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -70,6 +77,16 @@ class HomeViewModel @Inject constructor(
                 email = "fievel.farwest@example.com",
                 password = "test123&",
             )
+        }
+    }
+
+    fun populateFakeAisleListForDemo(
+        dataDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    ) {
+        viewModelScope.launch(dataDispatcher) {
+            fakeAisleList.forEach {
+                aisleRepository.addAisle(it)
+            }
         }
     }
 

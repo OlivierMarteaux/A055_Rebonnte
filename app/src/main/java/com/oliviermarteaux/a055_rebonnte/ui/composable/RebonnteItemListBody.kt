@@ -47,6 +47,8 @@ fun <T> RebonnteItemListBody(
     reloadItemOnError: () -> Unit,
     showFab: () -> Unit = {},
     hideFab: () -> Unit = {},
+    isLastPage: Boolean,
+    loadNextPage: () -> Unit,
     //_ trailing lambda !
     onItemClick: (T) -> Unit
 ){
@@ -96,7 +98,9 @@ fun <T> RebonnteItemListBody(
                         itemList = itemList,
                         itemTitle = itemTitle,
                         itemText = itemText,
-                        onItemClick = onItemClick
+                        onItemClick = onItemClick,
+                        isLastPage = isLastPage,
+                        loadNextPage = loadNextPage
                     )
                 }
             }

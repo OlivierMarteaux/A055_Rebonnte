@@ -72,15 +72,16 @@ fun HomeScreen(
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
                 fabModifier = modifier.testTag("HomeScreenFab"),
-                onFabClick = {
-                    checkUserState(
-                        onUserLogged = {
-                            selectAisle(Aisle())
-                            navigateToAddScreen()
-                                       },
-                        onNoUserLogged = ::showAuthErrorToast
-                    )
-                }
+                onFabClick = //::populateFakeAisleListForDemo
+                    {
+                        checkUserState(
+                            onUserLogged = {
+                                selectAisle(Aisle())
+                                navigateToAddScreen()
+                                           },
+                            onNoUserLogged = ::showAuthErrorToast
+                        )
+                    }
             ) { contentPadding ->
                 LaunchedEffect(homeUiState) {
                     Log.i(
@@ -102,7 +103,9 @@ fun HomeScreen(
                     showFab = ::showFab,
                     hideFab = ::hideFab,
                     actionUiState = addAisleUiState,
-                    resetUiState = ::resetAddAisleUiState
+                    resetUiState = ::resetAddAisleUiState,
+                    isLastPage = true,
+                    loadNextPage = {}
                 ){ aisle ->
                     selectAisle(aisle)
                     navigateToDetailScreen()

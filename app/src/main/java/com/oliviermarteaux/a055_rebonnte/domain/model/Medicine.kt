@@ -1,15 +1,11 @@
 package com.oliviermarteaux.a055_rebonnte.domain.model
 
-import androidx.compose.ui.text.toLowerCase
-import androidx.compose.ui.text.toUpperCase
 import com.oliviermarteaux.shared.extensions.toDate
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
 import java.util.Date
 import java.util.UUID
 import java.io.Serializable
 import java.time.LocalDate
-import java.util.Locale
-import java.util.Locale.getDefault
 
 data class Medicine(
 

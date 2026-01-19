@@ -4,13 +4,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.CollectionInfo
 import androidx.compose.ui.semantics.CollectionItemInfo
 import androidx.compose.ui.semantics.collectionInfo
 import androidx.compose.ui.semantics.collectionItemInfo
 import androidx.compose.ui.semantics.semantics
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 
 @Composable
@@ -20,7 +23,9 @@ fun <T> RebonnteItemList(
     itemTitle: (T) -> String? = { null },
     getItemTitle: @Composable (T) -> String? = { null },
     itemText: @Composable (T) -> String,
-    onItemClick: (T) -> Unit = {}
+    onItemClick: (T) -> Unit = {},
+    isLastPage: Boolean,
+    loadNextPage: () -> Unit
 ) {
     Column (modifier = modifier ) {
         LazyColumn(
@@ -41,6 +46,14 @@ fun <T> RebonnteItemList(
                         collectionItemInfo = CollectionItemInfo(index, 1, 0, 1)
                     }
                 )
+            }
+            item {
+                if (!isLastPage) {
+                    LaunchedEffect(Unit) {
+                        loadNextPage()
+                    }
+                    CircularProgressIndicator()
+                }
             }
         }
     }

@@ -120,17 +120,18 @@ fun MedicineListScreen(
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
                 fabModifier = modifier.testTag("MedicineListScreenFab"),
-                onFabClick = {
-                    checkUserState(
-                        onUserLogged = {
-                            hideSearchBar()
-                            selectMedicine(Medicine())
-                            switchToMedicineCreationMode()
-                            navigateToAddOrEditMedicineScreen()
-                        },
-                        onNoUserLogged = ::showAuthErrorToast
-                    )
-                }
+                onFabClick = //::populateFakeMedicineListForDemo
+                    {
+                        checkUserState(
+                            onUserLogged = {
+                                hideSearchBar()
+                                selectMedicine(Medicine())
+                                switchToMedicineCreationMode()
+                                navigateToAddOrEditMedicineScreen()
+                            },
+                            onNoUserLogged = ::showAuthErrorToast
+                        )
+                    }
             ) { contentPadding ->
                 LaunchedEffect(medicineListUiState) {
                     Log.i(
@@ -145,19 +146,21 @@ fun MedicineListScreen(
                     listUiState = medicineListUiState,
                     listViewModel = medicineListViewModel,
                     itemLabel = stringResource(R.string.medicine),
-                    itemList =  filteredMedicineList,
+                    itemList =  medicineList,
                     item = medicine,
                     itemTitle =  Medicine::name,
                     itemText = { medicine: Medicine ->
                         stringResource(R.string.stock, medicine.stock) },
                     onSearchFocusRequester = onSearchFocusRequester,
-                    reloadItemOnError = ::getMedicineSortedAndFiltered,
+                    reloadItemOnError = ::loadFirstPage,
                     showFab = ::showFab,
                     hideFab = ::hideFab,
                     actionUiState = addOrEditMedicineUiState,
                     itemCrudAction = medicineCrudAction,
                     resetUiState = ::resetAddOrEditMedicineUiState,
                     resetItemCrudAction = ::resetMedicineCrudAction,
+                    isLastPage = isLastPage,
+                    loadNextPage = ::loadNextPage
                 ){ medicine ->
                     hideSearchBar()
                     selectMedicine(medicine)

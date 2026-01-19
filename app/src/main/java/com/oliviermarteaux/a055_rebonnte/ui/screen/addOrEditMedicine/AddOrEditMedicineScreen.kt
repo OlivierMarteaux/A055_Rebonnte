@@ -189,7 +189,9 @@ fun AddScreenBody(
             RebonnteItemList(
                 itemList = changeRecord,
                 getItemTitle = MedicineChange::getTitle,
-                itemText = MedicineChange::getDescription
+                itemText = MedicineChange::getDescription,
+                isLastPage = true,
+                loadNextPage = {}
             )
         }
     }
