@@ -41,6 +41,7 @@ fun <T> RebonnteItemListBody(
     itemList: List<T>,
     itemLabel: String,
     item: T,
+    itemId: (T) -> String,
     itemTitle: (T) -> String,
     itemText: @Composable (T) -> String = { "" },
     onSearchFocusRequester: FocusRequester = FocusRequester(),
@@ -96,6 +97,7 @@ fun <T> RebonnteItemListBody(
                             .padding(contentPadding)
                             .padding(horizontal = SharedPadding.large),
                         itemList = itemList,
+                        itemId = itemId,
                         itemTitle = itemTitle,
                         itemText = itemText,
                         onItemClick = onItemClick,

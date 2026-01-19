@@ -1,5 +1,6 @@
 package com.oliviermarteaux.a055_rebonnte.ui.screen.aisleDetail
 
+import android.R.attr.name
 import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -78,6 +79,7 @@ fun AisleDetailScreen(
                         itemLabel = stringResource(R.string.medicine),
                         itemList = medicineList.filter { it.aisle == aisle },
                         item = medicine,
+                        itemId = Medicine::id,
                         itemTitle = Medicine::name ,
                         itemText = { medicine: Medicine ->
                             stringResource(R.string.stock, medicine.stock)

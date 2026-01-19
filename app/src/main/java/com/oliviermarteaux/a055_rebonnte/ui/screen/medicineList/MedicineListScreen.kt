@@ -1,5 +1,6 @@
 package com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList
 
+import android.R.attr.name
 import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -148,6 +149,7 @@ fun MedicineListScreen(
                     itemLabel = stringResource(R.string.medicine),
                     itemList =  medicineList,
                     item = medicine,
+                    itemId =  Medicine::id,
                     itemTitle =  Medicine::name,
                     itemText = { medicine: Medicine ->
                         stringResource(R.string.stock, medicine.stock) },

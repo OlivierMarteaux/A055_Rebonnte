@@ -124,16 +124,19 @@ class MedicineFirebaseApi: MedicineApi {
 
         val snapshot = queryRef.get().await()
 
-        val medicines = snapshot.documents.mapNotNull {
+        val medicineList = snapshot.documents.mapNotNull {
             it.toObject(Medicine::class.java)?.copy(id = it.id)
         }
 
+        Log.d("OM_TAG", "MedicineFirebaseApi: getMedicinesFilteredSortedPaged: medicineList.size = ${medicineList.size}")
+        Log.d("OM_TAG", "MedicineFirebaseApi: getMedicinesFilteredSortedPaged: pageSize = $pageSize")
+        Log.d("OM_TAG", "MedicineFirebaseApi: getMedicinesFilteredSortedPaged: isLastPage = ${medicineList.size < pageSize}")
         emit(
             Result.success(
                 PagedList(
-                    items = medicines,
+                    items = medicineList,
                     lastSnapshot = snapshot.documents.lastOrNull(),
-                    isLastPage = medicines.size < pageSize
+                    isLastPage = medicineList.size < pageSize
                 )
             )
         )

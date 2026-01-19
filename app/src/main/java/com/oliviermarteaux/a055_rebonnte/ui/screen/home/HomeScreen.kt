@@ -98,6 +98,7 @@ fun HomeScreen(
                     itemLabel = stringResource(R.string.aisle),
                     itemList =  aisleList,
                     item = aisle,
+                    itemId = Aisle::id,
                     itemTitle =  Aisle::name,
                     reloadItemOnError = ::loadAisles,
                     showFab = ::showFab,

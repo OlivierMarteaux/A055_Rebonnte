@@ -187,6 +187,7 @@ fun AddScreenBody(
 
         with(medicine) {
             RebonnteItemList(
+                itemId = { id },
                 itemList = changeRecord,
                 getItemTitle = MedicineChange::getTitle,
                 itemText = MedicineChange::getDescription,

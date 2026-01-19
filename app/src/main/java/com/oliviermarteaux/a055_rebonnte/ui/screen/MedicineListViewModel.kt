@@ -1,5 +1,6 @@
 package com.oliviermarteaux.a055_rebonnte.ui.screen
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -7,7 +8,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentSnapshot
-import com.oliviermarteaux.a055_rebonnte.data.fake.fakeAisleList
 import com.oliviermarteaux.a055_rebonnte.data.fake.fakeMedicineList
 import com.oliviermarteaux.a055_rebonnte.data.repository.MedicineRepository
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
@@ -34,23 +34,42 @@ class MedicineListViewModel @Inject constructor(
     isOnlineFlow = isOnlineFlow,
     log = log
 ) {
-    private var lastSnapshot: DocumentSnapshot? = null
-    var isLastPage = false
-        private set
     val medicineList = mutableStateListOf<Medicine>()
     var medicineListUiState: ListUiState<Medicine> by mutableStateOf(ListUiState.Loading)
         private set
 
-//    var medicineList: List<Medicine> by mutableStateOf(emptyList())
-//        private set
+    //_ ############################################################################################
+    //_ Searching
+    //_ ############################################################################################
+    var queryFieldValue: TextFieldValue by mutableStateOf(TextFieldValue(""))
+        private set
+    fun clearQuery() {
+        queryFieldValue = TextFieldValue("")
+        loadFirstPage()
+    }
+    fun filterMedicines(query: TextFieldValue) {
+        queryFieldValue = query
+        loadFirstPage()
+    }
 
-//    var filteredMedicineList: List<Medicine> by mutableStateOf(emptyList())
-//        private set
-
+    //_ ############################################################################################
+    //_ Sorting
+    //_ ############################################################################################
     var currentSortOption: MedicineSortOption by mutableStateOf(MedicineSortOption.DESCENDING_TIMESTAMP)
         private set
 
-    var queryFieldValue: TextFieldValue by mutableStateOf(TextFieldValue(""))
+    fun sortMedicinesBy(sortOption: MedicineSortOption) {
+        currentSortOption = sortOption
+        loadFirstPage()
+    }
+
+    //_ ############################################################################################
+    //_ List pageing
+    //_ ############################################################################################
+    private var lastSnapshot: DocumentSnapshot? = null
+    var isLastPage by mutableStateOf(false)
+        private set
+    var isLoading = false
         private set
 
     fun loadFirstPage() {
@@ -61,10 +80,13 @@ class MedicineListViewModel @Inject constructor(
     }
 
     fun loadNextPage() {
-        if (isLastPage) return
+        Log.d("OM_TAG","MedicineListViewModel::loadNextPage: isLastPage = $isLastPage")
+        Log.d("OM_TAG","MedicineListViewModel::loadNextPage: isLoading = $isLoading")
+        Log.d("OM_TAG","MedicineListViewModel::loadNextPage: return = ${(isLastPage || isLoading)}")
+        if (isLastPage || isLoading) return
 
         viewModelScope.launch {
-            medicineListUiState = ListUiState.Loading
+            isLoading = true
 
             medicineRepository.getMedicinesFilteredSortedPaged(
                 query = queryFieldValue.text.lowercase(),
@@ -73,7 +95,8 @@ class MedicineListViewModel @Inject constructor(
                 lastSnapshot = lastSnapshot
             ).collect { result ->
                 result.onSuccess { page ->
-                    medicineList.addAll(page.items)
+                    val newItems = page.items.filter { it.id !in medicineList.map { m -> m.id } }
+                    medicineList.addAll(newItems)
                     lastSnapshot = page.lastSnapshot
                     isLastPage = page.isLastPage
                     medicineListUiState =
@@ -83,75 +106,13 @@ class MedicineListViewModel @Inject constructor(
                     medicineListUiState = ListUiState.Error(e)
                 }
             }
+            isLoading = false
         }
     }
 
-    fun clearQuery() {
-        queryFieldValue = TextFieldValue("")
-        loadFirstPage()
-//        getMedicineSortedAndFiltered()
-//        filterMedicines(queryFieldValue)
-    }
-
-    fun filterMedicines(query: TextFieldValue) {
-        queryFieldValue = query
-        loadFirstPage()
-//        getMedicineSortedAndFiltered()
-//        filteredMedicineList = medicineList.filter { medicine ->
-//            listOfNotNull(medicine.name, medicine.author?.firstname, medicine.author?.lastname)
-//                .any { field -> field.contains(query.text, true) }
-//        }.sortedWith ( currentSortOption.comparator )
-    }
-
-    fun sortMedicinesBy(sortOption: MedicineSortOption) {
-        currentSortOption = sortOption
-        loadFirstPage()
-//        filteredMedicineList = filteredMedicineList.sortedWith(sortOption.comparator)
-    }
-
-//    fun loadMedicines() {
-//        viewModelScope.launch {
-//            medicineListUiState = ListUiState.Loading
-////            delay(1500) // simulate network delay for Loading state evidence
-//            medicineRepository.getMedicineSortedBy(currentSortOption).collect { result ->
-//                result
-//                    .onSuccess {
-//                        medicineList = it
-//                        filteredMedicineList = it
-//                        medicineListUiState =
-//                            if (medicineList.isEmpty()) ListUiState.Empty
-//                            else ListUiState.Success(medicineList)
-//                    }
-//                    .onFailure { e ->
-//                        medicineListUiState = ListUiState.Error(e)
-//                    }
-//            }
-//        }
-//    }
-
-//    fun getMedicineSortedAndFiltered() {
-//        viewModelScope.launch {
-//            medicineListUiState = ListUiState.Loading
-////            delay(1500) // simulate network delay for Loading state evidence
-//            medicineRepository.getMedicineSortedAndFilteredBy(
-//                query = queryFieldValue.text.lowercase(),
-//                medicineSortOption = currentSortOption
-//            ).collect { result ->
-//                result
-//                    .onSuccess {
-//                        medicineList = it
-//                        filteredMedicineList = it
-//                        medicineListUiState =
-//                            if (medicineList.isEmpty()) ListUiState.Empty
-//                            else ListUiState.Success(medicineList)
-//                    }
-//                    .onFailure { e ->
-//                        medicineListUiState = ListUiState.Error(e)
-//                    }
-//            }
-//        }
-//    }
-
+    //_ ############################################################################################
+    //_ Testing
+    //_ ############################################################################################
     private fun signInTestUser(){
         viewModelScope.launch {
             userRepository.signIn(
@@ -161,6 +122,9 @@ class MedicineListViewModel @Inject constructor(
         }
     }
 
+    //_ ############################################################################################
+    //_ Pre-populating
+    //_ ############################################################################################
     fun populateFakeMedicineListForDemo(
         dataDispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) {
@@ -171,6 +135,9 @@ class MedicineListViewModel @Inject constructor(
         }
     }
 
+    //_ ############################################################################################
+    //_ Init
+    //_ ############################################################################################
     init {
         // throw RuntimeException("Test Crash") // Force a crash
         log.d("MedicineListViewModel: init")
