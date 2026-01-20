@@ -12,6 +12,7 @@ interface MedicineApi {
 //    fun getMedicineSortedAndFilteredBy(query: String, medicineSortOption: MedicineSortOption): Flow<Result<List<Medicine>>>
     fun getMedicinesFilteredSortedPaged(
         query: String,
+        aisleId: String,
         medicineSortOption: MedicineSortOption,
         pageSize: Long,
         lastSnapshot: DocumentSnapshot?

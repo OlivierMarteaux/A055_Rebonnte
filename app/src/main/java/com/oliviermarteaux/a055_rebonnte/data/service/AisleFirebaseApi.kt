@@ -47,12 +47,21 @@ class AisleFirebaseApi: AisleApi {
 
         // throw IllegalStateException("Forced exception for testing")
 
+        val docRef = aislesCollection.document() // generates ID locally
+        val aisleId = docRef.id
+
         // Add aisle to Firestore aisles collection
-        aislesCollection.add(aisle).await()
+        docRef.set(aisle.copy(id = aisleId)).await()
+//        aislesCollection.add(aisle).await()
+
         Log.d("OM_TAG", "AisleFirebaseApi: addAisle: success")
         Unit
 
     }.onFailure { e ->
         Log.e("OM_TAG", "AisleFirebaseApi: addAisle: failed due to Exception: ${e.message}")
     }
+
+
+
+
 }

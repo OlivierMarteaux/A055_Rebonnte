@@ -74,7 +74,7 @@ fun <T> RebonnteItemListBody(
 
                 is ListUiState.Empty -> {
                     showFab()
-                    SharedToast("No medicine available")
+                    SharedToast("No $itemLabel available")
                 }
 
                 is ListUiState.Error -> {

@@ -5,12 +5,12 @@ import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
 
 val fakeMedicineList = drugNameList.mapIndexed { index, name ->
     val author = fakeUserList[index % fakeUserList.size]
-    val aisle = fakeAisleList[index % fakeAisleList.size]
+//    val aisle = fakeAisleList[index % fakeAisleList.size]
     val stock = (index % 120) + 10
 
     Medicine(
         name = name,
-        aisle = aisle,
+//        aisle = aisle,
         stock = stock,
         author = author,
         changeRecord = listOf(

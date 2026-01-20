@@ -1,6 +1,5 @@
 package com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList
 
-import android.R.attr.name
 import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -39,10 +38,14 @@ import com.oliviermarteaux.shared.compose.R as oR
 fun MedicineListScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
+    //homeViewModel: HomeViewModel = hiltViewModel(), // for medicine pre-populating only
     medicineListViewModel: MedicineListViewModel,
     medicineViewModel: MedicineViewModel,
     navigateToAddOrEditMedicineScreen: () -> Unit = {}
 ) {
+    LaunchedEffect(Unit){
+        medicineListViewModel.getAllMedicineByDescendingTimestamp()
+    }
     with(medicineListViewModel) {
         with(medicineViewModel) {
 
@@ -102,7 +105,7 @@ fun MedicineListScreen(
                 topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
                 // search bar
                 query = queryFieldValue,
-                onQueryChange = ::filterMedicines,
+                onQueryChange = ::filterMedicineByName,
                 searchLabel = stringResource(R.string.look_for_an, cdItem),
                 searchBarIcon = IconSource.VectorIcon(Icons.Default.Clear),
                 searchBarIconSemantics = cdCustomAccessibilityActionClear,
@@ -121,7 +124,7 @@ fun MedicineListScreen(
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
                 fabModifier = modifier.testTag("MedicineListScreenFab"),
-                onFabClick = //::populateFakeMedicineListForDemo
+                onFabClick = //{populateFakeMedicineListForDemo(homeViewModel.aisleList)}
                     {
                         checkUserState(
                             onUserLogged = {

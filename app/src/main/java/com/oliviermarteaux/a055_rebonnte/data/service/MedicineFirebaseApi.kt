@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineSortOption
 import com.oliviermarteaux.a055_rebonnte.ui.screen.PagedList
@@ -101,6 +102,7 @@ class MedicineFirebaseApi: MedicineApi {
 
     override fun getMedicinesFilteredSortedPaged(
         query: String,
+        aisleId: String,
         medicineSortOption: MedicineSortOption,
         pageSize: Long,
         lastSnapshot: DocumentSnapshot?
@@ -109,14 +111,10 @@ class MedicineFirebaseApi: MedicineApi {
         var queryRef = medicinesCollection
             .whereGreaterThanOrEqualTo("nameLowerCase", query)
             .whereLessThanOrEqualTo("nameLowerCase", query.toShiftedAlpha())
+            .whereGreaterThanOrEqualTo("aisle.id", aisleId)
+            .whereLessThan("aisle.id", aisleId.toShiftedAlpha())
             .orderBy(medicineSortOption.field, medicineSortOption.direction)
             .limit(pageSize)
-
-//        if (query.isNotBlank()) {
-//            queryRef = queryRef
-//                .whereGreaterThanOrEqualTo("nameLowerCase", query)
-//                .whereLessThanOrEqualTo("nameLowerCase", query.toShiftedAlpha())
-//        }
 
         if (lastSnapshot != null) {
             queryRef = queryRef.startAfter(lastSnapshot)
@@ -141,6 +139,7 @@ class MedicineFirebaseApi: MedicineApi {
             )
         )
     }.catch { e ->
+        Log.e("OM_TAG", "MedicineFirebaseApi: getMedicinesFilteredSortedPaged: failed", e)
         emit(Result.failure(e))
     }
 
@@ -153,8 +152,13 @@ class MedicineFirebaseApi: MedicineApi {
 
         // throw IllegalStateException("Forced exception for testing")
 
+        val docRef = medicinesCollection.document() // generates ID locally
+        val aisleId = docRef.id
+
         // Add medicine to Firestore medicines collection
-        medicinesCollection.add(medicine).await()
+        docRef.set(medicine.copy(id = aisleId)).await()
+//        medicinesCollection.add(medicine).await()
+
         Log.d("OM_TAG", "MedicineFirebaseApi: addMedicine: success")
         Unit
 

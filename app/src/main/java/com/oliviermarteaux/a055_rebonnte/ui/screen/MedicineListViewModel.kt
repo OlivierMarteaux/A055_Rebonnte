@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentSnapshot
 import com.oliviermarteaux.a055_rebonnte.data.fake.fakeMedicineList
 import com.oliviermarteaux.a055_rebonnte.data.repository.MedicineRepository
+import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.localshared.utils.TestConfig
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
@@ -39,16 +40,34 @@ class MedicineListViewModel @Inject constructor(
         private set
 
     //_ ############################################################################################
+    //_ Loading whole list
+    //_ ############################################################################################
+
+    fun getAllMedicineByDescendingTimestamp(){
+        queryFieldValue = TextFieldValue("")
+        currentSortOption = MedicineSortOption.DESCENDING_TIMESTAMP
+        aisleId = ""
+        loadFirstPage()
+    }
+
+    //_ ############################################################################################
     //_ Searching
     //_ ############################################################################################
     var queryFieldValue: TextFieldValue by mutableStateOf(TextFieldValue(""))
         private set
+
+    private var aisleId: String = ""
     fun clearQuery() {
         queryFieldValue = TextFieldValue("")
         loadFirstPage()
     }
-    fun filterMedicines(query: TextFieldValue) {
+    fun filterMedicineByName(query: TextFieldValue) {
         queryFieldValue = query
+        loadFirstPage()
+    }
+    fun filterMedicineByAisleId(selectedAisleId: String) {
+        aisleId = selectedAisleId
+        Log.d("OM_TAG", "MedicineListViewModel::filterMedicineByAisleId: selected aisle Id = $aisleId")
         loadFirstPage()
     }
 
@@ -64,7 +83,7 @@ class MedicineListViewModel @Inject constructor(
     }
 
     //_ ############################################################################################
-    //_ List pageing
+    //_ List paging
     //_ ############################################################################################
     private var lastSnapshot: DocumentSnapshot? = null
     var isLastPage by mutableStateOf(false)
@@ -73,6 +92,7 @@ class MedicineListViewModel @Inject constructor(
         private set
 
     fun loadFirstPage() {
+        Log.d("OM_TAG","MedicineListViewModel::loadFirstPage")
         lastSnapshot = null
         isLastPage = false
         medicineList.clear()
@@ -90,6 +110,7 @@ class MedicineListViewModel @Inject constructor(
 
             medicineRepository.getMedicinesFilteredSortedPaged(
                 query = queryFieldValue.text.lowercase(),
+                aisleId = aisleId,
                 medicineSortOption = currentSortOption,
                 pageSize = 9,
                 lastSnapshot = lastSnapshot
@@ -126,11 +147,16 @@ class MedicineListViewModel @Inject constructor(
     //_ Pre-populating
     //_ ############################################################################################
     fun populateFakeMedicineListForDemo(
+        aisleList: List<Aisle>,
         dataDispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) {
         viewModelScope.launch(dataDispatcher) {
             fakeMedicineList.forEach {
-                medicineRepository.addMedicine(it)
+                medicineRepository.addMedicine(
+                    it.copy(
+                        aisle = aisleList.random()
+                    )
+                )
             }
         }
     }
@@ -144,8 +170,5 @@ class MedicineListViewModel @Inject constructor(
 
         // Sign in the test user in case of test config
         if (TestConfig.isTest) signInTestUser()
-
-        // Fetch medicines from the repository
-        sortMedicinesBy(MedicineSortOption.DESCENDING_TIMESTAMP)
     }
 }

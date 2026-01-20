@@ -134,7 +134,7 @@ fun SharedScaffold(
     screenContentDescription: String = "",
     topAppBarModifier: Modifier = Modifier,
     trailingIcon: IconSource? = null,
-    trailingIconAction: (() -> Unit)? = {},
+    trailingIconAction: (() -> Unit)? = null,
     trailingIconButtonContentDescription: String = "",
     avatarUrl: String? = null,
     onBackClick: (() -> Unit)? = null,

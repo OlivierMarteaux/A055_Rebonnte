@@ -1,17 +1,17 @@
 package com.oliviermarteaux.localshared.extensions
 
-import com.google.common.io.Files.map
+import android.util.Log
+import com.google.android.play.integrity.internal.z
 
 fun String.toShiftedAlpha(): String {
-    if (this.isEmpty()) return "z"
+    if (this.isEmpty()) return "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
 
-    val shiftedLastChar = when ( val lastChar = last()) {
-        in 'a'..'y' -> lastChar + 1
-        'z' -> 'z'
-        in 'A'..'Y' -> lastChar + 1
-        'Z' -> 'Z'
-        else -> lastChar
+    val newString = when (val lastChar = last()) {
+        in '0'..'y' -> dropLast(1) + (lastChar + 1) // normal increment
+        'z' -> this + '0'                            // append '0' if last char is 'z'
+        else -> dropLast(1) + lastChar               // leave unchanged for any other char
     }
 
-    return dropLast(1) + shiftedLastChar
+    Log.d("OM_TAG", "$this -> $newString")
+    return newString
 }

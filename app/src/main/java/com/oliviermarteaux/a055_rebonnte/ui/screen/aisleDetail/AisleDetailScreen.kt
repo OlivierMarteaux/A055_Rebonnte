@@ -1,6 +1,5 @@
 package com.oliviermarteaux.a055_rebonnte.ui.screen.aisleDetail
 
-import android.R.attr.name
 import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,8 +13,8 @@ import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.CrudAction
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.localshared.composables.SharedScaffold
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
@@ -30,6 +29,11 @@ fun AisleDetailScreen(
     navigateBack: () -> Unit = {},
     navigateToAddOrEditMedicineScreen: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        Log.d("OM_TAG", "selected aile: ${aisleViewModel.aisle.name}")
+        medicineListViewModel.filterMedicineByAisleId(aisleViewModel.aisle.id)
+    }
+
     with(medicineViewModel) {
         val cdScreenTitle = stringResource(RebonnteScreen.AisleDetail.titleRes)
         val cdContainer = stringResource(R.string.aisle)
@@ -62,13 +66,14 @@ fun AisleDetailScreen(
             semanticStateText = cdItemAction
         ) { contentPadding ->
             with(medicineListViewModel) {
-                LaunchedEffect(medicineListUiState) {
-                    Log.i(
-                        "OM_TAG",
-                        "MedicineListViewModel: LaunchedEffect: medicineListUiState = $medicineListUiState"
-                    )
-                }
                 with(aisleViewModel) {
+
+                    LaunchedEffect(medicineListUiState) {
+                        Log.i(
+                            "OM_TAG",
+                            "MedicineListViewModel: LaunchedEffect: medicineListUiState = $medicineListUiState"
+                        )
+                    }
 
                     RebonnteItemListBody(
                         contentPadding = contentPadding,
@@ -77,7 +82,7 @@ fun AisleDetailScreen(
                         listUiState = medicineListUiState,
                         listViewModel = medicineListViewModel,
                         itemLabel = stringResource(R.string.medicine),
-                        itemList = medicineList.filter { it.aisle == aisle },
+                        itemList = medicineList/*.filter { it.aisle == aisle }*/,
                         item = medicine,
                         itemId = Medicine::id,
                         itemTitle = Medicine::name ,
