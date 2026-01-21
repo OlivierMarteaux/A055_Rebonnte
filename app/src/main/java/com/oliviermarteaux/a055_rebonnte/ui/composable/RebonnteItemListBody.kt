@@ -45,7 +45,7 @@ fun <T> RebonnteItemListBody(
     itemTitle: (T) -> String,
     itemText: @Composable (T) -> String = { "" },
     onSearchFocusRequester: FocusRequester = FocusRequester(),
-    reloadItemOnError: () -> Unit,
+    reloadItemList: () -> Unit,
     showFab: () -> Unit = {},
     hideFab: () -> Unit = {},
     isLastPage: Boolean,
@@ -82,7 +82,7 @@ fun <T> RebonnteItemListBody(
                     RebonnteErrorScreen(
                         modifier = modifier,
                         contentPadding = contentPadding,
-                        loadItems = reloadItemOnError
+                        loadItems = reloadItemList
                     )
                 }
 
@@ -139,8 +139,9 @@ fun <T> RebonnteItemListBody(
                             bottomPadding = ToastPadding.high
                         )
                     }
-                    else -> {}
+                    else -> {Log.d("OM_TAG", "RebonnteListBody: no CrudAction set")}
                 }
+                reloadItemList()
                 resetUiState()
                 resetItemCrudAction?.invoke()
             }

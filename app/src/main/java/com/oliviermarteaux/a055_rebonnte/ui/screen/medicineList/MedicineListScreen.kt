@@ -157,7 +157,7 @@ fun MedicineListScreen(
                     itemText = { medicine: Medicine ->
                         stringResource(R.string.stock, medicine.stock) },
                     onSearchFocusRequester = onSearchFocusRequester,
-                    reloadItemOnError = ::loadFirstPage,
+                    reloadItemList = ::loadFirstPage,
                     showFab = ::showFab,
                     hideFab = ::hideFab,
                     actionUiState = addOrEditMedicineUiState,

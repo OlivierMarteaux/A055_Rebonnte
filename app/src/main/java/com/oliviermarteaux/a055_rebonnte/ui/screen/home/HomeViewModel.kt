@@ -1,13 +1,17 @@
 package com.oliviermarteaux.a055_rebonnte.ui.screen.home
 
+import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.DocumentSnapshot
 import com.oliviermarteaux.a055_rebonnte.data.fake.fakeAisleList
 import com.oliviermarteaux.a055_rebonnte.data.fake.fakeMedicineList
 import com.oliviermarteaux.a055_rebonnte.data.repository.AisleRepository
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
+import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChangeType
 import com.oliviermarteaux.localshared.utils.TestConfig
@@ -24,11 +28,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-/**
- * ViewModel responsible for managing data and events related to the Home screen.
- * This ViewModel retrieves aisles from the AisleRepository and exposes them as a Flow<List<Aisle>>,
- * allowing UI components to observe and react to changes in the aisles data.
- */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val aisleRepository: AisleRepository,
@@ -40,37 +39,56 @@ class HomeViewModel @Inject constructor(
     isOnlineFlow = isOnlineFlow,
     log = log,
 ) {
-    /**
-     * The UI state for the home feed.
-     */
     var homeUiState: ListUiState<Aisle> by mutableStateOf(ListUiState.Loading)
         private set
+    val aisleList = mutableStateListOf<Aisle>()
 
-    var aisleList: List<Aisle> by mutableStateOf(emptyList())
+    //_ ############################################################################################
+    //_ List paging
+    //_ ############################################################################################
+    private var lastSnapshot: DocumentSnapshot? = null
+    var isLastPage by mutableStateOf(false)
+        private set
+    var isLoading = false
         private set
 
+    fun loadFirstPage() {
+        Log.d("OM_TAG","HomeViewModel::loadFirstPage")
+        lastSnapshot = null
+        isLastPage = false
+        aisleList.clear()
+        loadNextPage()
+    }
 
-    /**
-     * Loads the posts from the repository.
-     */
-    fun loadAisles() {
+    fun loadNextPage() {
+        Log.d("OM_TAG","HomeViewModel::loadNextPage: isLastPage = $isLastPage")
+        Log.d("OM_TAG","HomeViewModel::loadNextPage: isLoading = $isLoading")
+        Log.d("OM_TAG","HomeViewModel::loadNextPage: return = ${(isLastPage || isLoading)}")
+        if (isLastPage || isLoading) return
+
         viewModelScope.launch {
-            homeUiState = ListUiState.Loading
-//            delay(1500) // simulate network delay for Loading state evidence
-            aisleRepository.getAislesSortedByDescTimestamp().collect { result ->
-                result
-                    .onSuccess {
-                        aisleList = it
-                        homeUiState =
-                            if (aisleList.isEmpty()) ListUiState.Empty
-                            else ListUiState.Success(aisleList)
-                    }
-                    .onFailure { e ->
-                        homeUiState = ListUiState.Error(e)
-                    }
+            isLoading = true
+
+            aisleRepository.getAislePaged(
+                pageSize = 9,
+                lastSnapshot = lastSnapshot
+            ).collect { result ->
+                result.onSuccess { page ->
+                    val newItems = page.items.filter { it.id !in aisleList.map { m -> m.id } }
+                    aisleList.addAll(newItems)
+                    lastSnapshot = page.lastSnapshot
+                    isLastPage = page.isLastPage
+                    homeUiState =
+                        if (aisleList.isEmpty()) ListUiState.Empty
+                        else ListUiState.Success(aisleList)
+                }.onFailure { e ->
+                    homeUiState = ListUiState.Error(e)
+                }
             }
+            isLoading = false
         }
     }
+
 
     private fun signInTestUser(){
         viewModelScope.launch {
@@ -93,12 +111,12 @@ class HomeViewModel @Inject constructor(
 
     init {
         // throw RuntimeException("Test Crash") // Force a crash
-        log.d("HomeFeedViewModel: init")
+        log.d("HomeViewModel: init")
 
         // Sign in the test user in case of test config
         if (TestConfig.isTest) signInTestUser()
 
         // Fetch posts from the repository
-        loadAisles()
+        loadFirstPage()
     }
 }

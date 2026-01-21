@@ -45,7 +45,7 @@ import com.oliviermarteaux.shared.compose.R as oR
 
 @Composable
 fun AddOrEditMedicineScreen(
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel,
     medicineViewModel: MedicineViewModel,
     navigateBack: () -> Unit,
 ) {
@@ -187,7 +187,7 @@ fun AddScreenBody(
 
         with(medicine) {
             RebonnteItemList(
-                itemId = { id },
+                itemId = MedicineChange::id,
                 itemList = changeRecord,
                 getItemTitle = MedicineChange::getTitle,
                 itemText = MedicineChange::getDescription,
@@ -247,6 +247,7 @@ fun AddScreenTextForm(
 
         SharedFilledIntTextField(
             value = stock,
+            intRange = 0 .. 100,
             onConfirm = { updateMedicineStock(it) },
             label = stringResource(R.string.stock_label),
             textFieldModifier = Modifier.fillMaxWidth(),
