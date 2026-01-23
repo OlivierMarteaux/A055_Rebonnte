@@ -29,11 +29,6 @@ fun AisleDetailScreen(
     navigateBack: () -> Unit = {},
     navigateToAddOrEditMedicineScreen: () -> Unit
 ) {
-    LaunchedEffect(Unit) {
-        Log.d("OM_TAG", "selected aile: ${aisleViewModel.aisle.name}")
-        medicineListViewModel.filterMedicineByAisleId(aisleViewModel.aisle.id)
-    }
-
     with(medicineViewModel) {
         val cdScreenTitle = stringResource(RebonnteScreen.AisleDetail.titleRes)
         val cdContainer = stringResource(R.string.aisle)

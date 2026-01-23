@@ -19,7 +19,9 @@ import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.CrudAction
-import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
+import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteBottomAppBar
+import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteBottomNavItem
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
@@ -31,8 +33,9 @@ fun AisleListScreen(
     modifier: Modifier = Modifier,
     aisleListViewModel: AisleListViewModel,
     aisleViewModel: AisleViewModel,
-    navigateToDetailScreen: () -> Unit = {},
-    navigateToAddScreen: () -> Unit = {}
+    medicineListViewModel: MedicineListViewModel,
+    navigateToDetailScreen: () -> Unit,
+    navigateToAddScreen: () -> Unit
 ) {
     with(aisleListViewModel) {
         with (aisleViewModel) {
@@ -66,7 +69,12 @@ fun AisleListScreen(
                 // top app bar
                 topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
                 // bottom app bar
-                bottomBar = { RebonnteBottomAppBar(navController) },
+                bottomBar = { RebonnteBottomAppBar(
+                    navController = navController,
+                    item1 = RebonnteBottomNavItem.AisleNavItem,
+                    item2 = RebonnteBottomNavItem.MedicineNavItem,
+                    callback2 = medicineListViewModel::getAllMedicineByDescendingTimestamp
+                )},
                 // fab button
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
@@ -109,6 +117,7 @@ fun AisleListScreen(
                     loadNextPage = ::loadNextPage
                 ){ aisle ->
                     selectAisle(aisle)
+                    medicineListViewModel.filterMedicineByAisleId(aisle.id)
                     navigateToDetailScreen()
                 }
             }

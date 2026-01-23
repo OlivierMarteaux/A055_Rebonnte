@@ -25,7 +25,8 @@ import com.oliviermarteaux.a055_rebonnte.ui.screen.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineSortOption
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
-import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
+import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteBottomAppBar
+import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteBottomNavItem
 import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.ui.UiState
@@ -43,9 +44,6 @@ fun MedicineListScreen(
     medicineViewModel: MedicineViewModel,
     navigateToAddOrEditMedicineScreen: () -> Unit = {}
 ) {
-    LaunchedEffect(Unit){
-        medicineListViewModel.getAllMedicineByDescendingTimestamp()
-    }
     with(medicineListViewModel) {
         with(medicineViewModel) {
 
@@ -119,7 +117,11 @@ fun MedicineListScreen(
                 onSortByAscendingStockClick = { sortMedicinesBy(MedicineSortOption.ASCENDING_STOCK) },
                 onSortByDescendingStockClick = { sortMedicinesBy(MedicineSortOption.DESCENDING_STOCK) },
                 // bottom app bar
-                bottomBar = { RebonnteBottomAppBar(navController) },
+                bottomBar = { RebonnteBottomAppBar(
+                    navController = navController,
+                    item1 = RebonnteBottomNavItem.AisleNavItem,
+                    item2 = RebonnteBottomNavItem.MedicineNavItem
+                )},
                 // fab button
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,

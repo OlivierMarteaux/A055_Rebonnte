@@ -106,6 +106,7 @@ fun SharedNavGraph(
             AisleListScreen(
                 aisleListViewModel = aisleListViewModel,
                 aisleViewModel = aisleViewModel,
+                medicineListViewModel = medicineListViewModel,
                 navController = navHostController,
                 navigateToDetailScreen = {navHostController.navigate(RebonnteScreen.AisleDetail.route) },
                 navigateToAddScreen = { navHostController.navigate(RebonnteScreen.AddAisle.route) }
