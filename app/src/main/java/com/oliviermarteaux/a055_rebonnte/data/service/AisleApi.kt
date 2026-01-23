@@ -11,7 +11,7 @@ interface AisleApi {
         pageSize: Long,
         lastSnapshot: DocumentSnapshot?
     ): Flow<Result<PagedList<Aisle>>>
-    fun getAislesSortedByDescTimestamp(): Flow<Result<List<Aisle>>>
+//    fun getAislesSortedByDescTimestamp(): Flow<Result<List<Aisle>>>
 
     suspend fun addAisle(aisle: Aisle): Result<Unit>
 }

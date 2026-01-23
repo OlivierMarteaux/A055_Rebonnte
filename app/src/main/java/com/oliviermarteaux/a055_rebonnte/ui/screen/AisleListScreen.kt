@@ -79,7 +79,7 @@ fun AisleListScreen(
                 // fab button
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
-                fabModifier = modifier.testTag("HomeScreenFab"),
+                fabModifier = modifier.testTag("AddAisle"),
                 onFabClick = //::populateFakeAisleListForDemo
                     {
                         checkUserState(

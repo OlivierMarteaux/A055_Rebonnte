@@ -117,5 +117,7 @@ class AisleListViewModel @Inject constructor(
 
         // Sign in the test user in case of test config
         if (TestConfig.isTest) signInTestUser()
+
+        loadFirstPage()
     }
 }

@@ -22,8 +22,8 @@ class AisleFirebaseRepository @Inject constructor(
             lastSnapshot = lastSnapshot
         )
 
-    override fun getAislesSortedByDescTimestamp(): Flow<Result<List<Aisle>>> =
-        aisleApi.getAislesSortedByDescTimestamp()
+//    override fun getAislesSortedByDescTimestamp(): Flow<Result<List<Aisle>>> =
+//        aisleApi.getAislesSortedByDescTimestamp()
 
     override suspend fun addAisle(aisle: Aisle): Result<Unit> =
         aisleApi.addAisle(aisle)
