@@ -31,13 +31,13 @@ fun RebonnteApp(){
             Screen.Splash.route
         }
 
-    if (!TestConfig.isTest) {
-        RequestPermissionsOnFirstLaunch(
-            Manifest.permission.CAMERA,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.POST_NOTIFICATIONS
-        )
-    }
+//    if (!TestConfig.isTest) {
+//        RequestPermissionsOnFirstLaunch(
+//            Manifest.permission.CAMERA,
+//            Manifest.permission.ACCESS_FINE_LOCATION,
+//            Manifest.permission.POST_NOTIFICATIONS
+//        )
+//    }
 
     Surface {
         DismissKeyboardOnTapOutside {

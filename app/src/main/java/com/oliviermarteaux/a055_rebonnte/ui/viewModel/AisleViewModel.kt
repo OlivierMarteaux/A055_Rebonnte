@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen
+package com.oliviermarteaux.a055_rebonnte.ui.viewModel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

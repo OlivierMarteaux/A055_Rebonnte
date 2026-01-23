@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.home
+package com.oliviermarteaux.a055_rebonnte.ui.screen
 
 import android.util.Log
 import androidx.compose.foundation.layout.padding
@@ -12,29 +12,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
-import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
+import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteBottomAppBar
+import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteBottomNavItem
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun AisleListScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    aisleListViewModel: AisleListViewModel,
     aisleViewModel: AisleViewModel,
-    navigateToDetailScreen: () -> Unit = {},
-    navigateToAddScreen: () -> Unit = {}
+    medicineListViewModel: MedicineListViewModel,
+    navigateToDetailScreen: () -> Unit,
+    navigateToAddScreen: () -> Unit
 ) {
-    with(homeViewModel) {
+    with(aisleListViewModel) {
         with (aisleViewModel) {
 
             var fabDisplayed by rememberSaveable { mutableStateOf(false) }
@@ -43,11 +47,11 @@ fun HomeScreen(
 
             val cdItem = stringResource(R.string.aisle)
             val cdItems = stringResource(R.string.aisles)
-            val cdScreenTitle = stringResource(RebonnteScreen.Home.titleRes)
+            val cdScreenTitle = stringResource(RebonnteScreen.AisleList.titleRes)
             val cdScreen =
                 if (addAisleUiState is UiState.Success) {
                     resetAddAisleUiState()
-                    stringResource(R.string.successfully_created, cdItem)
+                    stringResource(R.string.successfully_created, aisle.name, cdItem)
                 }
                 else
                     stringResource(
@@ -61,25 +65,31 @@ fun HomeScreen(
                 stringResource(R.string.button_double_tap_to, cdFabLabel, cdFabAction)
 
             SharedScaffold(
-                title = stringResource(RebonnteScreen.Home.titleRes),
+                title = stringResource(RebonnteScreen.AisleList.titleRes),
                 screenContentDescription = cdScreen,
                 // top app bar
                 topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
                 // bottom app bar
-                bottomBar = { RebonnteBottomAppBar(navController) },
+                bottomBar = { RebonnteBottomAppBar(
+                    navController = navController,
+                    item1 = RebonnteBottomNavItem.AisleNavItem,
+                    item2 = RebonnteBottomNavItem.MedicineNavItem,
+                    callback2 = medicineListViewModel::getAllMedicineByDescendingTimestamp
+                )},
                 // fab button
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
                 fabModifier = modifier.testTag("HomeScreenFab"),
-                onFabClick = {
-                    checkUserState(
-                        onUserLogged = {
-                            selectAisle(Aisle())
-                            navigateToAddScreen()
-                                       },
-                        onNoUserLogged = ::showAuthErrorToast
-                    )
-                }
+                onFabClick = //::populateFakeAisleListForDemo
+                    {
+                        checkUserState(
+                            onUserLogged = {
+                                selectAisle(Aisle())
+                                navigateToAddScreen()
+                                           },
+                            onNoUserLogged = ::showAuthErrorToast
+                        )
+                    }
             ) { contentPadding ->
                 LaunchedEffect(homeUiState) {
                     Log.i(
@@ -92,17 +102,23 @@ fun HomeScreen(
                     modifier = modifier,
                     testTag = "MedicineListScreen",
                     listUiState = homeUiState,
-                    listViewModel = homeViewModel,
+                    listViewModel = aisleListViewModel,
                     itemLabel = stringResource(R.string.aisle),
                     itemList =  aisleList,
+                    item = aisle,
+                    itemId = Aisle::id,
                     itemTitle =  Aisle::name,
-                    reloadItemOnError = ::loadAisles,
+                    reloadItemList = ::loadFirstPage,
                     showFab = ::showFab,
                     hideFab = ::hideFab,
                     actionUiState = addAisleUiState,
-                    resetUiState = ::resetAddAisleUiState
+                    resetUiState = ::resetAddAisleUiState,
+                    itemCrudAction = CrudAction.ADD,
+                    isLastPage = isLastPage,
+                    loadNextPage = ::loadNextPage
                 ){ aisle ->
                     selectAisle(aisle)
+                    medicineListViewModel.filterMedicineByAisleId(aisle.id)
                     navigateToDetailScreen()
                 }
             }

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 fun SharedFilledIntTextField(
     value: Int,
     modifier: Modifier = Modifier,
+    intRange: IntRange = 0..50,
     textFieldModifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = true,
@@ -78,7 +79,7 @@ fun SharedFilledIntTextField(
     IntPickerDialog(
         show = intPickerDialog,
         value = value,
-        range = 0..50,
+        range = intRange,
         onDismiss = { toggleIntPickerDialog() },
         onConfirm = {
             intValue = it

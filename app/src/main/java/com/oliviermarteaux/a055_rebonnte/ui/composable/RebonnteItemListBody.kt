@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import com.oliviermarteaux.a055_rebonnte.R
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
@@ -33,16 +34,21 @@ fun <T> RebonnteItemListBody(
     listUiState: ListUiState<T>,
     actionUiState: UiState<Unit>,
     resetUiState: () -> Unit = {},
-    actionCreation: Boolean = true,
+    itemCrudAction: CrudAction = CrudAction.NONE,
+    resetItemCrudAction: (() -> Unit)? = {},
     listViewModel: AuthUserViewModel,
     itemList: List<T>,
     itemLabel: String,
+    item: T,
+    itemId: (T) -> String,
     itemTitle: (T) -> String,
     itemText: @Composable (T) -> String = { "" },
     onSearchFocusRequester: FocusRequester = FocusRequester(),
-    reloadItemOnError: () -> Unit,
+    reloadItemList: () -> Unit,
     showFab: () -> Unit = {},
     hideFab: () -> Unit = {},
+    isLastPage: Boolean,
+    loadNextPage: () -> Unit,
     //_ trailing lambda !
     onItemClick: (T) -> Unit
 ){
@@ -67,7 +73,7 @@ fun <T> RebonnteItemListBody(
 
                 is ListUiState.Empty -> {
                     showFab()
-                    SharedToast("No medicine available")
+                    SharedToast("No $itemLabel available")
                 }
 
                 is ListUiState.Error -> {
@@ -75,7 +81,7 @@ fun <T> RebonnteItemListBody(
                     RebonnteErrorScreen(
                         modifier = modifier,
                         contentPadding = contentPadding,
-                        loadItems = reloadItemOnError
+                        loadItems = reloadItemList
                     )
                 }
 
@@ -90,9 +96,12 @@ fun <T> RebonnteItemListBody(
                             .padding(contentPadding)
                             .padding(horizontal = SharedPadding.large),
                         itemList = itemList,
+                        itemId = itemId,
                         itemTitle = itemTitle,
                         itemText = itemText,
-                        onItemClick = onItemClick
+                        onItemClick = onItemClick,
+                        isLastPage = isLastPage,
+                        loadNextPage = loadNextPage
                     )
                 }
             }
@@ -107,20 +116,33 @@ fun <T> RebonnteItemListBody(
 
             if (actionUiState is UiState.Success) {
                 Log.d("OM_TAG", "RebonnteListBody: actionUiState is success")
-                if (actionCreation) {
-                    Log.d("OM_TAG", "RebonnteListBody: action is creation")
-                    SharedToast(
-                        text = stringResource(R.string.successfully_created, itemLabel),
-                        bottomPadding = ToastPadding.high
-                    )
-                } else {
-                    Log.d("OM_TAG", "RebonnteListBody: action is edition")
-                    SharedToast(
-                        text = stringResource(R.string.successfully_edited, itemLabel),
-                        bottomPadding = ToastPadding.high
-                    )
+                when (itemCrudAction) {
+                    CrudAction.ADD -> {
+                        Log.d("OM_TAG", "RebonnteListBody: action is creation")
+                        SharedToast(
+                            text = stringResource(R.string.successfully_created, itemLabel, itemTitle(item)),
+                            bottomPadding = ToastPadding.high
+                        )
+                    }
+                    CrudAction.UPDATE -> {
+                        Log.d("OM_TAG", "RebonnteListBody: action is edition")
+                        SharedToast(
+                            text = stringResource(R.string.successfully_edited, itemLabel, itemTitle(item)),
+                            bottomPadding = ToastPadding.high
+                        )
+                    }
+                    CrudAction.DELETE -> {
+                        Log.d("OM_TAG", "RebonnteListBody: action is deletion")
+                        SharedToast(
+                            text = stringResource(R.string.successfully_deleted, itemLabel, itemTitle(item)),
+                            bottomPadding = ToastPadding.high
+                        )
+                    }
+                    else -> {Log.d("OM_TAG", "RebonnteListBody: no CrudAction set")}
                 }
+                reloadItemList()
                 resetUiState()
+                resetItemCrudAction?.invoke()
             }
         }
     }

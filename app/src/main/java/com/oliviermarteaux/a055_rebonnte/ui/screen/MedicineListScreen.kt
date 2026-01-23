@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList
+package com.oliviermarteaux.a055_rebonnte.ui.screen
 
 import android.util.Log
 import androidx.compose.foundation.layout.padding
@@ -19,12 +19,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
+import com.oliviermarteaux.a055_rebonnte.ui.MedicineSortOption
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineSortOption
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
-import com.oliviermarteaux.localshared.composables.RebonnteBottomAppBar
+import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteBottomAppBar
+import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteBottomNavItem
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
 import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.ui.UiState
@@ -37,8 +40,10 @@ import com.oliviermarteaux.shared.compose.R as oR
 fun MedicineListScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
+    //homeViewModel: AisleListViewModel = hiltViewModel(), // for medicine pre-populating only
     medicineListViewModel: MedicineListViewModel,
     medicineViewModel: MedicineViewModel,
+    aisleListViewModel: AisleListViewModel,
     navigateToAddOrEditMedicineScreen: () -> Unit = {}
 ) {
     with(medicineListViewModel) {
@@ -75,12 +80,13 @@ fun MedicineListScreen(
             val cdScreen =
                 if (addOrEditMedicineUiState is UiState.Success) {
                     resetAddOrEditMedicineUiState()
-                    if (medicineCreation)
-                        stringResource(R.string.successfully_created, cdItem)
-                    else
-                        stringResource(R.string.successfully_edited, cdItem)
-                }
-                else
+                    when (medicineCrudAction){
+                        CrudAction.ADD -> stringResource(R.string.successfully_created, cdItem, medicine.name)
+                        CrudAction.UPDATE -> stringResource(R.string.successfully_edited, cdItem, medicine.name)
+                        CrudAction.DELETE -> stringResource(R.string.successfully_deleted, cdItem, medicine.name)
+                        else -> ""
+                    }
+                } else
                     stringResource(
                         R.string.you_are_on_the_screen_here_you_can_browse_all_the,
                         cdScreenTitle,
@@ -99,7 +105,7 @@ fun MedicineListScreen(
                 topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
                 // search bar
                 query = queryFieldValue,
-                onQueryChange = ::filterMedicines,
+                onQueryChange = ::filterMedicineByName,
                 searchLabel = stringResource(R.string.look_for_an, cdItem),
                 searchBarIcon = IconSource.VectorIcon(Icons.Default.Clear),
                 searchBarIconSemantics = cdCustomAccessibilityActionClear,
@@ -108,27 +114,36 @@ fun MedicineListScreen(
                 searchBarDisplayed = searchBarDisplayed,
                 onSearch = { focusOnSearchResult() },
                 // sort menu
-                onSortByNoneClick = ::loadMedicines,
-                onSortByNameClick = { sortMedicinesBy(MedicineSortOption.NAME) },
+                onSortByNoneClick = { sortMedicinesBy(MedicineSortOption.DESCENDING_TIMESTAMP) },
+                onSortByNameClick = { sortMedicinesBy(MedicineSortOption.ASCENDING_NAME) },
                 onSortByAscendingStockClick = { sortMedicinesBy(MedicineSortOption.ASCENDING_STOCK) },
                 onSortByDescendingStockClick = { sortMedicinesBy(MedicineSortOption.DESCENDING_STOCK) },
                 // bottom app bar
-                bottomBar = { RebonnteBottomAppBar(navController) },
+                bottomBar = { RebonnteBottomAppBar(
+                    navController = navController,
+                    item1 = RebonnteBottomNavItem.AisleNavItem,
+                    callback1 = {
+                        aisleListViewModel.loadFirstPage()
+                    },
+                    item2 = RebonnteBottomNavItem.MedicineNavItem
+                )},
                 // fab button
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
                 fabModifier = modifier.testTag("MedicineListScreenFab"),
-                onFabClick = {
-                    checkUserState(
-                        onUserLogged = {
-                            hideSearchBar()
-                            selectMedicine(Medicine())
-                            switchToMedicineCreationMode()
-                            navigateToAddOrEditMedicineScreen()
-                        },
-                        onNoUserLogged = ::showAuthErrorToast
-                    )
-                }
+                onFabClick = //{populateFakeMedicineListForDemo(homeViewModel.aisleList)}
+                    {
+                        checkUserState(
+                            onUserLogged = {
+                                hideSearchBar()
+                                aisleListViewModel.getAllAisle()
+                                selectMedicine(Medicine())
+                                switchToMedicineCreationMode()
+                                navigateToAddOrEditMedicineScreen()
+                            },
+                            onNoUserLogged = ::showAuthErrorToast
+                        )
+                    }
             ) { contentPadding ->
                 LaunchedEffect(medicineListUiState) {
                     Log.i(
@@ -143,17 +158,22 @@ fun MedicineListScreen(
                     listUiState = medicineListUiState,
                     listViewModel = medicineListViewModel,
                     itemLabel = stringResource(R.string.medicine),
-                    itemList =  filteredMedicineList,
+                    itemList =  medicineList,
+                    item = medicine,
+                    itemId =  Medicine::id,
                     itemTitle =  Medicine::name,
                     itemText = { medicine: Medicine ->
                         stringResource(R.string.stock, medicine.stock) },
                     onSearchFocusRequester = onSearchFocusRequester,
-                    reloadItemOnError = ::loadMedicines,
+                    reloadItemList = ::loadFirstPage,
                     showFab = ::showFab,
                     hideFab = ::hideFab,
                     actionUiState = addOrEditMedicineUiState,
-                    actionCreation = medicineCreation,
-                    resetUiState = ::resetAddOrEditMedicineUiState
+                    itemCrudAction = medicineCrudAction,
+                    resetUiState = ::resetAddOrEditMedicineUiState,
+                    resetItemCrudAction = ::resetMedicineCrudAction,
+                    isLastPage = isLastPage,
+                    loadNextPage = ::loadNextPage
                 ){ medicine ->
                     hideSearchBar()
                     selectMedicine(medicine)

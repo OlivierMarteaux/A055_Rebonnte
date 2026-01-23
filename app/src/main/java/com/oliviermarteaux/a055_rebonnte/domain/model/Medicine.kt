@@ -17,6 +17,6 @@ data class Medicine(
     val author: User? = User(),
     val creationDate: Date? = LocalDate.now().toDate(),
     val creationTime: Date? = LocalDate.now().toDate(),
-    val changeRecord: List<MedicineChange> = emptyList()
-
+    val changeRecord: List<MedicineChange> = emptyList(),
+    val nameLowerCase: String = "",
 ): Serializable

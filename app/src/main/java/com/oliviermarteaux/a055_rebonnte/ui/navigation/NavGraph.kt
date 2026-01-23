@@ -10,14 +10,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.oliviermarteaux.a055_rebonnte.R
-import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.addAisle.AddAisleScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.addOrEditMedicine.AddOrEditMedicineScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.aisleDetail.AisleDetailScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList.MedicineListScreen
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.AddAisleScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.AddOrEditMedicineScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleDetailScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleListScreen
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListScreen
 import com.oliviermarteaux.localshared.composables.LoginScreen
 import com.oliviermarteaux.localshared.composables.PasswordScreen
 import com.oliviermarteaux.localshared.composables.ResetScreen
@@ -40,6 +41,7 @@ fun SharedNavGraph(
     aisleViewModel: AisleViewModel = hiltViewModel(),
     medicineViewModel: MedicineViewModel = hiltViewModel(),
     medicineListViewModel: MedicineListViewModel = hiltViewModel(),
+    aisleListViewModel: AisleListViewModel = hiltViewModel()
 ){
     val imageModifier: Modifier = Modifier.clip(shape = SharedShapes.medium)
     NavHost(
@@ -53,7 +55,10 @@ fun SharedNavGraph(
                 imageModifier = Modifier.clip(shape = RoundedCornerShape(24.dp)),
                 serverClientIdStringRes = R.string.default_web_client_id,
                 navigateToLoginScreen = { navHostController.navigate(Screen.Login.route) },
-                navigateToHomeScreen = { navHostController.navigate(Screen.Home.route) },
+                navigateToHomeScreen = {
+                    aisleListViewModel.loadFirstPage()
+                    navHostController.navigate(RebonnteScreen.AisleList.route)
+                                       },
             )
         }
         /*_ LOGIN SCREEN #############################################################################*/
@@ -78,7 +83,8 @@ fun SharedNavGraph(
                 imageModifier = imageModifier,
                 onBackClick = { navHostController.navigateUp() },
                 navigateToHomeScreen = {
-                    navHostController.navigate(Screen.Home.route){
+                    aisleListViewModel.loadFirstPage()
+                    navHostController.navigate(RebonnteScreen.AisleList.route){
                         popUpTo(0) { inclusive = true } // clear everything
                     }
                 },
@@ -100,9 +106,11 @@ fun SharedNavGraph(
             )
         }
         /*_ AISLE LIST SCREEN ##############################################################################*/
-        composable(route = RebonnteScreen.Home.route) {
-            HomeScreen(
+        composable(route = RebonnteScreen.AisleList.route) {
+            AisleListScreen(
+                aisleListViewModel = aisleListViewModel,
                 aisleViewModel = aisleViewModel,
+                medicineListViewModel = medicineListViewModel,
                 navController = navHostController,
                 navigateToDetailScreen = {navHostController.navigate(RebonnteScreen.AisleDetail.route) },
                 navigateToAddScreen = { navHostController.navigate(RebonnteScreen.AddAisle.route) }
@@ -125,6 +133,7 @@ fun SharedNavGraph(
             MedicineListScreen(
                 medicineViewModel = medicineViewModel,
                 medicineListViewModel = medicineListViewModel,
+                aisleListViewModel = aisleListViewModel,
                 navController = navHostController,
                 navigateToAddOrEditMedicineScreen = {
                     navHostController.navigate(RebonnteScreen.AddOrEditMedicine.route)
@@ -142,6 +151,7 @@ fun SharedNavGraph(
         composable(route = RebonnteScreen.AddOrEditMedicine.route) {
             AddOrEditMedicineScreen(
                 medicineViewModel = medicineViewModel,
+                aisleListViewModel = aisleListViewModel,
                 navigateBack = { navHostController.navigateUp() },
             )
         }

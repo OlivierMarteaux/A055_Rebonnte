@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.aisleDetail
+package com.oliviermarteaux.a055_rebonnte.ui.screen
 
 import android.util.Log
 import androidx.compose.foundation.layout.padding
@@ -11,9 +11,11 @@ import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
 import com.oliviermarteaux.localshared.composables.SharedScaffold
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
@@ -35,8 +37,12 @@ fun AisleDetailScreen(
         val cdItems = stringResource(R.string.medicines)
         val cdItemAction: String = run {
             resetAddOrEditMedicineUiState()
-            if (medicineCreation) stringResource(R.string.successfully_created, cdItem)
-            else stringResource(R.string.successfully_edited, cdItem)
+            when (medicineCrudAction) {
+                CrudAction.ADD -> stringResource(R.string.successfully_created, cdItem, medicine.name)
+                CrudAction.UPDATE -> stringResource(R.string.successfully_edited, cdItem, medicine.name)
+                CrudAction.DELETE -> stringResource(R.string.successfully_deleted, cdItem, medicine.name)
+                else -> ""
+            }
         }
         val cdScreen = stringResource(
             R.string.you_are_on_the_screen_here_you_can_browse_all_the_in_this,
@@ -56,13 +62,14 @@ fun AisleDetailScreen(
             semanticStateText = cdItemAction
         ) { contentPadding ->
             with(medicineListViewModel) {
-                LaunchedEffect(medicineListUiState) {
-                    Log.i(
-                        "OM_TAG",
-                        "MedicineListViewModel: LaunchedEffect: medicineListUiState = $medicineListUiState"
-                    )
-                }
                 with(aisleViewModel) {
+
+                    LaunchedEffect(medicineListUiState) {
+                        Log.i(
+                            "OM_TAG",
+                            "MedicineListViewModel: LaunchedEffect: medicineListUiState = $medicineListUiState"
+                        )
+                    }
 
                     RebonnteItemListBody(
                         contentPadding = contentPadding,
@@ -71,15 +78,20 @@ fun AisleDetailScreen(
                         listUiState = medicineListUiState,
                         listViewModel = medicineListViewModel,
                         itemLabel = stringResource(R.string.medicine),
-                        itemList = medicineList.filter { it.aisle == aisle },
+                        itemList = medicineList/*.filter { it.aisle == aisle }*/,
+                        item = medicine,
+                        itemId = Medicine::id,
                         itemTitle = Medicine::name ,
                         itemText = { medicine: Medicine ->
                             stringResource(R.string.stock, medicine.stock)
                                    },
-                        reloadItemOnError = ::loadMedicines,
+                        reloadItemList = ::loadFirstPage,
                         actionUiState = addOrEditMedicineUiState,
-                        actionCreation = medicineCreation,
-                        resetUiState = ::resetAddOrEditMedicineUiState
+                        itemCrudAction = medicineCrudAction,
+                        resetItemCrudAction = ::resetMedicineCrudAction,
+                        resetUiState = ::resetAddOrEditMedicineUiState,
+                        isLastPage = isLastPage,
+                        loadNextPage = ::loadNextPage
 
                     ) { medicine ->
                         selectMedicine(medicine)
