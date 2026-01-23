@@ -7,6 +7,6 @@ Feature: Display and scroll the medicine list
     When I click on the "Medicines" button
     Then I should arrive on the MedicineList Screen
 
-  Scenario: Display and scroll the aisles list
-    Given I am on the Home screen
-    Then All the aisles are displayed and scrollable on the screen
+  Scenario: Display and scroll the medicines list
+    Given I am on the MedicineList screen
+    Then All the medicines are displayed and scrollable on the screen
