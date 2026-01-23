@@ -24,6 +24,7 @@ import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteBottomAppBar
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteBottomNavItem
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
@@ -42,6 +43,7 @@ fun MedicineListScreen(
     //homeViewModel: AisleListViewModel = hiltViewModel(), // for medicine pre-populating only
     medicineListViewModel: MedicineListViewModel,
     medicineViewModel: MedicineViewModel,
+    aisleListViewModel: AisleListViewModel,
     navigateToAddOrEditMedicineScreen: () -> Unit = {}
 ) {
     with(medicineListViewModel) {
@@ -120,6 +122,9 @@ fun MedicineListScreen(
                 bottomBar = { RebonnteBottomAppBar(
                     navController = navController,
                     item1 = RebonnteBottomNavItem.AisleNavItem,
+                    callback1 = {
+                        aisleListViewModel.loadFirstPage()
+                    },
                     item2 = RebonnteBottomNavItem.MedicineNavItem
                 )},
                 // fab button
@@ -131,6 +136,7 @@ fun MedicineListScreen(
                         checkUserState(
                             onUserLogged = {
                                 hideSearchBar()
+                                aisleListViewModel.getAllAisle()
                                 selectMedicine(Medicine())
                                 switchToMedicineCreationMode()
                                 navigateToAddOrEditMedicineScreen()

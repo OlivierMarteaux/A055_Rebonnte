@@ -11,6 +11,7 @@ import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel

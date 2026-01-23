@@ -46,6 +46,14 @@ class AisleListViewModel @Inject constructor(
     var isLoading = false
         private set
 
+    fun getAllAisle(){
+        Log.d("OM_TAG","AisleListViewModel::getAllAisle")
+        lastSnapshot = null
+        isLastPage = false
+        aisleList.clear()
+        loadNextPage(pageSize = 100)
+    }
+
     fun loadFirstPage() {
         Log.d("OM_TAG","AisleListViewModel::loadFirstPage")
         lastSnapshot = null
@@ -54,7 +62,7 @@ class AisleListViewModel @Inject constructor(
         loadNextPage()
     }
 
-    fun loadNextPage() {
+    fun loadNextPage(pageSize: Long = 9) {
         Log.d("OM_TAG","AisleListViewModel::loadNextPage: isLastPage = $isLastPage")
         Log.d("OM_TAG","AisleListViewModel::loadNextPage: isLoading = $isLoading")
         Log.d("OM_TAG","AisleListViewModel::loadNextPage: return = ${(isLastPage || isLoading)}")
@@ -64,7 +72,7 @@ class AisleListViewModel @Inject constructor(
             isLoading = true
 
             aisleRepository.getAislePaged(
-                pageSize = 9,
+                pageSize = pageSize,
                 lastSnapshot = lastSnapshot
             ).collect { result ->
                 result.onSuccess { page ->

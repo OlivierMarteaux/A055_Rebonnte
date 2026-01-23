@@ -133,6 +133,7 @@ fun SharedNavGraph(
             MedicineListScreen(
                 medicineViewModel = medicineViewModel,
                 medicineListViewModel = medicineListViewModel,
+                aisleListViewModel = aisleListViewModel,
                 navController = navHostController,
                 navigateToAddOrEditMedicineScreen = {
                     navHostController.navigate(RebonnteScreen.AddOrEditMedicine.route)
