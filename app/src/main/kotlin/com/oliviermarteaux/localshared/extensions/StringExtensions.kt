@@ -1,7 +1,6 @@
 package com.oliviermarteaux.localshared.extensions
 
 import android.util.Log
-import com.google.android.play.integrity.internal.z
 
 fun String.toShiftedAlpha(): String {
     if (this.isEmpty()) return "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"

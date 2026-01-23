@@ -119,7 +119,6 @@ fun SharedNavGraph(
         /*_ AISLE DETAIL SCREEN ##############################################################################*/
         composable(route = RebonnteScreen.AisleDetail.route) {
             AisleDetailScreen(
-                aisleViewModel = aisleViewModel,
                 medicineViewModel = medicineViewModel,
                 medicineListViewModel = medicineListViewModel,
                 navigateToAddOrEditMedicineScreen = {

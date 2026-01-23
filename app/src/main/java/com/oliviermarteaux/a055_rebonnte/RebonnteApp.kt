@@ -1,6 +1,5 @@
 package com.oliviermarteaux.a055_rebonnte
 
-import android.Manifest
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -10,7 +9,6 @@ import androidx.navigation.compose.rememberNavController
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.SharedNavGraph
 import com.oliviermarteaux.localshared.utils.TestConfig
 import com.oliviermarteaux.shared.composables.startup.DismissKeyboardOnTapOutside
-import com.oliviermarteaux.shared.composables.startup.RequestPermissionsOnFirstLaunch
 import com.oliviermarteaux.shared.navigation.LogRoutes
 import com.oliviermarteaux.shared.navigation.Screen
 
