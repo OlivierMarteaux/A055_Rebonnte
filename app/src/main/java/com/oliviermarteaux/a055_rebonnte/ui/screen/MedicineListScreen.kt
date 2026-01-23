@@ -130,7 +130,7 @@ fun MedicineListScreen(
                 // fab button
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
-                fabModifier = modifier.testTag("MedicineListScreenFab"),
+                fabModifier = modifier.testTag("AddMedicine"),
                 onFabClick = //{populateFakeMedicineListForDemo(homeViewModel.aisleList)}
                     {
                         checkUserState(
