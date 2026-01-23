@@ -38,7 +38,7 @@ import com.oliviermarteaux.shared.compose.R as oR
 fun MedicineListScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    //homeViewModel: HomeViewModel = hiltViewModel(), // for medicine pre-populating only
+    //homeViewModel: AisleListViewModel = hiltViewModel(), // for medicine pre-populating only
     medicineListViewModel: MedicineListViewModel,
     medicineViewModel: MedicineViewModel,
     navigateToAddOrEditMedicineScreen: () -> Unit = {}

@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
@@ -27,7 +26,7 @@ import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemList
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteSaveButton
 import com.oliviermarteaux.a055_rebonnte.ui.screen.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.home.HomeViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.aisleList.AisleListViewModel
 import com.oliviermarteaux.localshared.composables.SharedFilledIntTextField
 import com.oliviermarteaux.localshared.composables.SharedFilledItemTextField
 import com.oliviermarteaux.localshared.composables.SharedScaffold
@@ -45,7 +44,7 @@ import com.oliviermarteaux.shared.compose.R as oR
 
 @Composable
 fun AddOrEditMedicineScreen(
-    homeViewModel: HomeViewModel,
+    aisleListViewModel: AisleListViewModel,
     medicineViewModel: MedicineViewModel,
     navigateBack: () -> Unit,
 ) {
@@ -99,7 +98,7 @@ fun AddOrEditMedicineScreen(
                     paddingValues = paddingValues,
                     updateMedicineStock = ::updateMedicineStock,
                     updateMedicineAisle = ::updateMedicineAisle,
-                    homeViewModel = homeViewModel,
+                    aisleListViewModel = aisleListViewModel,
                     medicineCrudAction = medicineCrudAction
                 )
                 when {
@@ -133,7 +132,7 @@ fun AddScreenBody(
     paddingValues: PaddingValues,
     updateMedicineStock: (Int) -> Unit,
     updateMedicineAisle: (Aisle) -> Unit,
-    homeViewModel: HomeViewModel,
+    aisleListViewModel: AisleListViewModel,
     medicineCrudAction: CrudAction,
 ) {
     val configuration = LocalConfiguration.current
@@ -154,7 +153,7 @@ fun AddScreenBody(
             updateMedicineName = updateMedicineName,
             updateMedicineStock = updateMedicineStock,
             updateMedicineAisle = updateMedicineAisle,
-            homeViewModel = homeViewModel,
+            aisleListViewModel = aisleListViewModel,
             medicineCreation = medicineCrudAction == CrudAction.ADD,
             isStockError = medicine.stock.toString().isEmpty()
                     && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
@@ -204,7 +203,7 @@ fun AddScreenTextForm(
     updateMedicineName: (String) -> Unit,
     updateMedicineStock: (Int) -> Unit,
     updateMedicineAisle: (Aisle) -> Unit,
-    homeViewModel: HomeViewModel,
+    aisleListViewModel: AisleListViewModel,
     medicineCreation: Boolean,
     isStockError: Boolean
 ){
@@ -228,7 +227,7 @@ fun AddScreenTextForm(
 
         SharedFilledItemTextField (
             value = aisle.name,
-            itemList = homeViewModel.aisleList,
+            itemList = aisleListViewModel.aisleList,
             selectedItem = aisle,
             itemLabel = {aisle -> aisle.name},
             label = stringResource(R.string.aisle),

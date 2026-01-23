@@ -1,6 +1,5 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.home
+package com.oliviermarteaux.a055_rebonnte.ui.screen.aisleList
 
-import android.R.attr.name
 import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,7 +12,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
@@ -28,15 +26,15 @@ import com.oliviermarteaux.shared.ui.theme.SharedPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun AisleListScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel,
+    aisleListViewModel: AisleListViewModel,
     aisleViewModel: AisleViewModel,
     navigateToDetailScreen: () -> Unit = {},
     navigateToAddScreen: () -> Unit = {}
 ) {
-    with(homeViewModel) {
+    with(aisleListViewModel) {
         with (aisleViewModel) {
 
             var fabDisplayed by rememberSaveable { mutableStateOf(false) }
@@ -45,7 +43,7 @@ fun HomeScreen(
 
             val cdItem = stringResource(R.string.aisle)
             val cdItems = stringResource(R.string.aisles)
-            val cdScreenTitle = stringResource(RebonnteScreen.Home.titleRes)
+            val cdScreenTitle = stringResource(RebonnteScreen.AisleList.titleRes)
             val cdScreen =
                 if (addAisleUiState is UiState.Success) {
                     resetAddAisleUiState()
@@ -63,7 +61,7 @@ fun HomeScreen(
                 stringResource(R.string.button_double_tap_to, cdFabLabel, cdFabAction)
 
             SharedScaffold(
-                title = stringResource(RebonnteScreen.Home.titleRes),
+                title = stringResource(RebonnteScreen.AisleList.titleRes),
                 screenContentDescription = cdScreen,
                 // top app bar
                 topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
@@ -95,7 +93,7 @@ fun HomeScreen(
                     modifier = modifier,
                     testTag = "MedicineListScreen",
                     listUiState = homeUiState,
-                    listViewModel = homeViewModel,
+                    listViewModel = aisleListViewModel,
                     itemLabel = stringResource(R.string.aisle),
                     itemList =  aisleList,
                     item = aisle,

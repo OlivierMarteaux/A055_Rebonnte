@@ -13,7 +13,7 @@ sealed class RebonnteBottomNavItem(
     @param: StringRes val titleRes: Int
 ) {
     object AisleNavItem: RebonnteBottomNavItem(
-        screen = RebonnteScreen.Home,
+        screen = RebonnteScreen.AisleList,
         icon = Icons.Filled.Home,
         titleRes = R.string.aisles)
 

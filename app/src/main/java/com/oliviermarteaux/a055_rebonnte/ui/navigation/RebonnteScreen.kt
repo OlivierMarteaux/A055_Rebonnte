@@ -15,8 +15,8 @@ sealed class RebonnteScreen(
     val routeWithArgs: String = "",
     val titleRes: Int = -1,
 ) {
-    data object Home : RebonnteScreen(
-        route = "home",
+    data object AisleList : RebonnteScreen(
+        route = "aisle_list",
         titleRes = R.string.aisles
     )
     data object AisleDetail : RebonnteScreen(
