@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList
+package com.oliviermarteaux.a055_rebonnte.ui.screen
 
 import android.util.Log
 import androidx.compose.foundation.layout.padding
@@ -19,14 +19,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
+import com.oliviermarteaux.a055_rebonnte.ui.MedicineSortOption
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.CrudAction
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineSortOption
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteBottomAppBar
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteBottomNavItem
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
 import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.ui.UiState

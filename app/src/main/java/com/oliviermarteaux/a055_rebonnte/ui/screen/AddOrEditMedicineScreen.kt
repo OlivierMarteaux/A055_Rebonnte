@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.addOrEditMedicine
+package com.oliviermarteaux.a055_rebonnte.ui.screen
 
 import android.content.res.Configuration
 import android.util.Log
@@ -24,9 +24,9 @@ import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemList
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteSaveButton
-import com.oliviermarteaux.a055_rebonnte.ui.screen.CrudAction
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.aisleList.AisleListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
 import com.oliviermarteaux.localshared.composables.SharedFilledIntTextField
 import com.oliviermarteaux.localshared.composables.SharedFilledItemTextField
 import com.oliviermarteaux.localshared.composables.SharedScaffold

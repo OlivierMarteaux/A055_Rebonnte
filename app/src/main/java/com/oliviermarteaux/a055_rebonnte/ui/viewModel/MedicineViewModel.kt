@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen
+package com.oliviermarteaux.a055_rebonnte.ui.viewModel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,10 +9,10 @@ import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChangeType
+import com.oliviermarteaux.a055_rebonnte.ui.InvalidStockException
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.UiState
-import com.oliviermarteaux.shared.ui.showToastFlag
 import com.oliviermarteaux.shared.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen
+package com.oliviermarteaux.a055_rebonnte.ui
 
 import com.google.firebase.firestore.DocumentSnapshot
 

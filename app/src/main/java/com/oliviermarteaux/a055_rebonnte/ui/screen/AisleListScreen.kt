@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.aisleList
+package com.oliviermarteaux.a055_rebonnte.ui.screen
 
 import android.util.Log
 import androidx.compose.foundation.layout.padding
@@ -17,11 +17,12 @@ import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.CrudAction
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteBottomAppBar
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteBottomNavItem
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding

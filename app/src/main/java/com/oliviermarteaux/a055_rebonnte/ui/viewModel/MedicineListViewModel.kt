@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen
+package com.oliviermarteaux.a055_rebonnte.ui.viewModel
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -12,6 +12,7 @@ import com.oliviermarteaux.a055_rebonnte.data.fake.fakeMedicineList
 import com.oliviermarteaux.a055_rebonnte.data.repository.MedicineRepository
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
+import com.oliviermarteaux.a055_rebonnte.ui.MedicineSortOption
 import com.oliviermarteaux.localshared.utils.TestConfig
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel

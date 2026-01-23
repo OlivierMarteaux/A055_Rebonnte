@@ -1,4 +1,4 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.addAisle
+package com.oliviermarteaux.a055_rebonnte.ui.screen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
@@ -19,7 +19,7 @@ import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteSaveButton
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.SharedFilledTextField
 import com.oliviermarteaux.shared.composables.SharedScaffold

@@ -5,10 +5,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
-import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineSortOption
-import com.oliviermarteaux.a055_rebonnte.ui.screen.PagedList
-import com.oliviermarteaux.localshared.extensions.toShiftedAlpha
+import com.oliviermarteaux.a055_rebonnte.ui.PagedList
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

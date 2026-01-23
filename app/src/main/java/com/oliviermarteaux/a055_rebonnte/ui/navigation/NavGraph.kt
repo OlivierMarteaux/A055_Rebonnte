@@ -10,15 +10,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.oliviermarteaux.a055_rebonnte.R
-import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.addAisle.AddAisleScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.addOrEditMedicine.AddOrEditMedicineScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.aisleDetail.AisleDetailScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.aisleList.AisleListScreen
-import com.oliviermarteaux.a055_rebonnte.ui.screen.aisleList.AisleListViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.screen.medicineList.MedicineListScreen
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.AddAisleScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.AddOrEditMedicineScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleDetailScreen
+import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleListScreen
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListScreen
 import com.oliviermarteaux.localshared.composables.LoginScreen
 import com.oliviermarteaux.localshared.composables.PasswordScreen
 import com.oliviermarteaux.localshared.composables.ResetScreen
@@ -55,7 +55,10 @@ fun SharedNavGraph(
                 imageModifier = Modifier.clip(shape = RoundedCornerShape(24.dp)),
                 serverClientIdStringRes = R.string.default_web_client_id,
                 navigateToLoginScreen = { navHostController.navigate(Screen.Login.route) },
-                navigateToHomeScreen = { navHostController.navigate(RebonnteScreen.AisleList.route) },
+                navigateToHomeScreen = {
+                    aisleListViewModel.loadFirstPage()
+                    navHostController.navigate(RebonnteScreen.AisleList.route)
+                                       },
             )
         }
         /*_ LOGIN SCREEN #############################################################################*/
@@ -80,7 +83,8 @@ fun SharedNavGraph(
                 imageModifier = imageModifier,
                 onBackClick = { navHostController.navigateUp() },
                 navigateToHomeScreen = {
-                    navHostController.navigate(Screen.Home.route){
+                    aisleListViewModel.loadFirstPage()
+                    navHostController.navigate(RebonnteScreen.AisleList.route){
                         popUpTo(0) { inclusive = true } // clear everything
                     }
                 },

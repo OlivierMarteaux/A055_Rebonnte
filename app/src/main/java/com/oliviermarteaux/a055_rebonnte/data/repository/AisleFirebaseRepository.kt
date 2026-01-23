@@ -3,9 +3,7 @@ package com.oliviermarteaux.a055_rebonnte.data.repository
 import com.google.firebase.firestore.DocumentSnapshot
 import com.oliviermarteaux.a055_rebonnte.data.service.AisleApi
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
-import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineSortOption
-import com.oliviermarteaux.a055_rebonnte.ui.screen.PagedList
+import com.oliviermarteaux.a055_rebonnte.ui.PagedList
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton

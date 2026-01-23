@@ -1,21 +1,15 @@
 package com.oliviermarteaux.a055_rebonnte.data.service
 
-import android.R.attr.direction
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
-import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
-import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineSortOption
-import com.oliviermarteaux.a055_rebonnte.ui.screen.PagedList
+import com.oliviermarteaux.a055_rebonnte.ui.MedicineSortOption
+import com.oliviermarteaux.a055_rebonnte.ui.PagedList
 import com.oliviermarteaux.localshared.extensions.toShiftedAlpha
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 

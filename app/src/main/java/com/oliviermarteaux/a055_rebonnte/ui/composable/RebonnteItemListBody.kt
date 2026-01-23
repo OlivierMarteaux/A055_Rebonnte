@@ -1,6 +1,5 @@
 package com.oliviermarteaux.a055_rebonnte.ui.composable
 
-import android.R.attr.text
 import android.util.Log
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
@@ -17,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import com.oliviermarteaux.a055_rebonnte.R
-import com.oliviermarteaux.a055_rebonnte.ui.screen.CrudAction
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel

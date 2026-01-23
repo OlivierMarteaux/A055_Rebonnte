@@ -1,10 +1,8 @@
-package com.oliviermarteaux.a055_rebonnte.ui.screen.aisleList
+package com.oliviermarteaux.a055_rebonnte.ui.viewModel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentSnapshot
 import com.oliviermarteaux.a055_rebonnte.data.fake.fakeAisleList
@@ -21,6 +19,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @HiltViewModel
 class AisleListViewModel @Inject constructor(
@@ -109,8 +109,5 @@ class AisleListViewModel @Inject constructor(
 
         // Sign in the test user in case of test config
         if (TestConfig.isTest) signInTestUser()
-
-        // Fetch posts from the repository
-        loadFirstPage()
     }
 }
