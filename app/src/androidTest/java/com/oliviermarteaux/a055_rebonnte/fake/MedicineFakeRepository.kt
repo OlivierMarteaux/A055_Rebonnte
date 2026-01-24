@@ -34,7 +34,11 @@ class MedicineFakeRepository: MedicineRepository {
         return Result.success(Unit)
     }
 
-    override suspend fun updateMedicine(medicine: Medicine): Result<Unit> = Result.success(Unit)
+    override suspend fun updateMedicine(medicine: Medicine): Result<Unit> {
+        val newFakeList = listOf(medicine) + fakeMedicineList.filterNot { it.id == medicine.id }
+        fakeList = fakeList.copy(items = newFakeList)
+        return Result.success(Unit)
+    }
 
     override suspend fun deleteMedicine(medicineId: String): Result<Unit> {
         fakeList = fakeList.copy(
