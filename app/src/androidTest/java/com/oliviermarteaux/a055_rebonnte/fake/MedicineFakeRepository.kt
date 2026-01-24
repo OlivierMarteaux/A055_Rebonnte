@@ -33,19 +33,16 @@ class MedicineFakeRepository: MedicineRepository {
 
         when (medicineSortOption) {
             MedicineSortOption.ASCENDING_NAME -> {
-                fakeList = fakeList.copy(items = fakeMedicineList)
                 val newFakeList = fakeMedicineList.sortedBy { it.name }
                 fakeList = fakeList.copy(items = newFakeList)
                 for (i in 0..7) {Log.d("OM_TAG", "MedicineFakeRepository::getMedicineFilteredSortedPaged: ${newFakeList[i].name}: ${newFakeList[i].stock}")}
             }
             MedicineSortOption.ASCENDING_STOCK -> {
-                fakeList = fakeList.copy(items = fakeMedicineList)
                 val newFakeList = fakeMedicineList.sortedBy { it.stock }
                 fakeList = fakeList.copy(items = newFakeList)
                 for (i in 0..7) {Log.d("OM_TAG", "MedicineFakeRepository::getMedicineFilteredSortedPaged: ${newFakeList[i].name}: ${newFakeList[i].stock}")}
             }
             MedicineSortOption.DESCENDING_STOCK -> {
-                fakeList = fakeList.copy(items = fakeMedicineList)
                 val newFakeList = fakeMedicineList.sortedByDescending { it.stock }
                 fakeList = fakeList.copy(items = newFakeList)
                 for (i in 0..7) {Log.d("OM_TAG", "MedicineFakeRepository::getMedicineFilteredSortedPaged: ${newFakeList[i].name}: ${newFakeList[i].stock}")}

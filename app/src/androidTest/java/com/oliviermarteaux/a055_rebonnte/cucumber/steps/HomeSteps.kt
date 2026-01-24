@@ -19,6 +19,7 @@ class HomeSteps(private val composeRuleHolder: ComposeRuleHolder) {
     @Then("I should arrive on the Home Screen")
     fun iAmOnTheHomeScreen() {
         Log.d("OM_TAG", "I should arrive on the Home screen")
+        composeRule.waitForIdle()
 
         // Verify some known aisles are shown
         composeRule.onNodeWithText("Analgesics & Pain Management").assertIsDisplayed()
