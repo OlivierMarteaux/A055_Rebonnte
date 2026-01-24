@@ -80,7 +80,7 @@ fun AisleDetailScreen(
                     itemText = { medicine: Medicine ->
                         stringResource(R.string.stock, medicine.stock)
                                },
-                    reloadItemList = ::loadFirstPage,
+                    reloadItemList = ::getAllMedicineByDescendingTimestamp,
                     actionUiState = addOrEditMedicineUiState,
                     itemCrudAction = medicineCrudAction,
                     resetItemCrudAction = ::resetMedicineCrudAction,

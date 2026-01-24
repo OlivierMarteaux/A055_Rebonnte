@@ -17,6 +17,6 @@ class DeleteMedicineSteps(private val composeRuleHolder: ComposeRuleHolder) {
 //        Thread.sleep(3000)
 
         // Check that the first events are visible
-            composeRule.onNodeWithText("Paracetamol").assertIsNotDisplayed()
+            composeRule.onNodeWithText("Amoxicillin").assertIsNotDisplayed()
     }
 }

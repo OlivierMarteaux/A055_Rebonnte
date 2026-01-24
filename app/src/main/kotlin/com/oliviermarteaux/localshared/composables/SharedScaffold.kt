@@ -146,6 +146,7 @@ fun SharedScaffold(
     searchBarIcon: IconSource = IconSource.VectorIcon(Icons.Default.Clear),
     searchBarIconSemantics: String = "",
     onSearchBarIconClick: () -> Unit = {},
+    searchBarIconModifier: Modifier = Modifier,
     onQueryChange: ((TextFieldValue) -> Unit)? = null,
     searchBarModifier: Modifier = Modifier,
     searchBarTextFieldModifier: Modifier = Modifier,
@@ -283,6 +284,7 @@ fun SharedScaffold(
                                 searchLabel = searchLabel,
                                 icon = searchBarIcon,
                                 iconSemantics = searchBarIconSemantics,
+                                iconModifier = searchBarIconModifier,
                                 onIconClick = onSearchBarIconClick,
                             )
                         }

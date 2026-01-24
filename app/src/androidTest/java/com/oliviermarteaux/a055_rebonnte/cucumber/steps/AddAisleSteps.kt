@@ -1,5 +1,6 @@
 package com.oliviermarteaux.a055_rebonnte.cucumber.steps
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.isDisplayed
@@ -20,8 +21,9 @@ class AddAisleSteps(private val composeRuleHolder: ComposeRuleHolder) {
     fun iAmOnTheAddAisleScreen() {
 
         // Check that the first events are visible
-        composeRule.waitUntil(timeout) {
-            composeRule.onNodeWithTag("AddAisleScreen").isDisplayed()
-        }
+        composeRule.onNodeWithTag("AddAisleScreen").assertIsDisplayed()
+//        composeRule.waitUntil(timeout) {
+//            composeRule.onNodeWithTag("AddAisleScreen").isDisplayed()
+//        }
     }
 }

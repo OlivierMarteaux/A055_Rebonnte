@@ -31,7 +31,8 @@ fun <T> RebonnteItemList(
     onItemClick: (T) -> Unit = {},
     isLastPage: Boolean,
     loadNextPage: () -> Unit,
-    itemModifier: Modifier = Modifier
+    itemModifier: Modifier = Modifier,
+    lazyListModifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
 
@@ -39,7 +40,7 @@ fun <T> RebonnteItemList(
         LazyColumn(
             state = listState,
             verticalArrangement = Arrangement.spacedBy(SharedPadding.xs),
-            modifier = Modifier.semantics{
+            modifier = lazyListModifier.semantics{
                 collectionInfo = CollectionInfo(
                     rowCount = itemList.size,
                     columnCount = 1

@@ -71,4 +71,14 @@ class SharedButtonSteps(private val composeRuleHolder: ComposeRuleHolder) {
         // Use contentDescription or tag for your FABs
         composeRule.onNodeWithText(cardText).performClick()
     }
+    //_#########################
+    //_#  CLICKABLE MENU ENTRY
+    //_#########################
+    @When("I click on the {string} menu entry")
+    fun iClickOnMenuEntry(label: String) {
+        composeRule.onNode(
+            hasContentDescription(label, substring = true)
+        ).performClick()
+        composeRule.waitForIdle()
+    }
 }

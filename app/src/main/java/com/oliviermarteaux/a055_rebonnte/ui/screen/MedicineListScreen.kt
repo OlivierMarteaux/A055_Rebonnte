@@ -110,6 +110,7 @@ fun MedicineListScreen(
                 searchBarIcon = IconSource.VectorIcon(Icons.Default.Clear),
                 searchBarIconSemantics = cdCustomAccessibilityActionClear,
                 onSearchBarIconClick = { clearQuery(); hideSearchBar() },
+                searchBarIconModifier = Modifier.testTag("SearchBarClearIcon"),
                 searchBarTextFieldModifier = Modifier.testTag("SearchField"),
                 toggleSearchBar = ::toggleSearchBar,
                 searchBarDisplayed = searchBarDisplayed,
@@ -166,7 +167,7 @@ fun MedicineListScreen(
                     itemText = { medicine: Medicine ->
                         stringResource(R.string.stock, medicine.stock) },
                     onSearchFocusRequester = onSearchFocusRequester,
-                    reloadItemList = ::loadFirstPage,
+                    reloadItemList = ::getAllMedicineByDescendingTimestamp,
                     showFab = ::showFab,
                     hideFab = ::hideFab,
                     actionUiState = addOrEditMedicineUiState,
@@ -175,7 +176,8 @@ fun MedicineListScreen(
                     resetItemCrudAction = ::resetMedicineCrudAction,
                     isLastPage = isLastPage,
                     loadNextPage = ::loadNextPage,
-                    itemModifier = Modifier.testTag("MedicineItem")
+                    itemModifier = Modifier.testTag("MedicineItem"),
+                    lazyListModifier = Modifier.testTag("MedicineLazyList")
                 ){ medicine ->
                     hideSearchBar()
                     selectMedicine(medicine)

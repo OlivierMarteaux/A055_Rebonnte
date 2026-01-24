@@ -21,9 +21,10 @@ class MedicineListSteps(private val composeRuleHolder: ComposeRuleHolder) {
         Log.d("OM_TAG", "I should arrive on the MedicineList screen")
 
         // Verify some known medicines are shown
-        composeRule.waitUntil(timeout) {
-            composeRule.onNodeWithText("Ibuprofen").isDisplayed()
-        }
+        composeRule.onNodeWithText("Ibuprofen").assertIsDisplayed()
+//        composeRule.waitUntil(timeout) {
+//            composeRule.onNodeWithText("Ibuprofen").isDisplayed()
+//        }
 //        Thread.sleep(5_000)
     }
 
@@ -32,10 +33,12 @@ class MedicineListSteps(private val composeRuleHolder: ComposeRuleHolder) {
         Log.d("OM_TAG", "All the medicines are displayed and scrollable on the screen")
 
         // Check that the first events are visible
-        composeRule.waitUntil(timeout) {
-            composeRule.onNodeWithText("Paracetamol").isDisplayed()
-            composeRule.onNodeWithText("Ibuprofen").isDisplayed()
-        }
+        composeRule.onNodeWithText("Paracetamol").assertIsDisplayed()
+        composeRule.onNodeWithText("Ibuprofen").assertIsDisplayed()
+//        composeRule.waitUntil(timeout) {
+//            composeRule.onNodeWithText("Paracetamol").isDisplayed()
+//            composeRule.onNodeWithText("Ibuprofen").isDisplayed()
+//        }
 
         // Perform scroll action to verify it is scrollable
         composeRule.onNode(hasScrollAction()) // ensure scrollable container exists

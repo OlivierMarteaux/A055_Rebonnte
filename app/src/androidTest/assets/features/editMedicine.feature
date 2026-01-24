@@ -1,4 +1,4 @@
-Feature: Add a new medicine
+Feature: Edit a medicine
   As a user on the Home screen
   I want to modify the stock of a medicine
   So that the new medicine stock is displayed on the home screen

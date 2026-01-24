@@ -1,5 +1,6 @@
 package com.oliviermarteaux.a055_rebonnte.cucumber.steps
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.hasText
@@ -28,9 +29,10 @@ class AddMedicineSteps(private val composeRuleHolder: ComposeRuleHolder) {
     fun iAmOnThAddOrEditMedicineScreen() {
 
         // Check that the first events are visible
-        composeRule.waitUntil(timeout) {
-            composeRule.onNodeWithTag("AddOrEditMedicineScreen").isDisplayed()
-        }
+        composeRule.onNodeWithTag("AddOrEditMedicineScreen").assertIsDisplayed()
+//        composeRule.waitUntil(timeout) {
+//            composeRule.onNodeWithTag("AddOrEditMedicineScreen").isDisplayed()
+//        }
     }
 
     @And("I select an aisle in the Aisle picker field")

@@ -2,6 +2,7 @@ package com.oliviermarteaux.a055_rebonnte.ui.navigation
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -129,6 +130,9 @@ fun SharedNavGraph(
         }
         /*_ MEDICINE LIST SCREEN ##############################################################################*/
         composable(route = RebonnteScreen.MedicineList.route) {
+//            LaunchedEffect(Unit) {
+//                medicineListViewModel.loadFirstPage()
+//            }
             MedicineListScreen(
                 medicineViewModel = medicineViewModel,
                 medicineListViewModel = medicineListViewModel,

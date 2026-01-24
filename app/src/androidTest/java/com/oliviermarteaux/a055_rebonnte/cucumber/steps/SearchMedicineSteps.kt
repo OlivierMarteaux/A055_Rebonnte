@@ -1,14 +1,20 @@
 package com.oliviermarteaux.a055_rebonnte.cucumber.steps
 
+import android.R.attr.label
 import android.util.Log
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasImeAction
 import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isNotDisplayed
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.text.input.ImeAction
@@ -34,11 +40,21 @@ class SearchMedicineSteps(private val composeRuleHolder: ComposeRuleHolder) {
         Log.d("OM_TAG", "I should see only the searched medicine in the medicine list")
 
         // Check that the first events are visible
-        composeRule.waitUntil(timeout) {
-            composeRule.onNodeWithText("Paracetamol").isDisplayed()
-        }
+        composeRule.onNodeWithText("Paracetamol").assertIsDisplayed()
+//        composeRule.waitUntil(timeout) {
+//            composeRule.onNodeWithText("Paracetamol").isDisplayed()
+//        }
         composeRule
             .onAllNodes(hasTestTag("MedicineItem"))
             .assertCountEquals(1)
+
+        //reset the list after search
+        composeRule.onNode(
+            hasContentDescription("Search", substring = true)
+        ).performClick()
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithTag("SearchBarClearIcon").performClick()
+        composeRule.waitForIdle()
     }
 }

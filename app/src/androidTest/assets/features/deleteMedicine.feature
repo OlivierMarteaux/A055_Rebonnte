@@ -6,7 +6,7 @@ Feature: Delete a medicine
   Background: Navigate to the AddOrEditMedicine screen
     Given I am on the Home screen
     When I click on the "Medicines" button
-    And I click on the "Paracetamol" card
+    And I click on the "Amoxicillin" card
     Then I should arrive on the AddOrEditMedicine Screen
 
   Scenario: Delete a medicine successfully

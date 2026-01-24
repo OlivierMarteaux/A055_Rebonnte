@@ -1,5 +1,6 @@
 package com.oliviermarteaux.a055_rebonnte.cucumber.steps
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import com.oliviermarteaux.a055_rebonnte.di.ComposeRuleHolder
@@ -12,12 +13,14 @@ class EditMedicineSteps(private val composeRuleHolder: ComposeRuleHolder) {
 
     @And("I should see the edited medicine with the updated stock")
     fun iShouldSeeMedicineWithUpdatedStock() {
-//        Thread.sleep(2000)
+        Thread.sleep(2000)
 
         // Check that the first events are visible
-        composeRule.waitUntil(timeout) {
-            composeRule.onNodeWithText("Paracetamol").isDisplayed()
-            composeRule.onNodeWithText("Stock: 27").isDisplayed()
-        }
+        composeRule.onNodeWithText("Paracetamol").assertIsDisplayed()
+        composeRule.onNodeWithText("Stock: 27").assertIsDisplayed()
+//        composeRule.waitUntil(timeout) {
+//            composeRule.onNodeWithText("Paracetamol").isDisplayed()
+//            composeRule.onNodeWithText("Stock: 27").isDisplayed()
+//        }
     }
 }

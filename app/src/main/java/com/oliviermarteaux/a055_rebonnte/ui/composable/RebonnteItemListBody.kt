@@ -50,6 +50,7 @@ fun <T> RebonnteItemListBody(
     isLastPage: Boolean,
     loadNextPage: () -> Unit,
     itemModifier: Modifier = Modifier,
+    lazyListModifier: Modifier = Modifier,
     //_ trailing lambda !
     onItemClick: (T) -> Unit
 ){
@@ -103,7 +104,8 @@ fun <T> RebonnteItemListBody(
                         onItemClick = onItemClick,
                         isLastPage = isLastPage,
                         loadNextPage = loadNextPage,
-                        itemModifier = itemModifier
+                        itemModifier = itemModifier,
+                        lazyListModifier = lazyListModifier
                     )
                 }
             }

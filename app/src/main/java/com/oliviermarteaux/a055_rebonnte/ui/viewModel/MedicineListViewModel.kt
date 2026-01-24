@@ -92,7 +92,7 @@ class MedicineListViewModel @Inject constructor(
     var isLoading = false
         private set
 
-    fun loadFirstPage() {
+    private fun loadFirstPage() {
         Log.d("OM_TAG","MedicineListViewModel::loadFirstPage")
         lastSnapshot = null
         isLastPage = false
@@ -120,12 +120,14 @@ class MedicineListViewModel @Inject constructor(
             ).collect { result ->
                 result.onSuccess { page ->
                     val newItems = page.items.filter { it.id !in medicineList.map { m -> m.id } }
+//                    val newItems = page.items
                     medicineList.addAll(newItems)
                     lastSnapshot = page.lastSnapshot
                     isLastPage = page.isLastPage
                     medicineListUiState =
                         if (medicineList.isEmpty()) ListUiState.Empty
                         else ListUiState.Success(medicineList)
+                    for (i in 0..7){Log.d("OM_TAG", "MedicineListViewModel::loadNextPage: ${medicineList[i].name}: ${medicineList[i].stock}")}
                 }.onFailure { e ->
                     medicineListUiState = ListUiState.Error(e)
                 }

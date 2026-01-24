@@ -21,9 +21,10 @@ class HomeSteps(private val composeRuleHolder: ComposeRuleHolder) {
         Log.d("OM_TAG", "I should arrive on the Home screen")
 
         // Verify some known aisles are shown
-        composeRule.waitUntil(timeout) {
-            composeRule.onNodeWithText("Analgesics & Pain Management").isDisplayed()
-        }
+        composeRule.onNodeWithText("Analgesics & Pain Management").assertIsDisplayed()
+//        composeRule.waitUntil(timeout) {
+//            composeRule.onNodeWithText("Analgesics & Pain Management").isDisplayed()
+//        }
 //        Thread.sleep(5_000)
     }
 
@@ -32,10 +33,12 @@ class HomeSteps(private val composeRuleHolder: ComposeRuleHolder) {
         Log.d("OM_TAG", "All the aisles are displayed and scrollable on the screen")
 
         // Check that the first events are visible
-        composeRule.waitUntil(timeout) {
-            composeRule.onNodeWithText("Analgesics & Pain Management").isDisplayed()
-            composeRule.onNodeWithText("Antibiotics").isDisplayed()
-        }
+        composeRule.onNodeWithText("Analgesics & Pain Management").assertIsDisplayed()
+        composeRule.onNodeWithText("Antibiotics").assertIsDisplayed()
+//        composeRule.waitUntil(timeout) {
+//            composeRule.onNodeWithText("Analgesics & Pain Management").isDisplayed()
+//            composeRule.onNodeWithText("Antibiotics").isDisplayed()
+//        }
 
         // Perform scroll action to verify it is scrollable
         composeRule.onNode(hasScrollAction()) // ensure scrollable container exists
