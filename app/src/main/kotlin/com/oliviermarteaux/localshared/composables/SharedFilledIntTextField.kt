@@ -31,8 +31,9 @@ import androidx.compose.ui.unit.dp
 fun SharedFilledIntTextField(
     value: Int,
     modifier: Modifier = Modifier,
-    intRange: IntRange = 0..50,
+    scrollableFieldModifier : Modifier = Modifier,
     textFieldModifier: Modifier = Modifier,
+    intRange: IntRange = 0..50,
     enabled: Boolean = true,
     readOnly: Boolean = true,
     textStyle: TextStyle = LocalTextStyle.current,
@@ -85,7 +86,8 @@ fun SharedFilledIntTextField(
             intValue = it
             onConfirm(it)
             toggleIntPickerDialog()
-        }
+        },
+        scrollableFieldModifier = scrollableFieldModifier
     )
 
     // 🔑 KEEP TEXT IN SYNC WITH VALUE

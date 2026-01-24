@@ -27,6 +27,8 @@ fun IntPickerDialog(
     show: Boolean,
     value: Int,
     range: IntRange,
+    modifier: Modifier = Modifier,
+    scrollableFieldModifier: Modifier = Modifier,
     visibleCount: Int = 5,
     title: String = "Select value",
     onDismiss: () -> Unit,
@@ -58,6 +60,7 @@ fun IntPickerDialog(
     }
 
     AlertDialog(
+        modifier = modifier,
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
@@ -67,7 +70,7 @@ fun IntPickerDialog(
             ) {
                 LazyColumn(
                     state = listState,
-                    modifier = Modifier.height((visibleCount * 30).dp),
+                    modifier = scrollableFieldModifier.height((visibleCount * 30).dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     items(values) { item ->

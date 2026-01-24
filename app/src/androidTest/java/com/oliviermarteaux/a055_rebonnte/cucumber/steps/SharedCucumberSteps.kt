@@ -4,9 +4,7 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.hasClickAction
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.oliviermarteaux.a055_rebonnte.di.ComposeRuleHolder
 import io.cucumber.java.en.And
@@ -17,32 +15,6 @@ class SharedCucumberSteps(private val composeRuleHolder: ComposeRuleHolder) {
 
     private val composeRule = composeRuleHolder.composeRule
 
-    @When("I click on the {string} FAB button")
-    fun iClickOnFabButton(fabLabel: String) {
-
-        // Use contentDescription or tag for your FABs
-        composeRule.onNodeWithTag(fabLabel).performClick()
-    }
-
-    @When("I click on the {string} button")
-    fun iClickOnButton(text: String) {
-        // Use contentDescription or tag for your FABs
-        composeRule.onNodeWithText(text = text, useUnmergedTree = true).performClick()
-    }
-//
-//    @When("I click on the button tagged {string}")
-//    fun iClickOnButtonTagged(tag: String) {
-//        // Use contentDescription or tag for your FABs
-//        Log.d("OM_TAG", "I click on the button tagged $tag")
-//        composeRule.onNodeWithTag(testTag = tag, useUnmergedTree = true).performClick()
-//    }
-//
-//    @When("I click on the {string} card")
-//    fun iClickOnCard(cardText: String) {
-//        // Use contentDescription or tag for your FABs
-//        composeRule.onNodeWithText(cardText).performClick()
-//    }
-//
     @When("I enter {string} in the {string} field")
     fun iEnterText(name:String, textFieldLabel: String) {
         composeRule.onNodeWithText(textFieldLabel).performTextInput(name)
@@ -61,6 +33,7 @@ class SharedCucumberSteps(private val composeRuleHolder: ComposeRuleHolder) {
 
         // Assert the post is displayed
         composeRule.onNodeWithText(text).assertIsDisplayed()
+//        Thread.sleep(2000)
         val itemsNodes = composeRule.onAllNodes(hasClickAction())
         val lastItemNode: SemanticsNodeInteraction = itemsNodes[0]
         lastItemNode.assertTextContains(text)

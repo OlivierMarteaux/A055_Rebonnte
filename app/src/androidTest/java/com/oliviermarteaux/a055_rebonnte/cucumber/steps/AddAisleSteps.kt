@@ -1,6 +1,7 @@
 package com.oliviermarteaux.a055_rebonnte.cucumber.steps
 
 import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -22,15 +23,5 @@ class AddAisleSteps(private val composeRuleHolder: ComposeRuleHolder) {
         composeRule.waitUntil(timeout) {
             composeRule.onNodeWithTag("AddAisleScreen").isDisplayed()
         }
-    }
-
-    @Then("I cannot click on the {string} button")
-    fun iCannotClickButton(buttonLabel:String){
-
-        composeRule.onNodeWithText(text = buttonLabel, useUnmergedTree = true).performClick()
-
-        // Assert that user does not go back to home screen
-        composeRule.onNodeWithTag("AddAisleScreen").isDisplayed()
-        composeRule.onNodeWithTag("Analgesics & Pain Management").assertIsNotDisplayed()
     }
 }

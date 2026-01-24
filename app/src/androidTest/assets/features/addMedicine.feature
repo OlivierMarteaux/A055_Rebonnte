@@ -18,6 +18,6 @@ Feature: Add a new medicine
     Then I should arrive on the MedicineList Screen
     And I should see "Test Medicine" added at the top of the "medicines" list
 
-#  Scenario: Cannot add new aisle when Name field is empty
-#    Given I am on the AddAisle Screen
-#    Then I cannot click on the "Validate" button
+  Scenario: Cannot add new medicine when fields are not filled
+    Given I am on the AddOrEditMedicine Screen
+    Then I cannot click on the "Validate" button

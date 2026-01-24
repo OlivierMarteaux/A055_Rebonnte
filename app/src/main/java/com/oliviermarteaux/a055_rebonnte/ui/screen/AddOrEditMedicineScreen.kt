@@ -253,7 +253,8 @@ fun AddScreenTextForm(
             isError = isStockError,
             errorText = stringResource(R.string.please_enter_a_valid_stock),
             bottomPadding = SharedPadding.large,
-            contentDescription = cdMedicineStock
+            contentDescription = cdMedicineStock,
+            scrollableFieldModifier = Modifier.testTag("StockPicker")
         )
     }
 }
