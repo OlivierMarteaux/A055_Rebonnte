@@ -6,7 +6,9 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -52,6 +54,14 @@ class SharedButtonSteps(private val composeRuleHolder: ComposeRuleHolder) {
             hasText(buttonLabel) and hasClickAction()
         ).assertIsNotEnabled()
     }
+
+    @When("I click on the {string} icon button")
+    fun iClickIconButton(label: String){
+        composeRule.onNode(
+            hasContentDescription(label, substring = true)
+        ).performClick()
+    }
+
     //_######################
     //_#  CLICKABLE CARD
     //_######################

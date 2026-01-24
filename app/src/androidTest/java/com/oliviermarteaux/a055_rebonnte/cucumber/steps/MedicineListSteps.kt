@@ -22,7 +22,7 @@ class MedicineListSteps(private val composeRuleHolder: ComposeRuleHolder) {
 
         // Verify some known medicines are shown
         composeRule.waitUntil(timeout) {
-            composeRule.onNodeWithText("Paracetamol").isDisplayed()
+            composeRule.onNodeWithText("Ibuprofen").isDisplayed()
         }
 //        Thread.sleep(5_000)
     }
