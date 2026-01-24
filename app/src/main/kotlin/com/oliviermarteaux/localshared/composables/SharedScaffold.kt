@@ -148,6 +148,7 @@ fun SharedScaffold(
     onSearchBarIconClick: () -> Unit = {},
     onQueryChange: ((TextFieldValue) -> Unit)? = null,
     searchBarModifier: Modifier = Modifier,
+    searchBarTextFieldModifier: Modifier = Modifier,
     searchLabel: String = "",
     searchBarDisplayed: Boolean = false,
     toggleSearchBar: () -> Unit = {},
@@ -277,6 +278,7 @@ fun SharedScaffold(
                                 modifier = searchBarModifier
                                     .focusRequester(searchBarFocusRequester)
                                     .fillMaxWidth(),
+                                textFieldModifier = searchBarTextFieldModifier,
                                 onSearch =  { onSearch(); keyboardController?.hide(); toggleSearchBar() },
                                 searchLabel = searchLabel,
                                 icon = searchBarIcon,

@@ -30,7 +30,8 @@ fun <T> RebonnteItemList(
     itemText: @Composable (T) -> String,
     onItemClick: (T) -> Unit = {},
     isLastPage: Boolean,
-    loadNextPage: () -> Unit
+    loadNextPage: () -> Unit,
+    itemModifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
 
@@ -53,7 +54,7 @@ fun <T> RebonnteItemList(
                     title = itemTitle(item)?:getItemTitle(item)?:"",
                     text = itemText(item),
                     onClick = { onItemClick(item) },
-                    modifier = Modifier.semantics {
+                    modifier = itemModifier.semantics {
                         collectionItemInfo = CollectionItemInfo(index, 1, 0, 1)
                     }
                 )

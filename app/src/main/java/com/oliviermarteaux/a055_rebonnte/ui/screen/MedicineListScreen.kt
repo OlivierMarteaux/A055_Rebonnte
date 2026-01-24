@@ -20,16 +20,16 @@ import androidx.navigation.NavController
 import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.MedicineSortOption
-import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
-import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteBottomAppBar
+import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteBottomNavItem
+import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
+import com.oliviermarteaux.localshared.composables.SharedScaffold
 import com.oliviermarteaux.shared.composables.IconSource
-import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import kotlinx.coroutines.delay
@@ -106,10 +106,11 @@ fun MedicineListScreen(
                 // search bar
                 query = queryFieldValue,
                 onQueryChange = ::filterMedicineByName,
-                searchLabel = stringResource(R.string.look_for_an, cdItem),
+                searchLabel = stringResource(R.string.look_for_a, cdItem),
                 searchBarIcon = IconSource.VectorIcon(Icons.Default.Clear),
                 searchBarIconSemantics = cdCustomAccessibilityActionClear,
                 onSearchBarIconClick = { clearQuery(); hideSearchBar() },
+                searchBarTextFieldModifier = Modifier.testTag("SearchField"),
                 toggleSearchBar = ::toggleSearchBar,
                 searchBarDisplayed = searchBarDisplayed,
                 onSearch = { focusOnSearchResult() },
@@ -173,7 +174,8 @@ fun MedicineListScreen(
                     resetUiState = ::resetAddOrEditMedicineUiState,
                     resetItemCrudAction = ::resetMedicineCrudAction,
                     isLastPage = isLastPage,
-                    loadNextPage = ::loadNextPage
+                    loadNextPage = ::loadNextPage,
+                    itemModifier = Modifier.testTag("MedicineItem")
                 ){ medicine ->
                     hideSearchBar()
                     selectMedicine(medicine)

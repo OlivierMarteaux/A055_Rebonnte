@@ -4,7 +4,9 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.oliviermarteaux.a055_rebonnte.di.ComposeRuleHolder
 import io.cucumber.java.en.And
@@ -18,6 +20,11 @@ class SharedCucumberSteps(private val composeRuleHolder: ComposeRuleHolder) {
     @When("I enter {string} in the {string} field")
     fun iEnterText(name:String, textFieldLabel: String) {
         composeRule.onNodeWithText(textFieldLabel).performTextInput(name)
+    }
+
+    @And("I enter {string} in the field tagged {string}")
+    fun iEnterTextInTaggedField(name:String, tag: String) {
+        composeRule.onNodeWithTag(tag).performClick().performTextInput(name)
     }
 //
 //    @And("I should see {string} added at the end of the {string} list")

@@ -13,10 +13,10 @@
     <string name="medicine_entry_creation">%1$s: Medicine entry creation</string>
     <string name="medicine_stock_decreased">%1$s: Medicine stock decreased</string>
     <string name="medicine_stock_increased">%1$s: Medicine stock increased</string>
-    <string name="medicine">Medicine</string>
+    <string name="medicine">medicine</string>
     <string name="add">Add</string>
     <string name="you_are_on_the_screen_here_you_can_browse_all_the">You are on the %1$s screen. Here you can browse all the %2$s.</string>
-    <string name="look_for_an">Look for an %1$s</string>
+    <string name="look_for_a">Look for a %1$s</string>
     <string name="creation_of_a_new_fill_in_the_fields_and_validate_to_create_a_new">Creation of a new %1$s. Fill in the fields and validate to create a new %2$s.</string>
     <string name="please_enter_a_name">Please enter a name</string>
     <string name="edit_the_fill_in_the_fields_and_validate_to_edit_it">Edit the %1$s %2$s. Fill in the fields and validate to edit it.</string>

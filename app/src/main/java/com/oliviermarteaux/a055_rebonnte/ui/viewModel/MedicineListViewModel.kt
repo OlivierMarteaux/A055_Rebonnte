@@ -106,6 +106,8 @@ class MedicineListViewModel @Inject constructor(
         Log.d("OM_TAG","MedicineListViewModel::loadNextPage: return = ${(isLastPage || isLoading)}")
         if (isLastPage || isLoading) return
 
+        Log.d("OM_TAG", "MedicineListViewModel::loadNextPage: query = ${queryFieldValue.text.lowercase()}")
+
         viewModelScope.launch {
             isLoading = true
 

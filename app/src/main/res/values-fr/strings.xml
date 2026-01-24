@@ -16,7 +16,7 @@
     <string name="medicine">médicament</string>
     <string name="add">Ajouter</string>
     <string name="you_are_on_the_screen_here_you_can_browse_all_the">Vous êtes sur l\'écran %1$s. Ici vous pouvez parcourir les %2$s.</string>
-    <string name="look_for_an">Rechercher un %1$s</string>
+    <string name="look_for_a">Rechercher un %1$s</string>
     <string name="creation_of_a_new_fill_in_the_fields_and_validate_to_create_a_new">Création d\'un nouveau %1$s. Renseignez les champs et validez pour créer un nouveau %2$s.</string>
     <string name="please_enter_a_name">Renseignez un nom</string>
     <string name="edit_the_fill_in_the_fields_and_validate_to_edit_it">Modifier le %2$s %1$s. Renseignez les champs et validez pour le modifier.</string>

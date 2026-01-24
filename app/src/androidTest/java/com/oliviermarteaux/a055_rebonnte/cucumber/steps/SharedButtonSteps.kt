@@ -60,6 +60,7 @@ class SharedButtonSteps(private val composeRuleHolder: ComposeRuleHolder) {
         composeRule.onNode(
             hasContentDescription(label, substring = true)
         ).performClick()
+        composeRule.waitForIdle()
     }
 
     //_######################

@@ -25,7 +25,13 @@ class MedicineFakeRepository: MedicineRepository {
         medicineSortOption: MedicineSortOption,
         pageSize: Long,
         lastSnapshot: DocumentSnapshot?
-    ): Flow<Result<PagedList<Medicine>>> = flowOf(Result.success(fakeList))
+    ): Flow<Result<PagedList<Medicine>>> {
+        if (query.isNotBlank()) {
+            val newFakeList = fakeMedicineList.filter { it.name.contains(query, ignoreCase = true)  }
+            fakeList = fakeList.copy(items = newFakeList)
+        }
+        return flowOf(Result.success(fakeList))
+    }
 
     override suspend fun addMedicine(medicine: Medicine): Result<Unit> {
 

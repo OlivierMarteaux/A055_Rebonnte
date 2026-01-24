@@ -49,6 +49,7 @@ fun <T> RebonnteItemListBody(
     hideFab: () -> Unit = {},
     isLastPage: Boolean,
     loadNextPage: () -> Unit,
+    itemModifier: Modifier = Modifier,
     //_ trailing lambda !
     onItemClick: (T) -> Unit
 ){
@@ -101,7 +102,8 @@ fun <T> RebonnteItemListBody(
                         itemText = itemText,
                         onItemClick = onItemClick,
                         isLastPage = isLastPage,
-                        loadNextPage = loadNextPage
+                        loadNextPage = loadNextPage,
+                        itemModifier = itemModifier
                     )
                 }
             }
