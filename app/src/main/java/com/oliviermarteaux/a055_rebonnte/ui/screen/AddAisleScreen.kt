@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteSaveButton
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
@@ -27,7 +26,7 @@ import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import com.oliviermarteaux.shared.ui.theme.ToastPadding
-import com.oliviermarteaux.shared.compose.R as oR
+import com.oliviermarteaux.shared.compose.R
 
 @Composable
 fun AddAisleScreen(
@@ -56,11 +55,11 @@ fun AddAisleScreen(
                 )
                 if (addAisleUiState is UiState.Loading) { CenteredCircularProgressIndicator() }
                 if (networkError) SharedToast(
-                    text = stringResource(oR.string.network_error_check_your_internet_connection),
+                    text = stringResource(R.string.network_error_check_your_internet_connection),
                     bottomPadding = ToastPadding.medium
                 )
                 if (unknownError) SharedToast(
-                    text = stringResource(oR.string.an_unknown_error_occurred),
+                    text = stringResource(R.string.an_unknown_error_occurred),
                     bottomPadding = ToastPadding.medium
                 )
             }
@@ -110,7 +109,7 @@ fun AddAisleScreenTextForm(
         SharedFilledTextField(
             value = name,
             onValueChange = { updateAisleName(it) },
-            label = stringResource(oR.string.name),
+            label = stringResource(R.string.name),
             textFieldModifier = Modifier.fillMaxWidth(),
             isError = name.isEmpty(),
             errorText = stringResource(R.string.please_enter_a_name),

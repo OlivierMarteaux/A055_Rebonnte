@@ -15,8 +15,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import com.oliviermarteaux.a055_rebonnte.R
-import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
+import com.oliviermarteaux.a055_rebonnte.ui.CrudAction
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
@@ -24,7 +23,7 @@ import com.oliviermarteaux.shared.ui.ListUiState
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import com.oliviermarteaux.shared.ui.theme.ToastPadding
-import com.oliviermarteaux.shared.compose.R as oR
+import com.oliviermarteaux.shared.compose.R
 
 @Composable
 fun <T> RebonnteItemListBody(
@@ -60,7 +59,7 @@ fun <T> RebonnteItemListBody(
         ) {
             //_ UiState management: Empty, Error, Loading, Success
             val cdLoadingState =
-                stringResource(oR.string.please_wait_server_connection_in_progress)
+                stringResource(R.string.please_wait_server_connection_in_progress)
             when (listUiState) {
                 is ListUiState.Loading -> {
                     hideFab()
@@ -114,7 +113,7 @@ fun <T> RebonnteItemListBody(
                 bottomPadding = ToastPadding.high
             )
             if (networkError) SharedToast(
-                text = stringResource(oR.string.network_error_check_your_internet_connection),
+                text = stringResource(R.string.network_error_check_your_internet_connection),
                 bottomPadding = ToastPadding.veryHigh
             )
 

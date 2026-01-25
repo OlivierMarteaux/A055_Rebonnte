@@ -7,7 +7,7 @@ import com.google.firebase.firestore.SetOptions
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.MedicineSortOption
 import com.oliviermarteaux.a055_rebonnte.ui.PagedList
-import com.oliviermarteaux.localshared.extensions.toShiftedAlpha
+import com.oliviermarteaux.shared.extensions.toShiftedAlpha
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

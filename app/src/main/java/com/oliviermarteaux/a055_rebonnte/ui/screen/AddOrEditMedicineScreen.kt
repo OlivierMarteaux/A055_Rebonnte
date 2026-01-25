@@ -18,18 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
+import com.oliviermarteaux.a055_rebonnte.ui.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemList
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteSaveButton
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
-import com.oliviermarteaux.localshared.composables.SharedFilledIntTextField
-import com.oliviermarteaux.localshared.composables.SharedFilledItemTextField
-import com.oliviermarteaux.localshared.composables.SharedScaffold
+import com.oliviermarteaux.shared.composables.SharedFilledIntTextField
+import com.oliviermarteaux.shared.composables.SharedFilledItemTextField
+import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.composables.SharedFilledTextField
@@ -40,7 +39,7 @@ import com.oliviermarteaux.shared.composables.texts.TextTitleLarge
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import com.oliviermarteaux.shared.ui.theme.ToastPadding
-import com.oliviermarteaux.shared.compose.R as oR
+import com.oliviermarteaux.shared.compose.R
 
 @Composable
 fun AddOrEditMedicineScreen(
@@ -107,12 +106,12 @@ fun AddOrEditMedicineScreen(
                     }
 
                     networkError -> SharedToast(
-                        text = stringResource(oR.string.network_error_check_your_internet_connection),
+                        text = stringResource(R.string.network_error_check_your_internet_connection),
                         bottomPadding = ToastPadding.medium
                     )
 
                     unknownError -> SharedToast(
-                        text = stringResource(oR.string.an_unknown_error_occurred),
+                        text = stringResource(R.string.an_unknown_error_occurred),
                         bottomPadding = ToastPadding.medium
                     )
                 }
@@ -212,7 +211,7 @@ fun AddScreenTextForm(
         SharedFilledTextField(
             value = name,
             onValueChange = { updateMedicineName(it) },
-            label = stringResource(oR.string.name),
+            label = stringResource(R.string.name),
             textFieldModifier = Modifier.fillMaxWidth(),
             isError = name.isEmpty(),
             errorText = stringResource(R.string.please_enter_a_name),

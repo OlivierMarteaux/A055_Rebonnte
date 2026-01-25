@@ -7,19 +7,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentSnapshot
-import com.oliviermarteaux.a055_rebonnte.data.fake.fakeMedicineList
 import com.oliviermarteaux.a055_rebonnte.data.repository.MedicineRepository
-import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.MedicineSortOption
-import com.oliviermarteaux.localshared.utils.TestConfig
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.ListUiState
 import com.oliviermarteaux.shared.utils.Logger
+import com.oliviermarteaux.shared.utils.TestConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -147,20 +143,20 @@ class MedicineListViewModel @Inject constructor(
     //_ ############################################################################################
     //_ Pre-populating
     //_ ############################################################################################
-    fun populateFakeMedicineListForDemo(
-        aisleList: List<Aisle>,
-        dataDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    ) {
-        viewModelScope.launch(dataDispatcher) {
-            fakeMedicineList.forEach {
-                medicineRepository.addMedicine(
-                    it.copy(
-                        aisle = aisleList.random()
-                    )
-                )
-            }
-        }
-    }
+//    fun populateFakeMedicineListForDemo(
+//        aisleList: List<Aisle>,
+//        dataDispatcher: CoroutineDispatcher = Dispatchers.IO,
+//    ) {
+//        viewModelScope.launch(dataDispatcher) {
+//            fakeMedicineList.forEach {
+//                medicineRepository.addMedicine(
+//                    it.copy(
+//                        aisle = aisleList.random()
+//                    )
+//                )
+//            }
+//        }
+//    }
 
     //_ ############################################################################################
     //_ Init

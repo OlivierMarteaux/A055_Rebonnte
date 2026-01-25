@@ -2,7 +2,7 @@ package com.oliviermarteaux.a055_rebonnte.domain.model
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.oliviermarteaux.a055_rebonnte.R
+import com.oliviermarteaux.shared.compose.R
 import com.oliviermarteaux.shared.extensions.toDate
 import com.oliviermarteaux.shared.extensions.toLocalDateString
 import com.oliviermarteaux.shared.extensions.toLocalTimeString

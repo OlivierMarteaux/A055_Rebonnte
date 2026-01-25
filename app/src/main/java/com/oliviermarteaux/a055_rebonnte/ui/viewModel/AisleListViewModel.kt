@@ -6,17 +6,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentSnapshot
-import com.oliviermarteaux.a055_rebonnte.data.fake.fakeAisleList
 import com.oliviermarteaux.a055_rebonnte.data.repository.AisleRepository
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
-import com.oliviermarteaux.localshared.utils.TestConfig
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.ListUiState
 import com.oliviermarteaux.shared.utils.Logger
+import com.oliviermarteaux.shared.utils.TestConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -100,15 +97,15 @@ class AisleListViewModel @Inject constructor(
         }
     }
 
-    fun populateFakeAisleListForDemo(
-        dataDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    ) {
-        viewModelScope.launch(dataDispatcher) {
-            fakeAisleList.forEach {
-                aisleRepository.addAisle(it)
-            }
-        }
-    }
+//    fun populateFakeAisleListForDemo(
+//        dataDispatcher: CoroutineDispatcher = Dispatchers.IO,
+//    ) {
+//        viewModelScope.launch(dataDispatcher) {
+//            fakeAisleList.forEach {
+//                aisleRepository.addAisle(it)
+//            }
+//        }
+//    }
 
     init {
         // throw RuntimeException("Test Crash") // Force a crash

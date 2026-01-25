@@ -5,7 +5,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.oliviermarteaux.a055_rebonnte.R
+import com.oliviermarteaux.shared.compose.R
+
 
 sealed class RebonnteBottomNavItem(
     val screen: RebonnteScreen,

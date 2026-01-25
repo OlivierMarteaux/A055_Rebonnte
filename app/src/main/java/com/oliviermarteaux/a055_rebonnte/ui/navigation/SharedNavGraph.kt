@@ -19,10 +19,10 @@ import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
-import com.oliviermarteaux.localshared.composables.LoginScreen
-import com.oliviermarteaux.localshared.composables.PasswordScreen
-import com.oliviermarteaux.localshared.composables.ResetScreen
-import com.oliviermarteaux.localshared.composables.SplashScreen
+import com.oliviermarteaux.shared.firebase.authentication.ui.screen.login.LoginScreen
+import com.oliviermarteaux.shared.firebase.authentication.ui.screen.password.PasswordScreen
+import com.oliviermarteaux.shared.firebase.authentication.ui.screen.reset.ResetScreen
+import com.oliviermarteaux.shared.firebase.authentication.ui.screen.splash.SplashScreen
 import com.oliviermarteaux.shared.navigation.Screen
 import com.oliviermarteaux.shared.ui.theme.SharedShapes
 

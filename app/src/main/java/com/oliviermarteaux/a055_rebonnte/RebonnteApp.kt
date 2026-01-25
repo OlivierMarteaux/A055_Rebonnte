@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.SharedNavGraph
-import com.oliviermarteaux.localshared.utils.TestConfig
+import com.oliviermarteaux.shared.utils.TestConfig
 import com.oliviermarteaux.shared.composables.startup.DismissKeyboardOnTapOutside
 import com.oliviermarteaux.shared.navigation.LogRoutes
 import com.oliviermarteaux.shared.navigation.Screen

@@ -3,7 +3,6 @@ package com.oliviermarteaux.a055_rebonnte.cucumber.steps
 import android.util.Log
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasScrollAction
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToIndex
 import com.oliviermarteaux.a055_rebonnte.di.ComposeRuleHolder

@@ -1,7 +1,7 @@
 package com.oliviermarteaux.a055_rebonnte.test
 
 import android.os.Bundle
-import com.oliviermarteaux.localshared.utils.TestConfig
+import com.oliviermarteaux.shared.utils.TestConfig
 import io.cucumber.android.runner.CucumberAndroidJUnitRunner
 import io.cucumber.junit.Cucumber
 import io.cucumber.junit.CucumberOptions

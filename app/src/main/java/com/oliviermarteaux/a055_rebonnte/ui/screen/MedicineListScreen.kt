@@ -17,23 +17,22 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
+import com.oliviermarteaux.a055_rebonnte.ui.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.MedicineSortOption
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteBottomAppBar
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteBottomNavItem
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
-import com.oliviermarteaux.localshared.composables.SharedScaffold
+import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import kotlinx.coroutines.delay
-import com.oliviermarteaux.shared.compose.R as oR
+import com.oliviermarteaux.shared.compose.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,7 +95,7 @@ fun MedicineListScreen(
             val cdFabAction = stringResource(R.string.add_a_new, cdItem)
             val cdFabButton =
                 stringResource(R.string.button_double_tap_to, cdFabLabel, cdFabAction)
-            val cdCustomAccessibilityActionClear = stringResource(oR.string.clear_all_text)
+            val cdCustomAccessibilityActionClear = stringResource(R.string.clear_all_text)
 
             SharedScaffold(
                 title = stringResource(RebonnteScreen.MedicineList.titleRes),
@@ -165,7 +164,7 @@ fun MedicineListScreen(
                     itemId =  Medicine::id,
                     itemTitle =  Medicine::name,
                     itemText = { medicine: Medicine ->
-                        stringResource(R.string.stock, medicine.stock) },
+                        stringResource(R.string.stock_value, medicine.stock) },
                     onSearchFocusRequester = onSearchFocusRequester,
                     reloadItemList = ::getAllMedicineByDescendingTimestamp,
                     showFab = ::showFab,

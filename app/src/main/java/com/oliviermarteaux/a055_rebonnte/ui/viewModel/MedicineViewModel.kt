@@ -9,6 +9,7 @@ import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChangeType
+import com.oliviermarteaux.a055_rebonnte.ui.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.InvalidStockException
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
@@ -22,10 +23,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
-enum class CrudAction {
-    NONE, GET, ADD, UPDATE, DELETE
-}
 
 @HiltViewModel
 class MedicineViewModel @Inject constructor(
@@ -199,7 +196,7 @@ class MedicineViewModel @Inject constructor(
         }
 
         checkUserState(
-            onUserLogged = { user ->
+            onUserLogged = {
                 viewModelScope.launch(dataDispatcher) {
 
                     medicineRepository.deleteMedicine(medicine.id).fold(
