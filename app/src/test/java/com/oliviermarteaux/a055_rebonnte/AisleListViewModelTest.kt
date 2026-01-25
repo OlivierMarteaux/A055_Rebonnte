@@ -58,9 +58,13 @@ class AisleListViewModelTest {
 
         createViewModel()
 
+        //_ Make sure state is collected
+        advanceUntilIdle() //_ <- critical
+
         // When
         viewModel.loadFirstPage()
-        advanceUntilIdle()
+
+        advanceUntilIdle() //_ run all coroutines
 
         // Then
         assertTrue(viewModel.aisleList.isEmpty())
@@ -83,9 +87,13 @@ class AisleListViewModelTest {
 
         createViewModel()
 
+        //_ Make sure state is collected
+        advanceUntilIdle() //_ <- critical
+
         // When
         viewModel.loadFirstPage()
-        advanceUntilIdle()
+
+        advanceUntilIdle() //_ run all coroutines
 
         // Then
         assertTrue(viewModel.aisleList.isEmpty())

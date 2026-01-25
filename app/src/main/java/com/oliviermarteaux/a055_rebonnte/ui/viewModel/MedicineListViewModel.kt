@@ -1,6 +1,5 @@
 package com.oliviermarteaux.a055_rebonnte.ui.viewModel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -24,13 +23,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.min
 
 @HiltViewModel
 class MedicineListViewModel @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val userRepository: UserRepository,
-    log: Logger,
+    private val log: Logger,
     isOnlineFlow: Flow<Boolean>
 ) : AuthUserViewModel(
     userRepository = userRepository,
@@ -69,7 +67,7 @@ class MedicineListViewModel @Inject constructor(
     }
     fun filterMedicineByAisleId(selectedAisleId: String) {
         aisleId = selectedAisleId
-        Log.d("OM_TAG", "MedicineListViewModel::filterMedicineByAisleId: selected aisle Id = $aisleId")
+        log.d("MedicineListViewModel::filterMedicineByAisleId: selected aisle Id = $aisleId")
         loadFirstPage()
     }
 
@@ -94,7 +92,7 @@ class MedicineListViewModel @Inject constructor(
 //        private set
 
     private fun loadFirstPage() {
-        Log.d("OM_TAG","MedicineListViewModel::loadFirstPage")
+        log.d("MedicineListViewModel::loadFirstPage")
         lastSnapshot = null
         isLastPage = false
         medicineList.clear()
@@ -102,12 +100,10 @@ class MedicineListViewModel @Inject constructor(
     }
 
     fun loadNextPage() {
-        Log.d("OM_TAG","MedicineListViewModel::loadNextPage: isLastPage = $isLastPage")
-//        Log.d("OM_TAG","MedicineListViewModel::loadNextPage: isLoading = $isLoading")
-//        Log.d("OM_TAG","MedicineListViewModel::loadNextPage: return = ${(isLastPage || isLoading)}")
+        log.d("MedicineListViewModel::loadNextPage: isLastPage = $isLastPage")
         if (isLastPage/* || isLoading*/) return
 
-        Log.d("OM_TAG", "MedicineListViewModel::loadNextPage: query = ${queryFieldValue.text.lowercase()}")
+        log.d("MedicineListViewModel::loadNextPage: query = ${queryFieldValue.text.lowercase()}")
 
         viewModelScope.launch {
 //            isLoading = true

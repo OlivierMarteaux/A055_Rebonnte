@@ -122,6 +122,7 @@ class MedicineViewModel @Inject constructor(
             },
             onNoUserLogged = {
                 showAuthErrorToast()
+                addOrEditMedicineUiState = UiState.Idle
             }
         )
     }
@@ -167,16 +168,17 @@ class MedicineViewModel @Inject constructor(
                             withContext(layoutDispatcher) { onResult() }
                                     },
                         onFailure = {
-                            log.d("MedicineViewModel::updateMedicine: failed")
-                            addOrEditMedicineUiState = UiState.Idle
                             showUnknownErrorToast()
+//                            log.d("MedicineViewModel::updateMedicine: failed")
+                            addOrEditMedicineUiState = UiState.Idle
                         }
                     )
-                    log.d("MedicineViewModel::updateMedicine: addOrEditMedicineUiState = $addOrEditMedicineUiState")
+//                    log.d("MedicineViewModel::updateMedicine: addOrEditMedicineUiState = $addOrEditMedicineUiState")
                 }
             },
             onNoUserLogged = {
                 showAuthErrorToast()
+                addOrEditMedicineUiState = UiState.Idle
             }
         )
     }
@@ -207,16 +209,17 @@ class MedicineViewModel @Inject constructor(
                             withContext(layoutDispatcher) { onResult() }
                         },
                         onFailure = {
-                            log.d("MedicineViewModel::deleteMedicine: failed")
-                            addOrEditMedicineUiState = UiState.Idle
                             showUnknownErrorToast()
+//                            log.d("MedicineViewModel::deleteMedicine: failed")
+                            addOrEditMedicineUiState = UiState.Idle
                         }
                     )
-                    log.d("MedicineViewModel::deleteMedicine: addOrEditMedicineUiState = $addOrEditMedicineUiState")
+//                    log.d("MedicineViewModel::deleteMedicine: addOrEditMedicineUiState = $addOrEditMedicineUiState")
                 }
             },
             onNoUserLogged = {
                 showAuthErrorToast()
+                addOrEditMedicineUiState = UiState.Idle
             }
         )
     }
