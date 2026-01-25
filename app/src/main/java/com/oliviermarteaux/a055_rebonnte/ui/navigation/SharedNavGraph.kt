@@ -2,7 +2,6 @@ package com.oliviermarteaux.a055_rebonnte.ui.navigation
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -11,20 +10,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.oliviermarteaux.a055_rebonnte.R
-import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AddAisleScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AddOrEditMedicineScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleDetailScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleListScreen
-import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.screen.MedicineListScreen
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
 import com.oliviermarteaux.localshared.composables.LoginScreen
 import com.oliviermarteaux.localshared.composables.PasswordScreen
 import com.oliviermarteaux.localshared.composables.ResetScreen
 import com.oliviermarteaux.localshared.composables.SplashScreen
-import com.oliviermarteaux.shared.cameraX.CameraScreen
 import com.oliviermarteaux.shared.navigation.Screen
 import com.oliviermarteaux.shared.ui.theme.SharedShapes
 
@@ -130,9 +128,6 @@ fun SharedNavGraph(
         }
         /*_ MEDICINE LIST SCREEN ##############################################################################*/
         composable(route = RebonnteScreen.MedicineList.route) {
-//            LaunchedEffect(Unit) {
-//                medicineListViewModel.loadFirstPage()
-//            }
             MedicineListScreen(
                 medicineViewModel = medicineViewModel,
                 medicineListViewModel = medicineListViewModel,
@@ -155,12 +150,6 @@ fun SharedNavGraph(
             AddOrEditMedicineScreen(
                 medicineViewModel = medicineViewModel,
                 aisleListViewModel = aisleListViewModel,
-                navigateBack = { navHostController.navigateUp() },
-            )
-        }
-        /*_ CAMERA SCREEN ##########################################################################*/
-        composable(route = Screen.Camera.route) {
-            CameraScreen(
                 navigateBack = { navHostController.navigateUp() },
             )
         }
