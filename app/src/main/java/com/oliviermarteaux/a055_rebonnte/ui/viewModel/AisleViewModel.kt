@@ -85,6 +85,7 @@ class AisleViewModel @Inject constructor(
             },
             onNoUserLogged = {
                 showAuthErrorToast()
+                addAisleUiState = UiState.Idle
             }
         )
     }

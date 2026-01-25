@@ -25,12 +25,10 @@ class AisleListViewModelTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
-
     private val aisleRepository: AisleRepository = mockk()
     private val userRepository: UserRepository = mockk(relaxed = true)
     private val logger: Logger = NoOpLogger
     private val isOnlineFlow = MutableStateFlow(true)
-
     private lateinit var viewModel: AisleListViewModel
 
     private fun createViewModel() {
