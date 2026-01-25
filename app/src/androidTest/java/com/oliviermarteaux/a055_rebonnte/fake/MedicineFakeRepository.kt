@@ -69,6 +69,12 @@ class MedicineFakeRepository: MedicineRepository {
 
     override suspend fun deleteMedicine(medicineId: String): Result<Unit> {
 
+        val medicine: Medicine = fakeMedicineList.first { it.id == medicineId }
+
+        if (medicine.name == "Paracetamol") return Result.failure(
+            IllegalStateException("Error: this medicine cannot be deleted")
+        )
+
         fakeList = fakeList.copy(
             items = fakeList.items.filterNot { it.id == medicineId }
         )

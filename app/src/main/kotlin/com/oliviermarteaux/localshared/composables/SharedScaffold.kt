@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -129,6 +130,7 @@ import com.oliviermarteaux.shared.ui.theme.SharedPadding
 @Composable
 fun SharedScaffold(
     modifier: Modifier = Modifier,
+    testTag: String = "",
     //_ topAppBar
     title: String = "",
     screenContentDescription: String = "",
@@ -193,6 +195,7 @@ fun SharedScaffold(
 
     Scaffold(
         modifier = modifier
+            .testTag(testTag)
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
                     toggleSearchBar()
@@ -213,7 +216,7 @@ fun SharedScaffold(
                         ) {
                             TextTitleLarge(
                                 text = title,
-                                modifier = modifier.clearAndSetSemantics(
+                                modifier = Modifier.clearAndSetSemantics(
                                     properties = {
                                         contentDescription = screenContentDescription.ifEmpty { title }
                                     }
