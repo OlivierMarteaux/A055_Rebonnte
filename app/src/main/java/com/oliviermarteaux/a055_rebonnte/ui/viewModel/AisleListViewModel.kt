@@ -1,8 +1,9 @@
 package com.oliviermarteaux.a055_rebonnte.ui.viewModel
 
-import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentSnapshot
 import com.oliviermarteaux.a055_rebonnte.data.fake.fakeAisleList
@@ -19,14 +20,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 
 @HiltViewModel
 class AisleListViewModel @Inject constructor(
     private val aisleRepository: AisleRepository,
     private val userRepository: UserRepository,
-    log: Logger,
+    private val log: Logger,
     isOnlineFlow: Flow<Boolean>
 ) : AuthUserViewModel(
     userRepository = userRepository,
@@ -47,7 +46,7 @@ class AisleListViewModel @Inject constructor(
         private set
 
     fun getAllAisle(){
-        Log.d("OM_TAG","AisleListViewModel::getAllAisle")
+        log.d("AisleListViewModel::getAllAisle")
         lastSnapshot = null
         isLastPage = false
         aisleList.clear()
@@ -55,7 +54,7 @@ class AisleListViewModel @Inject constructor(
     }
 
     fun loadFirstPage() {
-        Log.d("OM_TAG","AisleListViewModel::loadFirstPage")
+        log.d("AisleListViewModel::loadFirstPage")
         lastSnapshot = null
         isLastPage = false
         aisleList.clear()
@@ -63,9 +62,9 @@ class AisleListViewModel @Inject constructor(
     }
 
     fun loadNextPage(pageSize: Long = 9) {
-        Log.d("OM_TAG","AisleListViewModel::loadNextPage: isLastPage = $isLastPage")
-        Log.d("OM_TAG","AisleListViewModel::loadNextPage: isLoading = $isLoading")
-        Log.d("OM_TAG","AisleListViewModel::loadNextPage: return = ${(isLastPage || isLoading)}")
+        log.d("AisleListViewModel::loadNextPage: isLastPage = $isLastPage")
+        log.d("AisleListViewModel::loadNextPage: isLoading = $isLoading")
+        log.d("AisleListViewModel::loadNextPage: return = ${(isLastPage || isLoading)}")
         if (isLastPage || isLoading) return
 
         viewModelScope.launch {
