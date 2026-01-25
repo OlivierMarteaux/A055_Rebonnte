@@ -116,7 +116,10 @@ class AisleListViewModel @Inject constructor(
         log.d("AisleListViewModel: init")
 
         // Sign in the test user in case of test config
-        if (TestConfig.isTest) signInTestUser()
+        if (TestConfig.isTest) {
+            signInTestUser()
+            loadFirstPage()
+        }
 
         // fixed: do not load in init as it leads to auth error when instantiated on SplashScreen
 //        loadFirstPage()
