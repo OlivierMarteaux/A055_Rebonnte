@@ -24,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.min
 
 @HiltViewModel
 class MedicineListViewModel @Inject constructor(
@@ -127,7 +128,6 @@ class MedicineListViewModel @Inject constructor(
                     medicineListUiState =
                         if (medicineList.isEmpty()) ListUiState.Empty
                         else ListUiState.Success(medicineList)
-                    for (i in 0..7){Log.d("OM_TAG", "MedicineListViewModel::loadNextPage: ${medicineList[i].name}: ${medicineList[i].stock}")}
                 }.onFailure { e ->
                     medicineListUiState = ListUiState.Error(e)
                 }
