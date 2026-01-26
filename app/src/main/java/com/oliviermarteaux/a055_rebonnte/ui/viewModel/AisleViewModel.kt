@@ -6,10 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.oliviermarteaux.a055_rebonnte.data.repository.AisleRepository
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
-import com.oliviermarteaux.localshared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
+import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.utils.Logger
+import com.oliviermarteaux.shared.utils.isOnline
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

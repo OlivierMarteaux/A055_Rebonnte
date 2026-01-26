@@ -2,7 +2,6 @@ package com.oliviermarteaux.a055_rebonnte.ui.screen
 
 import android.content.res.Configuration
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,8 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
@@ -30,11 +27,11 @@ import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
-import com.oliviermarteaux.localshared.composables.SharedFilledIntTextField
 import com.oliviermarteaux.shared.composables.SharedFilledItemTextField
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.IconSource
+import com.oliviermarteaux.shared.composables.SharedFilledIntTextField
 import com.oliviermarteaux.shared.composables.SharedFilledTextField
 import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.composables.spacer.SpacerLarge
