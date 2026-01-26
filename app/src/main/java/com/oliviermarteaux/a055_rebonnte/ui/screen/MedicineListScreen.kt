@@ -78,7 +78,7 @@ fun MedicineListScreen(
             val cdItems = stringResource(R.string.medicines)
             val cdScreen =
                 if (addOrEditMedicineUiState is UiState.Success) {
-                    resetAddOrEditMedicineUiState()
+//                    resetAddOrEditMedicineUiState()
                     when (medicineCrudAction){
                         CrudAction.ADD -> stringResource(R.string.successfully_created, cdItem, medicine.name)
                         CrudAction.UPDATE -> stringResource(R.string.successfully_edited, cdItem, medicine.name)

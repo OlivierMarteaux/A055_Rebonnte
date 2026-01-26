@@ -11,14 +11,13 @@ import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChangeType
 import com.oliviermarteaux.a055_rebonnte.ui.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.InvalidStockException
+import com.oliviermarteaux.localshared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
-import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -45,13 +44,11 @@ class MedicineViewModel @Inject constructor(
         private set
     fun resetAddOrEditMedicineUiState() {
         viewModelScope.launch {
-            delay(3000)
             addOrEditMedicineUiState = UiState.Idle
         }
     }
     fun resetMedicineCrudAction() {
         viewModelScope.launch {
-            delay(3000)
             medicineCrudAction = CrudAction.NONE
         }
     }
@@ -107,6 +104,7 @@ class MedicineViewModel @Inject constructor(
                         )
                     )).fold(
                         onSuccess = {
+                            showSuccessfulItemCreationToast()
                             addOrEditMedicineUiState = UiState.Success(Unit)
                             withContext(layoutDispatcher) { onResult() }
                                     },
@@ -136,7 +134,7 @@ class MedicineViewModel @Inject constructor(
             addOrEditMedicineUiState = UiState.Idle // 🟢 reset state since we're not adding the medicine
             return
         }
-        //_ add the medicine to the repository
+        //_ update the medicine in the repository
         checkUserState(
             onUserLogged = { user ->
                 viewModelScope.launch(dataDispatcher) {
@@ -160,17 +158,18 @@ class MedicineViewModel @Inject constructor(
                                 )
                     )).fold(
                         onSuccess = {
+                            showSuccessfulItemUpdateToast()
                             log.d("MedicineViewModel::updateMedicine: Successful")
                             addOrEditMedicineUiState = UiState.Success(Unit)
                             withContext(layoutDispatcher) { onResult() }
                                     },
                         onFailure = {
                             showUnknownErrorToast()
-//                            log.d("MedicineViewModel::updateMedicine: failed")
+                            log.d("MedicineViewModel::updateMedicine: failed")
                             addOrEditMedicineUiState = UiState.Idle
                         }
                     )
-//                    log.d("MedicineViewModel::updateMedicine: addOrEditMedicineUiState = $addOrEditMedicineUiState")
+                    log.d("MedicineViewModel::updateMedicine: addOrEditMedicineUiState = $addOrEditMedicineUiState")
                 }
             },
             onNoUserLogged = {
@@ -201,17 +200,18 @@ class MedicineViewModel @Inject constructor(
 
                     medicineRepository.deleteMedicine(medicine.id).fold(
                         onSuccess = {
+                            showSuccessfulItemDeletionToast()
                             log.d("MedicineViewModel::deleteMedicine: Successful")
                             addOrEditMedicineUiState = UiState.Success(Unit)
                             withContext(layoutDispatcher) { onResult() }
                         },
                         onFailure = {
                             showUnknownErrorToast()
-//                            log.d("MedicineViewModel::deleteMedicine: failed")
+                            log.d("MedicineViewModel::deleteMedicine: failed")
                             addOrEditMedicineUiState = UiState.Idle
                         }
                     )
-//                    log.d("MedicineViewModel::deleteMedicine: addOrEditMedicineUiState = $addOrEditMedicineUiState")
+                    log.d("MedicineViewModel::deleteMedicine: addOrEditMedicineUiState = $addOrEditMedicineUiState")
                 }
             },
             onNoUserLogged = {

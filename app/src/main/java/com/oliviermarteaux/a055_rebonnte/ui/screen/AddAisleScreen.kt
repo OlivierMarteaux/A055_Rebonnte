@@ -53,7 +53,7 @@ fun AddAisleScreen(
                     modifier = Modifier.testTag("AddAisleScreen"),
                     updateAisleName = ::updateAisleName,
                     addAisle = { addAisle{
-                        aisleListViewModel.loadFirstPage()
+//                        aisleListViewModel.loadFirstPage()
                         navigateBack()
                     }},
                     paddingValues = paddingValues,

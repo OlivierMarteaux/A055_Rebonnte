@@ -10,8 +10,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.oliviermarteaux.a055_rebonnte.data.repository.MedicineRepository
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.MedicineSortOption
+import com.oliviermarteaux.localshared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
-import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.ListUiState
 import com.oliviermarteaux.shared.utils.Logger
 import com.oliviermarteaux.shared.utils.TestConfig
@@ -39,6 +39,7 @@ class MedicineListViewModel @Inject constructor(
     //_ Loading whole list
     //_ ############################################################################################
 
+    // Used only for the pickers list (load the whole list - not paged)
     fun getAllMedicineByDescendingTimestamp(){
         queryFieldValue = TextFieldValue("")
         currentSortOption = MedicineSortOption.DESCENDING_TIMESTAMP
@@ -114,7 +115,6 @@ class MedicineListViewModel @Inject constructor(
             ).collect { result ->
                 result.onSuccess { page ->
                     val newItems = page.items.filter { it.id !in medicineList.map { m -> m.id } }
-//                    val newItems = page.items
                     medicineList.addAll(newItems)
                     lastSnapshot = page.lastSnapshot
                     isLastPage = page.isLastPage

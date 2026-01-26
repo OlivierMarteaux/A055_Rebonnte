@@ -34,14 +34,11 @@ fun AisleDetailScreen(
         val cdContainer = stringResource(R.string.aisle)
         val cdItem = stringResource(R.string.medicine)
         val cdItems = stringResource(R.string.medicines)
-        val cdItemAction: String = run {
-            resetAddOrEditMedicineUiState()
-            when (medicineCrudAction) {
-                CrudAction.ADD -> stringResource(R.string.successfully_created, cdItem, medicine.name)
-                CrudAction.UPDATE -> stringResource(R.string.successfully_edited, cdItem, medicine.name)
-                CrudAction.DELETE -> stringResource(R.string.successfully_deleted, cdItem, medicine.name)
-                else -> ""
-            }
+        val cdItemAction: String = when (medicineCrudAction) {
+            CrudAction.ADD -> stringResource(R.string.successfully_created, cdItem, medicine.name)
+            CrudAction.UPDATE -> stringResource(R.string.successfully_edited, cdItem, medicine.name)
+            CrudAction.DELETE -> stringResource(R.string.successfully_deleted, cdItem, medicine.name)
+            else -> ""
         }
         val cdScreen = stringResource(
             R.string.you_are_on_the_screen_here_you_can_browse_all_the_in_this,

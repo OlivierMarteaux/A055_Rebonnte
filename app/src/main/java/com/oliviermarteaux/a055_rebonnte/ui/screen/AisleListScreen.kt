@@ -41,6 +41,10 @@ fun AisleListScreen(
     with(aisleListViewModel) {
         with (aisleViewModel) {
 
+            LaunchedEffect(addAisleUiState){
+                Log.d("OM_TAG", "AisleListScreen: addAisleUiState is $addAisleUiState")
+            }
+
             var fabDisplayed by rememberSaveable { mutableStateOf(false) }
             fun showFab(){ fabDisplayed = true }
             fun hideFab(){ fabDisplayed = false }
@@ -50,7 +54,7 @@ fun AisleListScreen(
             val cdScreenTitle = stringResource(RebonnteScreen.AisleList.titleRes)
             val cdScreen =
                 if (addAisleUiState is UiState.Success) {
-                    resetAddAisleUiState()
+//                    resetAddAisleUiState()
                     stringResource(R.string.successfully_created, aisle.name, cdItem)
                 }
                 else

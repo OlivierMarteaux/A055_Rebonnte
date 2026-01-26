@@ -85,8 +85,8 @@ fun AddOrEditMedicineScreen(
             onBackClick = navigateBack,
             trailingIcon = IconSource.VectorIcon(Icons.Default.Delete),
             trailingIconAction = { deleteMedicine {
-                if(aisleViewModel.aisle == Aisle()) medicineListViewModel.getAllMedicineByDescendingTimestamp()
-                else medicineListViewModel.filterMedicineByAisleId(aisleViewModel.aisle.id)
+//                if(aisleViewModel.aisle == Aisle()) medicineListViewModel.getAllMedicineByDescendingTimestamp()
+//                else medicineListViewModel.filterMedicineByAisleId(aisleViewModel.aisle.id)
                 navigateBack()
             }},
             trailingIconButtonContentDescription = cdDeleteButton
@@ -99,12 +99,12 @@ fun AddOrEditMedicineScreen(
                     modifier = Modifier.testTag("AddOrEditMedicineScreen"),
                     updateMedicineName = ::updateMedicineName,
                     addMedicine = { addMedicine {
-                        medicineListViewModel.getAllMedicineByDescendingTimestamp()
+//                        medicineListViewModel.getAllMedicineByDescendingTimestamp()
                         navigateBack()
                     }},
                     updateMedicine = { updateMedicine {
-                        if(aisleViewModel.aisle == Aisle()) medicineListViewModel.getAllMedicineByDescendingTimestamp()
-                        else medicineListViewModel.filterMedicineByAisleId(aisleViewModel.aisle.id)
+//                        if(aisleViewModel.aisle == Aisle()) medicineListViewModel.getAllMedicineByDescendingTimestamp()
+//                        else medicineListViewModel.filterMedicineByAisleId(aisleViewModel.aisle.id)
                         navigateBack()
                     }},
                     paddingValues = paddingValues,
