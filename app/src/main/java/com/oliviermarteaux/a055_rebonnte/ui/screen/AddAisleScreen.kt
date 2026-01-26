@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteSaveButton
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
@@ -115,7 +116,8 @@ fun AddAisleScreenTextForm(
             textFieldModifier = Modifier.fillMaxWidth(),
             isError = name.isEmpty(),
             errorText = stringResource(R.string.please_enter_a_name),
-            bottomPadding = SharedPadding.large
+            bottomPadding = SharedPadding.large,
+            imeAction = ImeAction.Done
         )
     }
 }

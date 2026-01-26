@@ -26,11 +26,14 @@ package com.oliviermarteaux.localshared.composables
 //import androidx.compose.ui.text.input.VisualTransformation
 //import androidx.compose.ui.unit.Dp
 //import androidx.compose.ui.unit.dp
+//import com.oliviermarteaux.shared.composables.ClickableReadOnlyField
+//import com.oliviermarteaux.shared.composables.IntPickerDialog
 //
 //@Composable
 //fun SharedFilledIntTextField(
 //    value: Int,
 //    modifier: Modifier = Modifier,
+//    supportingTextModifier: Modifier = Modifier,
 //    scrollableFieldModifier : Modifier = Modifier,
 //    textFieldModifier: Modifier = Modifier,
 //    intRange: IntRange = 0..50,
@@ -99,12 +102,13 @@ package com.oliviermarteaux.localshared.composables
 //        onClick = { toggleIntPickerDialog() },
 //        isError = isError,
 //        errorText = errorText?:"",
-//        contentDescription = contentDescription?:""
+//        contentDescription = contentDescription?:"",
+//        modifier = modifier
 //    ) {
 //        SharedFilledTextField(
 //            value = textValue,
 //            onValueChange = onValueChange,
-//            modifier = modifier,
+//            modifier = supportingTextModifier,
 //            textFieldModifier = textFieldModifier,
 //            enabled = enabled,
 //            readOnly = readOnly,
