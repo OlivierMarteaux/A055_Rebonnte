@@ -84,8 +84,9 @@ class MedicineListViewModel @Inject constructor(
     private var lastSnapshot: DocumentSnapshot? = null
     var isLastPage by mutableStateOf(false)
         private set
-//    var isLoading = false
-//        private set
+
+    var isLoading = false
+        private set
 
     private fun loadFirstPage() {
         log.d("MedicineListViewModel::loadFirstPage")
@@ -102,7 +103,7 @@ class MedicineListViewModel @Inject constructor(
         log.d("MedicineListViewModel::loadNextPage: query = ${queryFieldValue.text.lowercase()}")
 
         viewModelScope.launch {
-//            isLoading = true
+            isLoading = true
 
             medicineRepository.getMedicinesFilteredSortedPaged(
                 query = queryFieldValue.text.lowercase(),
@@ -124,7 +125,7 @@ class MedicineListViewModel @Inject constructor(
                     medicineListUiState = ListUiState.Error(e)
                 }
             }
-//            isLoading = false
+            isLoading = false
         }
     }
 

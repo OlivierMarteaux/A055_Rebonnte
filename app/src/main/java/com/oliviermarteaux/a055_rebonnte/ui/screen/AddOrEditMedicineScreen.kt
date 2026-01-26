@@ -25,6 +25,8 @@ import com.oliviermarteaux.a055_rebonnte.ui.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemList
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteSaveButton
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
 import com.oliviermarteaux.shared.composables.SharedFilledIntTextField
 import com.oliviermarteaux.shared.composables.SharedFilledItemTextField
@@ -45,6 +47,8 @@ import com.oliviermarteaux.shared.compose.R
 fun AddOrEditMedicineScreen(
     aisleListViewModel: AisleListViewModel,
     medicineViewModel: MedicineViewModel,
+    medicineListViewModel: MedicineListViewModel,
+    aisleViewModel: AisleViewModel,
     navigateBack: () -> Unit,
 ) {
 
@@ -80,7 +84,11 @@ fun AddOrEditMedicineScreen(
             },
             onBackClick = navigateBack,
             trailingIcon = IconSource.VectorIcon(Icons.Default.Delete),
-            trailingIconAction = { deleteMedicine { navigateBack() } },
+            trailingIconAction = { deleteMedicine {
+                if(aisleViewModel.aisle == Aisle()) medicineListViewModel.getAllMedicineByDescendingTimestamp()
+                else medicineListViewModel.filterMedicineByAisleId(aisleViewModel.aisle.id)
+                navigateBack()
+            }},
             trailingIconButtonContentDescription = cdDeleteButton
         ) { paddingValues ->
 
@@ -91,9 +99,14 @@ fun AddOrEditMedicineScreen(
                     modifier = Modifier.testTag("AddOrEditMedicineScreen"),
                     updateMedicineName = ::updateMedicineName,
                     addMedicine = { addMedicine {
+                        medicineListViewModel.getAllMedicineByDescendingTimestamp()
                         navigateBack()
                     }},
-                    updateMedicine = { updateMedicine { navigateBack() } },
+                    updateMedicine = { updateMedicine {
+                        if(aisleViewModel.aisle == Aisle()) medicineListViewModel.getAllMedicineByDescendingTimestamp()
+                        else medicineListViewModel.filterMedicineByAisleId(aisleViewModel.aisle.id)
+                        navigateBack()
+                    }},
                     paddingValues = paddingValues,
                     updateMedicineStock = ::updateMedicineStock,
                     updateMedicineAisle = ::updateMedicineAisle,

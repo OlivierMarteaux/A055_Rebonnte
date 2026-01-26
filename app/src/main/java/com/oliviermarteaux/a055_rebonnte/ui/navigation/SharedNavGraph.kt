@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.oliviermarteaux.a055_rebonnte.R
+import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AddAisleScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AddOrEditMedicineScreen
 import com.oliviermarteaux.a055_rebonnte.ui.screen.AisleDetailScreen
@@ -120,6 +121,7 @@ fun SharedNavGraph(
             AisleDetailScreen(
                 medicineViewModel = medicineViewModel,
                 medicineListViewModel = medicineListViewModel,
+                aisleViewModel = aisleViewModel,
                 navigateToAddOrEditMedicineScreen = {
                     navHostController.navigate(RebonnteScreen.AddOrEditMedicine.route)
                 },
@@ -134,6 +136,7 @@ fun SharedNavGraph(
                 aisleListViewModel = aisleListViewModel,
                 navController = navHostController,
                 navigateToAddOrEditMedicineScreen = {
+                    aisleViewModel.selectAisle(Aisle())
                     navHostController.navigate(RebonnteScreen.AddOrEditMedicine.route)
                 },
             )
@@ -142,7 +145,8 @@ fun SharedNavGraph(
         composable(route = RebonnteScreen.AddAisle.route) {
             AddAisleScreen(
                 navigateBack = { navHostController.navigateUp() },
-                aisleViewModel = aisleViewModel
+                aisleViewModel = aisleViewModel,
+                aisleListViewModel = aisleListViewModel
             )
         }
         /*_ ADD OR EDIT MEDICINE SCREEN ##########################################################################*/
@@ -150,6 +154,8 @@ fun SharedNavGraph(
             AddOrEditMedicineScreen(
                 medicineViewModel = medicineViewModel,
                 aisleListViewModel = aisleListViewModel,
+                medicineListViewModel = medicineListViewModel,
+                aisleViewModel = aisleViewModel,
                 navigateBack = { navHostController.navigateUp() },
             )
         }

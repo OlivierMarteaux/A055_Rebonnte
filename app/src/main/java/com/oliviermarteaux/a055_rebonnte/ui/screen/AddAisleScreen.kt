@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteSaveButton
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.SharedFilledTextField
@@ -31,6 +32,7 @@ import com.oliviermarteaux.shared.compose.R
 @Composable
 fun AddAisleScreen(
     aisleViewModel: AisleViewModel,
+    aisleListViewModel: AisleListViewModel,
     navigateBack: () -> Unit,
 ) {
     with(aisleViewModel) {
@@ -50,7 +52,10 @@ fun AddAisleScreen(
                     aisle = aisle,
                     modifier = Modifier.testTag("AddAisleScreen"),
                     updateAisleName = ::updateAisleName,
-                    addAisle = { addAisle(onResult = navigateBack) },
+                    addAisle = { addAisle{
+                        aisleListViewModel.loadFirstPage()
+                        navigateBack()
+                    }},
                     paddingValues = paddingValues,
                 )
                 if (addAisleUiState is UiState.Loading) { CenteredCircularProgressIndicator() }

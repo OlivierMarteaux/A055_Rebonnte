@@ -11,6 +11,7 @@ import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
+import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
 import com.oliviermarteaux.shared.composables.SharedScaffold
@@ -24,6 +25,7 @@ fun AisleDetailScreen(
     modifier: Modifier = Modifier,
     medicineListViewModel: MedicineListViewModel,
     medicineViewModel: MedicineViewModel,
+    aisleViewModel: AisleViewModel,
     navigateBack: () -> Unit = {},
     navigateToAddOrEditMedicineScreen: () -> Unit
 ) {
@@ -59,39 +61,40 @@ fun AisleDetailScreen(
             semanticStateText = cdItemAction
         ) { contentPadding ->
             with(medicineListViewModel) {
-                LaunchedEffect(medicineListUiState) {
-                    Log.i(
-                        "OM_TAG",
-                        "MedicineListViewModel: LaunchedEffect: medicineListUiState = $medicineListUiState"
-                    )
-                }
+                with (aisleViewModel) {
+                    LaunchedEffect(medicineListUiState) {
+                        Log.i(
+                            "OM_TAG",
+                            "MedicineListViewModel: LaunchedEffect: medicineListUiState = $medicineListUiState"
+                        )
+                    }
 
-                RebonnteItemListBody(
-                    contentPadding = contentPadding,
-                    modifier = modifier,
-                    testTag = "AisleDetailScreen",
-                    listUiState = medicineListUiState,
-                    listViewModel = medicineListViewModel,
-                    itemLabel = stringResource(R.string.medicine),
-                    itemList = medicineList,
-                    item = medicine,
-                    itemId = Medicine::id,
-                    itemTitle = Medicine::name ,
-                    itemText = { medicine: Medicine ->
-                        stringResource(R.string.stock_value, medicine.stock)
-                               },
-                    reloadItemList = ::getAllMedicineByDescendingTimestamp,
-                    actionUiState = addOrEditMedicineUiState,
-                    itemCrudAction = medicineCrudAction,
-                    resetItemCrudAction = ::resetMedicineCrudAction,
-                    resetUiState = ::resetAddOrEditMedicineUiState,
-                    isLastPage = isLastPage,
-                    loadNextPage = ::loadNextPage
-
-                ) { medicine ->
-                    selectMedicine(medicine)
-                    switchToMedicineEditionMode()
-                    navigateToAddOrEditMedicineScreen()
+                    RebonnteItemListBody(
+                        contentPadding = contentPadding,
+                        modifier = modifier,
+                        testTag = "AisleDetailScreen",
+                        listUiState = medicineListUiState,
+                        listViewModel = medicineListViewModel,
+                        itemLabel = stringResource(R.string.medicine),
+                        itemList = medicineList,
+                        item = medicine,
+                        itemId = Medicine::id,
+                        itemTitle = Medicine::name,
+                        itemText = { medicine: Medicine ->
+                            stringResource(R.string.stock_value, medicine.stock)
+                        },
+                        reloadItemList = { filterMedicineByAisleId(aisle.id) },
+                        actionUiState = addOrEditMedicineUiState,
+                        itemCrudAction = medicineCrudAction,
+                        resetItemCrudAction = ::resetMedicineCrudAction,
+                        resetUiState = ::resetAddOrEditMedicineUiState,
+                        isLastPage = isLastPage,
+                        loadNextPage = ::loadNextPage
+                    ) { medicine ->
+                            selectMedicine(medicine)
+                            switchToMedicineEditionMode()
+                            navigateToAddOrEditMedicineScreen()
+                    }
                 }
             }
         }
