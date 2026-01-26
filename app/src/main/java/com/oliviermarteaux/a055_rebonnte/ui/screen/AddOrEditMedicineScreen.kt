@@ -2,9 +2,11 @@ package com.oliviermarteaux.a055_rebonnte.ui.screen
 
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -140,60 +142,134 @@ fun AddScreenBody(
     val orientation = configuration.orientation
     val isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-            .padding(bottom = SharedPadding.xxl)
-            .padding(horizontal = SharedPadding.large)
-            .let { if (isLandscape) it.verticalScroll(rememberScrollState()) else it},
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        AddScreenTextForm(
-            medicine = medicine,
-            updateMedicineName = updateMedicineName,
-            updateMedicineStock = updateMedicineStock,
-            updateMedicineAisle = updateMedicineAisle,
-            aisleListViewModel = aisleListViewModel,
-            medicineCreation = medicineCrudAction == CrudAction.ADD,
-            isStockError = medicine.stock.toString().isEmpty()
-                    && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
-        )
-
-        RebonnteSaveButton(
-            onClick = {
-                when (medicineCrudAction) {
-                    CrudAction.ADD -> {
-                        Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: AddMedicine()")
-                        addMedicine()
-                    }
-                    CrudAction.UPDATE -> {
-                        Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: UpdateMedicine()")
-                        updateMedicine()
-                    }
-                    else -> {}
-                }
-            },
-            enabled = (
-                medicine.name.isNotEmpty()
-                        && medicine.aisle.name.isNotEmpty()
-                        && medicine.stock.toString().isNotEmpty()
+    if(!isLandscape){
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(bottom = SharedPadding.xxl)
+                .padding(horizontal = SharedPadding.large),
+    //            .let { if (isLandscape) it.verticalScroll(rememberScrollState()) else it},
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            AddScreenTextForm(
+                medicine = medicine,
+                updateMedicineName = updateMedicineName,
+                updateMedicineStock = updateMedicineStock,
+                updateMedicineAisle = updateMedicineAisle,
+                aisleListViewModel = aisleListViewModel,
+                medicineCreation = medicineCrudAction == CrudAction.ADD,
+                isStockError = medicine.stock.toString().isEmpty()
                         && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
-                    )
-        )
-        SpacerLarge()
-        TextTitleLarge(text = stringResource(R.string.change_record))
-        SpacerMedium()
-
-        with(medicine) {
-            RebonnteItemList(
-                itemId = MedicineChange::id,
-                itemList = changeRecord,
-                getItemTitle = MedicineChange::getTitle,
-                itemText = MedicineChange::getDescription,
-                isLastPage = true,
-                loadNextPage = {}
             )
+
+            RebonnteSaveButton(
+                onClick = {
+                    when (medicineCrudAction) {
+                        CrudAction.ADD -> {
+                            Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: AddMedicine()")
+                            addMedicine()
+                        }
+
+                        CrudAction.UPDATE -> {
+                            Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: UpdateMedicine()")
+                            updateMedicine()
+                        }
+
+                        else -> {}
+                    }
+                },
+                enabled = (
+                        medicine.name.isNotEmpty()
+                                && medicine.aisle.name.isNotEmpty()
+                                && medicine.stock.toString().isNotEmpty()
+                                && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
+                        )
+            )
+            SpacerLarge()
+            TextTitleLarge(text = stringResource(R.string.change_record))
+            SpacerMedium()
+
+            with(medicine) {
+                RebonnteItemList(
+                    itemId = MedicineChange::id,
+                    itemList = changeRecord,
+                    getItemTitle = MedicineChange::getTitle,
+                    itemText = MedicineChange::getDescription,
+                    isLastPage = true,
+                    loadNextPage = {}
+                )
+            }
+        }
+    } else {
+        Row(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(bottom = SharedPadding.small)
+                .padding(horizontal = SharedPadding.large),
+            //            .let { if (isLandscape) it.verticalScroll(rememberScrollState()) else it},
+        ) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .weight(1f)
+            ) {
+                AddScreenTextForm(
+                    medicine = medicine,
+                    updateMedicineName = updateMedicineName,
+                    updateMedicineStock = updateMedicineStock,
+                    updateMedicineAisle = updateMedicineAisle,
+                    aisleListViewModel = aisleListViewModel,
+                    medicineCreation = medicineCrudAction == CrudAction.ADD,
+                    isStockError = medicine.stock.toString().isEmpty()
+                            && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
+                )
+
+                RebonnteSaveButton(
+                    onClick = {
+                        when (medicineCrudAction) {
+                            CrudAction.ADD -> {
+                                Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: AddMedicine()")
+                                addMedicine()
+                            }
+
+                            CrudAction.UPDATE -> {
+                                Log.d(
+                                    "OM_TAG",
+                                    "AddScreenBody::AddScreenSaveButton: UpdateMedicine()"
+                                )
+                                updateMedicine()
+                            }
+
+                            else -> {}
+                        }
+                    },
+                    enabled = (
+                            medicine.name.isNotEmpty()
+                                    && medicine.aisle.name.isNotEmpty()
+                                    && medicine.stock.toString().isNotEmpty()
+                                    && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
+                            )
+                )
+            }
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                TextTitleLarge(text = stringResource(R.string.change_record))
+                SpacerMedium()
+
+                with(medicine) {
+                    RebonnteItemList(
+                        itemId = MedicineChange::id,
+                        itemList = changeRecord,
+                        getItemTitle = MedicineChange::getTitle,
+                        itemText = MedicineChange::getDescription,
+                        isLastPage = true,
+                        loadNextPage = {}
+                    )
+                }
+            }
         }
     }
 }
