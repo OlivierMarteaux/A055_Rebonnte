@@ -5,7 +5,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
-import com.oliviermarteaux.a055_rebonnte.ui.PagedList
+import com.oliviermarteaux.shared.firebase.firestore.utils.PagedList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

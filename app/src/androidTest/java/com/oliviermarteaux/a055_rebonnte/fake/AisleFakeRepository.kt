@@ -4,7 +4,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.oliviermarteaux.a055_rebonnte.data.fake.fakeAisleList
 import com.oliviermarteaux.a055_rebonnte.data.repository.AisleRepository
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
-import com.oliviermarteaux.a055_rebonnte.ui.PagedList
+import com.oliviermarteaux.shared.firebase.firestore.utils.PagedList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

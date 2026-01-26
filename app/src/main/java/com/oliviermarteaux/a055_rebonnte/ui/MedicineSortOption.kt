@@ -3,10 +3,6 @@ package com.oliviermarteaux.a055_rebonnte.ui
 import com.google.firebase.firestore.Query
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 
-enum class SortOrder {
-    ASCENDING, DESCENDING
-}
-
 enum class MedicineSortOption(
     val field: String,
     val direction: Query.Direction,

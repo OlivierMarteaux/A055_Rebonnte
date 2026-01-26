@@ -12,7 +12,7 @@ import com.oliviermarteaux.a055_rebonnte.ui.theme.Grey40
 import com.oliviermarteaux.a055_rebonnte.ui.theme.Red40
 import com.oliviermarteaux.shared.composables.SharedButton
 import com.oliviermarteaux.shared.ui.theme.SharedSize
-import com.oliviermarteaux.shared.compose.R as oR
+import com.oliviermarteaux.shared.compose.R
 
 @Composable
 fun RebonnteSaveButton(
@@ -21,7 +21,7 @@ fun RebonnteSaveButton(
     modifier: Modifier = Modifier
 ){
     SharedButton(
-        text = stringResource(oR.string.validate),
+        text = stringResource(R.string.validate),
         onClick = onClick,
         shape = MaterialTheme.shapes.extraSmall,
         modifier = modifier

@@ -2,9 +2,9 @@ package com.oliviermarteaux.a055_rebonnte
 
 import com.oliviermarteaux.a055_rebonnte.data.repository.AisleRepository
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
-import com.oliviermarteaux.a055_rebonnte.ui.PagedList
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
+import com.oliviermarteaux.shared.firebase.firestore.utils.PagedList
 import com.oliviermarteaux.shared.test.rule.MainDispatcherRule
 import com.oliviermarteaux.shared.ui.ListUiState
 import com.oliviermarteaux.shared.utils.Logger

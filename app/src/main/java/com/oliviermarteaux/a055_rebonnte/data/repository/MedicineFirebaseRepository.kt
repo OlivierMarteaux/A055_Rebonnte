@@ -4,7 +4,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.oliviermarteaux.a055_rebonnte.data.service.MedicineApi
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.MedicineSortOption
-import com.oliviermarteaux.a055_rebonnte.ui.PagedList
+import com.oliviermarteaux.shared.firebase.firestore.utils.PagedList
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton

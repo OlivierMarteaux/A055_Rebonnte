@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
-import com.oliviermarteaux.a055_rebonnte.ui.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemList
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteSaveButton
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
@@ -42,6 +41,7 @@ import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import com.oliviermarteaux.shared.ui.theme.ToastPadding
 import com.oliviermarteaux.shared.compose.R
+import com.oliviermarteaux.shared.utils.CrudAction
 
 @Composable
 fun AddOrEditMedicineScreen(
@@ -71,11 +71,6 @@ fun AddOrEditMedicineScreen(
         stringResource(R.string.button_double_tap_to, cdDeleteLabel, cdDeleteAction)
 
     with(medicineViewModel) {
-
-        val trailingIconIcon: (() -> Unit)? = if (medicineCrudAction == CrudAction.UPDATE) {
-            { deleteMedicine { navigateBack() } } // lambda assigned
-        } else { null }
-
         SharedScaffold(
             title = when(medicineCrudAction){
                 CrudAction.ADD -> cdCreationTitle

@@ -20,6 +20,8 @@ import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
+import com.oliviermarteaux.shared.navigation.SharedNavGraph
+import com.oliviermarteaux.shared.navigation.authNavGraph
 import com.oliviermarteaux.shared.ui.theme.SharedShapes
 
 @Composable
@@ -59,7 +61,6 @@ fun RootNavGraph(
                 val aisleListViewModel: AisleListViewModel = hiltViewModel(parentEntry)
                 val aisleViewModel: AisleViewModel = hiltViewModel(parentEntry)
                 val medicineListViewModel: MedicineListViewModel = hiltViewModel(parentEntry)
-                val medicineViewModel: MedicineViewModel = hiltViewModel(parentEntry)
 
                 AisleListScreen(
                     aisleListViewModel = aisleListViewModel,
@@ -77,7 +78,6 @@ fun RootNavGraph(
                     navHostController.getBackStackEntry(SharedNavGraph.APP)
                 }
 
-                val aisleListViewModel: AisleListViewModel = hiltViewModel(parentEntry)
                 val aisleViewModel: AisleViewModel = hiltViewModel(parentEntry)
                 val medicineListViewModel: MedicineListViewModel = hiltViewModel(parentEntry)
                 val medicineViewModel: MedicineViewModel = hiltViewModel(parentEntry)
@@ -124,8 +124,6 @@ fun RootNavGraph(
 
                 val aisleListViewModel: AisleListViewModel = hiltViewModel(parentEntry)
                 val aisleViewModel: AisleViewModel = hiltViewModel(parentEntry)
-                val medicineListViewModel: MedicineListViewModel = hiltViewModel(parentEntry)
-                val medicineViewModel: MedicineViewModel = hiltViewModel(parentEntry)
 
                 AddAisleScreen(
                     navigateBack = { navHostController.navigateUp() },

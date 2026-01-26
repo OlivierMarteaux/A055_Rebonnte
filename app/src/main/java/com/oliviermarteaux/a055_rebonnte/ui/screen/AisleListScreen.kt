@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
-import com.oliviermarteaux.a055_rebonnte.ui.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteBottomAppBar
@@ -26,6 +25,7 @@ import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import com.oliviermarteaux.shared.compose.R
+import com.oliviermarteaux.shared.utils.CrudAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

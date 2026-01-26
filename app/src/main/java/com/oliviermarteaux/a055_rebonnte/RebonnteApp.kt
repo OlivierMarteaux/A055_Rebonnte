@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RootNavGraph
-import com.oliviermarteaux.a055_rebonnte.ui.navigation.SharedNavGraph
 import com.oliviermarteaux.shared.utils.TestConfig
 import com.oliviermarteaux.shared.composables.startup.DismissKeyboardOnTapOutside
 import com.oliviermarteaux.shared.navigation.LogRoutes
 import com.oliviermarteaux.shared.navigation.Screen
+import com.oliviermarteaux.shared.navigation.SharedNavGraph
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable

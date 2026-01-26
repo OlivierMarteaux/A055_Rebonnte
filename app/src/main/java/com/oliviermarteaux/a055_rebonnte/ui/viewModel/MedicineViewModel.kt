@@ -9,11 +9,11 @@ import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChange
 import com.oliviermarteaux.a055_rebonnte.domain.model.MedicineChangeType
-import com.oliviermarteaux.a055_rebonnte.ui.CrudAction
-import com.oliviermarteaux.a055_rebonnte.ui.InvalidStockException
 import com.oliviermarteaux.localshared.firebase.authentication.ui.AuthUserViewModel
+import com.oliviermarteaux.shared.exception.InvalidStockException
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.ui.UiState
+import com.oliviermarteaux.shared.utils.CrudAction
 import com.oliviermarteaux.shared.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
