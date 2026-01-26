@@ -35,12 +35,17 @@ class MedicineListViewModel @Inject constructor(
     var medicineListUiState: ListUiState<Medicine> by mutableStateOf(ListUiState.Loading)
         private set
 
+    fun resetMedicineList(){
+        medicineListUiState = ListUiState.Loading
+        medicineList.clear()
+    }
+
     //_ ############################################################################################
     //_ Loading whole list
     //_ ############################################################################################
 
     // Used only for the pickers list (load the whole list - not paged)
-    fun getAllMedicineByDescendingTimestamp(){
+    fun getMedicineSortedByDescendingTimestampPaged(){
         queryFieldValue = TextFieldValue("")
         currentSortOption = MedicineSortOption.DESCENDING_TIMESTAMP
         aisleId = ""
@@ -168,5 +173,7 @@ class MedicineListViewModel @Inject constructor(
 
         // Sign in the test user in case of test config
         if (TestConfig.isTest) signInTestUser()
+
+        loadFirstPage()
     }
 }

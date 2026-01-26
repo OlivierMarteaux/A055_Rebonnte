@@ -71,6 +71,11 @@ fun AddOrEditMedicineScreen(
         stringResource(R.string.button_double_tap_to, cdDeleteLabel, cdDeleteAction)
 
     with(medicineViewModel) {
+
+        val trailingIconIcon: (() -> Unit)? = if (medicineCrudAction == CrudAction.UPDATE) {
+            { deleteMedicine { navigateBack() } } // lambda assigned
+        } else { null }
+
         SharedScaffold(
             title = when(medicineCrudAction){
                 CrudAction.ADD -> cdCreationTitle
@@ -83,12 +88,8 @@ fun AddOrEditMedicineScreen(
                 else -> ""
             },
             onBackClick = navigateBack,
-            trailingIcon = IconSource.VectorIcon(Icons.Default.Delete),
-            trailingIconAction = { deleteMedicine {
-//                if(aisleViewModel.aisle == Aisle()) medicineListViewModel.getAllMedicineByDescendingTimestamp()
-//                else medicineListViewModel.filterMedicineByAisleId(aisleViewModel.aisle.id)
-                navigateBack()
-            }},
+            trailingIcon = if (medicineCrudAction == CrudAction.UPDATE) IconSource.VectorIcon(Icons.Default.Delete) else null,
+            trailingIconAction = if (medicineCrudAction == CrudAction.UPDATE) {  {deleteMedicine{navigateBack()}}  } else null,
             trailingIconButtonContentDescription = cdDeleteButton
         ) { paddingValues ->
 
@@ -98,15 +99,8 @@ fun AddOrEditMedicineScreen(
                     sourceMedicine = sourceMedicine,
                     modifier = Modifier.testTag("AddOrEditMedicineScreen"),
                     updateMedicineName = ::updateMedicineName,
-                    addMedicine = { addMedicine {
-//                        medicineListViewModel.getAllMedicineByDescendingTimestamp()
-                        navigateBack()
-                    }},
-                    updateMedicine = { updateMedicine {
-//                        if(aisleViewModel.aisle == Aisle()) medicineListViewModel.getAllMedicineByDescendingTimestamp()
-//                        else medicineListViewModel.filterMedicineByAisleId(aisleViewModel.aisle.id)
-                        navigateBack()
-                    }},
+                    addMedicine = { addMedicine { navigateBack() }},
+                    updateMedicine = { updateMedicine { navigateBack() }},
                     paddingValues = paddingValues,
                     updateMedicineStock = ::updateMedicineStock,
                     updateMedicineAisle = ::updateMedicineAisle,

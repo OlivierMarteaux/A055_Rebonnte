@@ -88,4 +88,8 @@ class AisleViewModel @Inject constructor(
             }
         )
     }
+
+    init {
+        log.d("AisleViewModel: init")
+    }
 }

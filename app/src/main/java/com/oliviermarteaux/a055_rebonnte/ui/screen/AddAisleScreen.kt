@@ -52,10 +52,7 @@ fun AddAisleScreen(
                     aisle = aisle,
                     modifier = Modifier.testTag("AddAisleScreen"),
                     updateAisleName = ::updateAisleName,
-                    addAisle = { addAisle{
-//                        aisleListViewModel.loadFirstPage()
-                        navigateBack()
-                    }},
+                    addAisle = { addAisle{ navigateBack() }},
                     paddingValues = paddingValues,
                 )
                 if (addAisleUiState is UiState.Loading) { CenteredCircularProgressIndicator() }

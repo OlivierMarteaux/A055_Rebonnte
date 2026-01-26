@@ -123,9 +123,7 @@ fun MedicineListScreen(
                 bottomBar = { RebonnteBottomAppBar(
                     navController = navController,
                     item1 = RebonnteBottomNavItem.AisleNavItem,
-                    callback1 = {
-                        aisleListViewModel.loadFirstPage()
-                    },
+                    callback1 = aisleListViewModel::loadFirstPage,
                     item2 = RebonnteBottomNavItem.MedicineNavItem
                 )},
                 // fab button
@@ -137,7 +135,7 @@ fun MedicineListScreen(
                         checkUserState(
                             onUserLogged = {
                                 hideSearchBar()
-                                aisleListViewModel.getAllAisle()
+                                aisleListViewModel.getAllAisleForPicker()
                                 selectMedicine(Medicine())
                                 switchToMedicineCreationMode()
                                 navigateToAddOrEditMedicineScreen()
@@ -166,7 +164,7 @@ fun MedicineListScreen(
                     itemText = { medicine: Medicine ->
                         stringResource(R.string.stock_value, medicine.stock) },
                     onSearchFocusRequester = onSearchFocusRequester,
-                    reloadItemList = ::getAllMedicineByDescendingTimestamp,
+                    reloadItemList = ::getMedicineSortedByDescendingTimestampPaged,
                     showFab = ::showFab,
                     hideFab = ::hideFab,
                     actionUiState = addOrEditMedicineUiState,

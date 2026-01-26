@@ -11,6 +11,7 @@ import com.oliviermarteaux.shared.utils.Logger
 import com.oliviermarteaux.shared.utils.NoOpLogger
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -62,7 +63,7 @@ class AisleListViewModelTest {
         advanceUntilIdle() //_ <- critical
 
         // When
-        viewModel.loadFirstPage()
+//        viewModel.loadFirstPage()
 
         advanceUntilIdle() //_ run all coroutines
 
@@ -71,6 +72,13 @@ class AisleListViewModelTest {
         assertTrue(viewModel.isLastPage)
         assertFalse(viewModel.isLoading)
         assertTrue(viewModel.homeUiState is ListUiState.Empty)
+
+        verify(exactly = 1) {
+            aisleRepository.getAislePaged(
+                pageSize = 9,
+                lastSnapshot = null
+            )
+        }
     }
 
     @Test
@@ -91,7 +99,7 @@ class AisleListViewModelTest {
         advanceUntilIdle() //_ <- critical
 
         // When
-        viewModel.loadFirstPage()
+//        viewModel.loadFirstPage()
 
         advanceUntilIdle() //_ run all coroutines
 
@@ -103,5 +111,12 @@ class AisleListViewModelTest {
         val uiState = viewModel.homeUiState
         assertTrue(uiState is ListUiState.Error)
         assertEquals(exception, (uiState as ListUiState.Error).throwable)
+
+        verify(exactly = 1) {
+            aisleRepository.getAislePaged(
+                pageSize = 9,
+                lastSnapshot = null
+            )
+        }
     }
 }

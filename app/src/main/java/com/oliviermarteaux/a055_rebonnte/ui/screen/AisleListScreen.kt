@@ -78,7 +78,7 @@ fun AisleListScreen(
                     navController = navController,
                     item1 = RebonnteBottomNavItem.AisleNavItem,
                     item2 = RebonnteBottomNavItem.MedicineNavItem,
-                    callback2 = medicineListViewModel::getAllMedicineByDescendingTimestamp
+                    callback2 = medicineListViewModel::getMedicineSortedByDescendingTimestampPaged
                 )},
                 // fab button
                 fabVisible = fabDisplayed,

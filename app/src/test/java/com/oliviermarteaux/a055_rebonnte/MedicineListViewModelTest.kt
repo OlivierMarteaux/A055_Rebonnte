@@ -78,7 +78,7 @@ class MedicineListViewModelTest {
         advanceUntilIdle() //_ <- critical
 
         // When
-        viewModel.loadNextPage()
+//        viewModel.loadNextPage()
 
         advanceUntilIdle() //_ wait for coroutine
 
@@ -111,7 +111,8 @@ class MedicineListViewModelTest {
         advanceUntilIdle() //_ <- critical
 
         // When
-        viewModel.loadNextPage()
+        // do not call loadNext page as loadFirstPage is called in init block
+//        viewModel.loadNextPage()
 
         advanceUntilIdle()//_ wait for coroutine
 

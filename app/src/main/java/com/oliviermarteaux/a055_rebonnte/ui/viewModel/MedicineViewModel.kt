@@ -220,4 +220,8 @@ class MedicineViewModel @Inject constructor(
             }
         )
     }
+
+    init{
+        log.d("MedicineViewModel: init")
+    }
 }

@@ -7,6 +7,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
+import com.oliviermarteaux.a055_rebonnte.ui.navigation.RootNavGraph
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.SharedNavGraph
 import com.oliviermarteaux.shared.utils.TestConfig
 import com.oliviermarteaux.shared.composables.startup.DismissKeyboardOnTapOutside
@@ -24,10 +25,12 @@ fun RebonnteApp(){
     val startDestination: String =
         if (TestConfig.isTest) {
         Log.d("OM_TAG", "start screen = ${RebonnteScreen.AisleList.route}")
-            RebonnteScreen.AisleList.route
+//            RebonnteScreen.AisleList.route
+            SharedNavGraph.APP
         } else {
             Log.d("OM_TAG", "start screen = ${Screen.Splash.route}")
-            Screen.Splash.route
+//            Screen.Splash.route
+            SharedNavGraph.AUTH
         }
 
 //    if (!TestConfig.isTest) {
@@ -40,7 +43,12 @@ fun RebonnteApp(){
 
     Surface {
         DismissKeyboardOnTapOutside {
-            SharedNavGraph(
+//            SharedNavGraph(
+//                navHostController = navController,
+//                startDestination = startDestination,
+//                logoRes = R.drawable.rebonnte_logo
+//            )
+            RootNavGraph(
                 navHostController = navController,
                 startDestination = startDestination,
                 logoRes = R.drawable.rebonnte_logo

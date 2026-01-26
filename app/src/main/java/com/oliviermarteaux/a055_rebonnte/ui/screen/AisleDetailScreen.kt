@@ -50,7 +50,7 @@ fun AisleDetailScreen(
         SharedScaffold(
             title = stringResource(RebonnteScreen.AisleDetail.titleRes),
             screenContentDescription = cdScreen,
-            onBackClick = navigateBack,
+            onBackClick = { navigateBack() },
             // top app bar
             topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
             //_ semantic state
@@ -88,9 +88,9 @@ fun AisleDetailScreen(
                         isLastPage = isLastPage,
                         loadNextPage = ::loadNextPage
                     ) { medicine ->
-                            selectMedicine(medicine)
-                            switchToMedicineEditionMode()
-                            navigateToAddOrEditMedicineScreen()
+                        selectMedicine(medicine)
+                        switchToMedicineEditionMode()
+                        navigateToAddOrEditMedicineScreen()
                     }
                 }
             }

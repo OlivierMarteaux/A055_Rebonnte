@@ -33,6 +33,11 @@ class AisleListViewModel @Inject constructor(
         private set
     val aisleList = mutableStateListOf<Aisle>()
 
+    fun resetAisleList(){
+        homeUiState = ListUiState.Loading
+        aisleList.clear()
+    }
+
     //_ ############################################################################################
     //_ List paging
     //_ ############################################################################################
@@ -42,7 +47,7 @@ class AisleListViewModel @Inject constructor(
     var isLoading = false
         private set
 
-    fun getAllAisle(){
+    fun getAllAisleForPicker(){
         log.d("AisleListViewModel::getAllAisle")
         lastSnapshot = null
         isLastPage = false
@@ -116,8 +121,6 @@ class AisleListViewModel @Inject constructor(
             signInTestUser()
             loadFirstPage()
         }
-
-        // fixed: do not load in init as it leads to auth error when instantiated on SplashScreen
-//        loadFirstPage()
+        loadFirstPage()
     }
 }
