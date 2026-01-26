@@ -1,7 +1,7 @@
 package com.oliviermarteaux.a055_rebonnte.ui.navigation
 
 import androidx.navigation.NamedNavArgument
-import com.oliviermarteaux.a055_rebonnte.R
+import com.oliviermarteaux.shared.compose.R
 
 /**
  * A sealed class that represents the different screens in the application.

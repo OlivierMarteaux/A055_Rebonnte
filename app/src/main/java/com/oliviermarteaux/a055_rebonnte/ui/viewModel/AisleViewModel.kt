@@ -6,14 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.oliviermarteaux.a055_rebonnte.data.repository.AisleRepository
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
+import com.oliviermarteaux.localshared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
-import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,7 +24,7 @@ class AisleViewModel @Inject constructor(
     private val aisleRepository: AisleRepository,
     userRepository: UserRepository,
     isOnlineFlow: Flow<Boolean>,
-    log: Logger
+    private val log: Logger
 ) : AuthUserViewModel(
     userRepository = userRepository,
     isOnlineFlow = isOnlineFlow,
@@ -44,7 +43,6 @@ class AisleViewModel @Inject constructor(
 
     fun resetAddAisleUiState() {
         viewModelScope.launch {
-            delay(3000)
             addAisleUiState = UiState.Idle
         }
     }
@@ -74,6 +72,7 @@ class AisleViewModel @Inject constructor(
                     aisleRepository.addAisle(aisle.copy(author = user)).fold(
                         onSuccess = {
                             addAisleUiState = UiState.Success(Unit)
+                            log.d("AisleViewModel: addAisleUiState is $addAisleUiState")
                             withContext(layoutDispatcher) { onResult() }
                                     },
                         onFailure = {
@@ -85,7 +84,12 @@ class AisleViewModel @Inject constructor(
             },
             onNoUserLogged = {
                 showAuthErrorToast()
+                addAisleUiState = UiState.Idle
             }
         )
+    }
+
+    init {
+        log.d("AisleViewModel: init")
     }
 }

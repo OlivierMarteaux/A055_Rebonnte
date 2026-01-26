@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.CollectionInfo
@@ -19,8 +18,6 @@ import androidx.compose.ui.semantics.collectionInfo
 import androidx.compose.ui.semantics.collectionItemInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.common.collect.Multimaps.index
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 
 @Composable
@@ -33,7 +30,9 @@ fun <T> RebonnteItemList(
     itemText: @Composable (T) -> String,
     onItemClick: (T) -> Unit = {},
     isLastPage: Boolean,
-    loadNextPage: () -> Unit
+    loadNextPage: () -> Unit,
+    itemModifier: Modifier = Modifier,
+    lazyListModifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
 
@@ -41,7 +40,7 @@ fun <T> RebonnteItemList(
         LazyColumn(
             state = listState,
             verticalArrangement = Arrangement.spacedBy(SharedPadding.xs),
-            modifier = Modifier.semantics{
+            modifier = lazyListModifier.semantics{
                 collectionInfo = CollectionInfo(
                     rowCount = itemList.size,
                     columnCount = 1
@@ -56,7 +55,7 @@ fun <T> RebonnteItemList(
                     title = itemTitle(item)?:getItemTitle(item)?:"",
                     text = itemText(item),
                     onClick = { onItemClick(item) },
-                    modifier = Modifier.semantics {
+                    modifier = itemModifier.semantics {
                         collectionItemInfo = CollectionItemInfo(index, 1, 0, 1)
                     }
                 )

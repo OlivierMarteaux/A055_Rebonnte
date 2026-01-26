@@ -1,18 +1,18 @@
 package com.oliviermarteaux.a055_rebonnte
 
-import android.Manifest
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
-import com.oliviermarteaux.a055_rebonnte.ui.navigation.SharedNavGraph
-import com.oliviermarteaux.localshared.utils.TestConfig
+import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
+import com.oliviermarteaux.a055_rebonnte.ui.navigation.RootNavGraph
+import com.oliviermarteaux.shared.utils.TestConfig
 import com.oliviermarteaux.shared.composables.startup.DismissKeyboardOnTapOutside
-import com.oliviermarteaux.shared.composables.startup.RequestPermissionsOnFirstLaunch
 import com.oliviermarteaux.shared.navigation.LogRoutes
 import com.oliviermarteaux.shared.navigation.Screen
+import com.oliviermarteaux.shared.navigation.SharedNavGraph
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
@@ -24,11 +24,13 @@ fun RebonnteApp(){
 
     val startDestination: String =
         if (TestConfig.isTest) {
-            Log.d("OM_TAG", "start screen = ${Screen.Home.route}")
-            Screen.Home.route
+        Log.d("OM_TAG", "start screen = ${RebonnteScreen.AisleList.route}")
+//            RebonnteScreen.AisleList.route
+            SharedNavGraph.APP
         } else {
             Log.d("OM_TAG", "start screen = ${Screen.Splash.route}")
-            Screen.Splash.route
+//            Screen.Splash.route
+            SharedNavGraph.AUTH
         }
 
 //    if (!TestConfig.isTest) {
@@ -41,7 +43,12 @@ fun RebonnteApp(){
 
     Surface {
         DismissKeyboardOnTapOutside {
-            SharedNavGraph(
+//            SharedNavGraph(
+//                navHostController = navController,
+//                startDestination = startDestination,
+//                logoRes = R.drawable.rebonnte_logo
+//            )
+            RootNavGraph(
                 navHostController = navController,
                 startDestination = startDestination,
                 logoRes = R.drawable.rebonnte_logo

@@ -1,0 +1,136 @@
+package com.oliviermarteaux.a055_rebonnte.ui.navigation
+
+///**
+// * The main navigation graph for the application.
+// *
+// * @param navHostController The navigation controller for the application.
+// */
+//
+//@Composable
+//fun SharedNavGraph(
+//    navHostController: NavHostController,
+//    startDestination: String,
+//    logoRes: Int = -1,
+//    aisleViewModel: AisleViewModel = hiltViewModel(),
+//    medicineViewModel: MedicineViewModel = hiltViewModel(),
+//    medicineListViewModel: MedicineListViewModel = hiltViewModel(),
+//    aisleListViewModel: AisleListViewModel = hiltViewModel()
+//){
+//    val imageModifier: Modifier = Modifier.clip(shape = SharedShapes.medium)
+//    NavHost(
+//        navController = navHostController,
+//        startDestination = startDestination
+//    ) {
+//        /*_ SPLASH SCREEN ############################################################################*/
+//        composable(route = Screen.Splash.route) {
+//            SplashScreen(
+//                logoDrawableRes = logoRes,
+//                imageModifier = Modifier.clip(shape = RoundedCornerShape(24.dp)),
+//                serverClientIdStringRes = R.string.default_web_client_id,
+//                navigateToLoginScreen = { navHostController.navigate(Screen.Login.route) },
+//                navigateToHomeScreen = {
+//                    aisleListViewModel.loadFirstPage()
+//                    navHostController.navigate(RebonnteScreen.AisleList.route)
+//                                       },
+//            )
+//        }
+//        /*_ LOGIN SCREEN #############################################################################*/
+//        composable(route = Screen.Login.route) {
+//            LoginScreen(
+//                logoDrawableRes = logoRes,
+//                imageModifier = imageModifier,
+//                onBackClick = { navHostController.navigateUp() },
+//                navigateToPasswordScreen = {
+//                        email -> navHostController.navigate("password/$email")
+//                },
+//                navigateToHomeScreen = { navHostController.navigate(Screen.Home.route) }
+//            )
+//        }
+//        /*_ PASSWORD SCREEN ##########################################################################*/
+//        composable(
+//            route = Screen.Password.routeWithArgs,
+//            arguments = Screen.Password.navArguments
+//        ) {
+//            PasswordScreen(
+//                logoDrawableRes = logoRes,
+//                imageModifier = imageModifier,
+//                onBackClick = { navHostController.navigateUp() },
+//                navigateToHomeScreen = {
+//                    aisleListViewModel.loadFirstPage()
+//                    navHostController.navigate(RebonnteScreen.AisleList.route){
+//                        popUpTo(0) { inclusive = true } // clear everything
+//                    }
+//                },
+//                navigateToPasswordResetScreen = {
+//                        email -> navHostController.navigate(Screen.Reset.route + "/${email}")
+//                }
+//            )
+//        }
+//        /*_ RESET SCREEN #############################################################################*/
+//        composable(
+//            route = Screen.Reset.routeWithArgs,
+//            arguments = Screen.Reset.navArguments,
+//        ) {
+//            ResetScreen(
+//                onBackClick = { navHostController.navigateUp() },
+//                navigateToLoginScreen = { navHostController.navigate(Screen.Login.route) },
+//                logoDrawableRes = logoRes,
+//                imageModifier = imageModifier,
+//            )
+//        }
+//        /*_ AISLE LIST SCREEN ##############################################################################*/
+//        composable(route = RebonnteScreen.AisleList.route) {
+//            AisleListScreen(
+//                aisleListViewModel = aisleListViewModel,
+//                aisleViewModel = aisleViewModel,
+//                medicineListViewModel = medicineListViewModel,
+//                navController = navHostController,
+//                navigateToDetailScreen = {navHostController.navigate(RebonnteScreen.AisleDetail.route) },
+//                navigateToAddScreen = { navHostController.navigate(RebonnteScreen.AddAisle.route) }
+//            )
+//        }
+//        /*_ AISLE DETAIL SCREEN ##############################################################################*/
+//        composable(route = RebonnteScreen.AisleDetail.route) {
+//            AisleDetailScreen(
+//                medicineViewModel = medicineViewModel,
+//                medicineListViewModel = medicineListViewModel,
+//                aisleViewModel = aisleViewModel,
+//                navigateToAddOrEditMedicineScreen = {
+//                    navHostController.navigate(RebonnteScreen.AddOrEditMedicine.route)
+//                },
+//                navigateBack = { navHostController.navigateUp() },
+//            )
+//        }
+//        /*_ MEDICINE LIST SCREEN ##############################################################################*/
+//        composable(route = RebonnteScreen.MedicineList.route) {
+//            MedicineListScreen(
+//                medicineViewModel = medicineViewModel,
+//                medicineListViewModel = medicineListViewModel,
+//                aisleListViewModel = aisleListViewModel,
+//                navController = navHostController,
+//                navigateToAddOrEditMedicineScreen = {
+//                    aisleViewModel.selectAisle(Aisle())
+//                    navHostController.navigate(RebonnteScreen.AddOrEditMedicine.route)
+//                },
+//            )
+//        }
+//        /*_ ADD AISLE SCREEN ##########################################################################*/
+//        composable(route = RebonnteScreen.AddAisle.route) {
+//            AddAisleScreen(
+//                navigateBack = { navHostController.navigateUp() },
+//                aisleViewModel = aisleViewModel,
+//                aisleListViewModel = aisleListViewModel
+//            )
+//        }
+//        /*_ ADD OR EDIT MEDICINE SCREEN ##########################################################################*/
+//        composable(route = RebonnteScreen.AddOrEditMedicine.route) {
+//            AddOrEditMedicineScreen(
+//                medicineViewModel = medicineViewModel,
+//                aisleListViewModel = aisleListViewModel,
+//                medicineListViewModel = medicineListViewModel,
+//                aisleViewModel = aisleViewModel,
+//                navigateBack = { navHostController.navigateUp() },
+//            )
+//        }
+//    }
+//}

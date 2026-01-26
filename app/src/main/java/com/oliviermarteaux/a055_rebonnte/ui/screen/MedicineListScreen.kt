@@ -17,23 +17,22 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.MedicineSortOption
-import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
-import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteBottomAppBar
+import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteBottomNavItem
+import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
-import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.composables.SharedScaffold
+import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import kotlinx.coroutines.delay
-import com.oliviermarteaux.shared.compose.R as oR
+import com.oliviermarteaux.shared.compose.R
+import com.oliviermarteaux.shared.utils.CrudAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,7 +78,7 @@ fun MedicineListScreen(
             val cdItems = stringResource(R.string.medicines)
             val cdScreen =
                 if (addOrEditMedicineUiState is UiState.Success) {
-                    resetAddOrEditMedicineUiState()
+//                    resetAddOrEditMedicineUiState()
                     when (medicineCrudAction){
                         CrudAction.ADD -> stringResource(R.string.successfully_created, cdItem, medicine.name)
                         CrudAction.UPDATE -> stringResource(R.string.successfully_edited, cdItem, medicine.name)
@@ -96,7 +95,7 @@ fun MedicineListScreen(
             val cdFabAction = stringResource(R.string.add_a_new, cdItem)
             val cdFabButton =
                 stringResource(R.string.button_double_tap_to, cdFabLabel, cdFabAction)
-            val cdCustomAccessibilityActionClear = stringResource(oR.string.clear_all_text)
+            val cdCustomAccessibilityActionClear = stringResource(R.string.clear_all_text)
 
             SharedScaffold(
                 title = stringResource(RebonnteScreen.MedicineList.titleRes),
@@ -106,10 +105,12 @@ fun MedicineListScreen(
                 // search bar
                 query = queryFieldValue,
                 onQueryChange = ::filterMedicineByName,
-                searchLabel = stringResource(R.string.look_for_an, cdItem),
+                searchLabel = stringResource(R.string.look_for_a, cdItem),
                 searchBarIcon = IconSource.VectorIcon(Icons.Default.Clear),
                 searchBarIconSemantics = cdCustomAccessibilityActionClear,
                 onSearchBarIconClick = { clearQuery(); hideSearchBar() },
+                searchBarIconModifier = Modifier.testTag("SearchBarClearIcon"),
+                searchBarTextFieldModifier = Modifier.testTag("SearchField"),
                 toggleSearchBar = ::toggleSearchBar,
                 searchBarDisplayed = searchBarDisplayed,
                 onSearch = { focusOnSearchResult() },
@@ -122,21 +123,19 @@ fun MedicineListScreen(
                 bottomBar = { RebonnteBottomAppBar(
                     navController = navController,
                     item1 = RebonnteBottomNavItem.AisleNavItem,
-                    callback1 = {
-                        aisleListViewModel.loadFirstPage()
-                    },
+                    callback1 = aisleListViewModel::loadFirstPage,
                     item2 = RebonnteBottomNavItem.MedicineNavItem
                 )},
                 // fab button
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
-                fabModifier = modifier.testTag("MedicineListScreenFab"),
+                fabModifier = modifier.testTag("AddMedicine"),
                 onFabClick = //{populateFakeMedicineListForDemo(homeViewModel.aisleList)}
                     {
                         checkUserState(
                             onUserLogged = {
                                 hideSearchBar()
-                                aisleListViewModel.getAllAisle()
+                                aisleListViewModel.getAllAisleForPicker()
                                 selectMedicine(Medicine())
                                 switchToMedicineCreationMode()
                                 navigateToAddOrEditMedicineScreen()
@@ -163,9 +162,9 @@ fun MedicineListScreen(
                     itemId =  Medicine::id,
                     itemTitle =  Medicine::name,
                     itemText = { medicine: Medicine ->
-                        stringResource(R.string.stock, medicine.stock) },
+                        stringResource(R.string.stock_value, medicine.stock) },
                     onSearchFocusRequester = onSearchFocusRequester,
-                    reloadItemList = ::loadFirstPage,
+                    reloadItemList = ::getMedicineSortedByDescendingTimestampPaged,
                     showFab = ::showFab,
                     hideFab = ::hideFab,
                     actionUiState = addOrEditMedicineUiState,
@@ -173,7 +172,9 @@ fun MedicineListScreen(
                     resetUiState = ::resetAddOrEditMedicineUiState,
                     resetItemCrudAction = ::resetMedicineCrudAction,
                     isLastPage = isLastPage,
-                    loadNextPage = ::loadNextPage
+                    loadNextPage = ::loadNextPage,
+                    itemModifier = Modifier.testTag("MedicineItem"),
+                    lazyListModifier = Modifier.testTag("MedicineLazyList")
                 ){ medicine ->
                     hideSearchBar()
                     selectMedicine(medicine)

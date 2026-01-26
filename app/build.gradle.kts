@@ -74,7 +74,7 @@ android {
 
         // choose test runner
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunner = "com.oliviermarteaux.a054_eventorias.test.MyCucumberTestRunner"
+        testInstrumentationRunner = "com.oliviermarteaux.a055_rebonnte.test.MyCucumberTestRunner"
     }
 
     //_ for Firebase App Distribution via Github Action: update version from github tag

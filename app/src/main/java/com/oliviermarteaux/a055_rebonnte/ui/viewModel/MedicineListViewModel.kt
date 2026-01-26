@@ -1,6 +1,5 @@
 package com.oliviermarteaux.a055_rebonnte.ui.viewModel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -8,19 +7,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentSnapshot
-import com.oliviermarteaux.a055_rebonnte.data.fake.fakeMedicineList
 import com.oliviermarteaux.a055_rebonnte.data.repository.MedicineRepository
-import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.MedicineSortOption
-import com.oliviermarteaux.localshared.utils.TestConfig
+import com.oliviermarteaux.localshared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
-import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.ListUiState
 import com.oliviermarteaux.shared.utils.Logger
+import com.oliviermarteaux.shared.utils.TestConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,7 +24,7 @@ import javax.inject.Inject
 class MedicineListViewModel @Inject constructor(
     private val medicineRepository: MedicineRepository,
     private val userRepository: UserRepository,
-    log: Logger,
+    private val log: Logger,
     isOnlineFlow: Flow<Boolean>
 ) : AuthUserViewModel(
     userRepository = userRepository,
@@ -40,11 +35,17 @@ class MedicineListViewModel @Inject constructor(
     var medicineListUiState: ListUiState<Medicine> by mutableStateOf(ListUiState.Loading)
         private set
 
+    fun resetMedicineList(){
+        medicineListUiState = ListUiState.Loading
+        medicineList.clear()
+    }
+
     //_ ############################################################################################
     //_ Loading whole list
     //_ ############################################################################################
 
-    fun getAllMedicineByDescendingTimestamp(){
+    // Used only for the pickers list (load the whole list - not paged)
+    fun getMedicineSortedByDescendingTimestampPaged(){
         queryFieldValue = TextFieldValue("")
         currentSortOption = MedicineSortOption.DESCENDING_TIMESTAMP
         aisleId = ""
@@ -68,7 +69,7 @@ class MedicineListViewModel @Inject constructor(
     }
     fun filterMedicineByAisleId(selectedAisleId: String) {
         aisleId = selectedAisleId
-        Log.d("OM_TAG", "MedicineListViewModel::filterMedicineByAisleId: selected aisle Id = $aisleId")
+        log.d("MedicineListViewModel::filterMedicineByAisleId: selected aisle Id = $aisleId")
         loadFirstPage()
     }
 
@@ -89,11 +90,12 @@ class MedicineListViewModel @Inject constructor(
     private var lastSnapshot: DocumentSnapshot? = null
     var isLastPage by mutableStateOf(false)
         private set
+
     var isLoading = false
         private set
 
-    fun loadFirstPage() {
-        Log.d("OM_TAG","MedicineListViewModel::loadFirstPage")
+    private fun loadFirstPage() {
+        log.d("MedicineListViewModel::loadFirstPage")
         lastSnapshot = null
         isLastPage = false
         medicineList.clear()
@@ -101,10 +103,10 @@ class MedicineListViewModel @Inject constructor(
     }
 
     fun loadNextPage() {
-        Log.d("OM_TAG","MedicineListViewModel::loadNextPage: isLastPage = $isLastPage")
-        Log.d("OM_TAG","MedicineListViewModel::loadNextPage: isLoading = $isLoading")
-        Log.d("OM_TAG","MedicineListViewModel::loadNextPage: return = ${(isLastPage || isLoading)}")
-        if (isLastPage || isLoading) return
+        log.d("MedicineListViewModel::loadNextPage: isLastPage = $isLastPage")
+        if (isLastPage/* || isLoading*/) return
+
+        log.d("MedicineListViewModel::loadNextPage: query = ${queryFieldValue.text.lowercase()}")
 
         viewModelScope.launch {
             isLoading = true
@@ -147,20 +149,20 @@ class MedicineListViewModel @Inject constructor(
     //_ ############################################################################################
     //_ Pre-populating
     //_ ############################################################################################
-    fun populateFakeMedicineListForDemo(
-        aisleList: List<Aisle>,
-        dataDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    ) {
-        viewModelScope.launch(dataDispatcher) {
-            fakeMedicineList.forEach {
-                medicineRepository.addMedicine(
-                    it.copy(
-                        aisle = aisleList.random()
-                    )
-                )
-            }
-        }
-    }
+//    fun populateFakeMedicineListForDemo(
+//        aisleList: List<Aisle>,
+//        dataDispatcher: CoroutineDispatcher = Dispatchers.IO,
+//    ) {
+//        viewModelScope.launch(dataDispatcher) {
+//            fakeMedicineList.forEach {
+//                medicineRepository.addMedicine(
+//                    it.copy(
+//                        aisle = aisleList.random()
+//                    )
+//                )
+//            }
+//        }
+//    }
 
     //_ ############################################################################################
     //_ Init
@@ -171,5 +173,7 @@ class MedicineListViewModel @Inject constructor(
 
         // Sign in the test user in case of test config
         if (TestConfig.isTest) signInTestUser()
+
+        loadFirstPage()
     }
 }

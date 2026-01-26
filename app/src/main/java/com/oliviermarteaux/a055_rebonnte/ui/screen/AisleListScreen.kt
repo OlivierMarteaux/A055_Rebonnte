@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
@@ -21,11 +20,12 @@ import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteBottomAppBar
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteBottomNavItem
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
+import com.oliviermarteaux.shared.compose.R
+import com.oliviermarteaux.shared.utils.CrudAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +41,10 @@ fun AisleListScreen(
     with(aisleListViewModel) {
         with (aisleViewModel) {
 
+            LaunchedEffect(addAisleUiState){
+                Log.d("OM_TAG", "AisleListScreen: addAisleUiState is $addAisleUiState")
+            }
+
             var fabDisplayed by rememberSaveable { mutableStateOf(false) }
             fun showFab(){ fabDisplayed = true }
             fun hideFab(){ fabDisplayed = false }
@@ -50,7 +54,7 @@ fun AisleListScreen(
             val cdScreenTitle = stringResource(RebonnteScreen.AisleList.titleRes)
             val cdScreen =
                 if (addAisleUiState is UiState.Success) {
-                    resetAddAisleUiState()
+//                    resetAddAisleUiState()
                     stringResource(R.string.successfully_created, aisle.name, cdItem)
                 }
                 else
@@ -74,12 +78,12 @@ fun AisleListScreen(
                     navController = navController,
                     item1 = RebonnteBottomNavItem.AisleNavItem,
                     item2 = RebonnteBottomNavItem.MedicineNavItem,
-                    callback2 = medicineListViewModel::getAllMedicineByDescendingTimestamp
+                    callback2 = medicineListViewModel::getMedicineSortedByDescendingTimestampPaged
                 )},
                 // fab button
                 fabVisible = fabDisplayed,
                 fabContentDescription = cdFabButton,
-                fabModifier = modifier.testTag("HomeScreenFab"),
+                fabModifier = modifier.testTag("AddAisle"),
                 onFabClick = //::populateFakeAisleListForDemo
                     {
                         checkUserState(

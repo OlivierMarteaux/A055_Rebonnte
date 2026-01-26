@@ -15,16 +15,15 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import com.oliviermarteaux.a055_rebonnte.R
-import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
+import com.oliviermarteaux.localshared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.composables.CenteredCircularProgressIndicator
 import com.oliviermarteaux.shared.composables.SharedToast
-import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.ListUiState
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import com.oliviermarteaux.shared.ui.theme.ToastPadding
-import com.oliviermarteaux.shared.compose.R as oR
+import com.oliviermarteaux.shared.compose.R
+import com.oliviermarteaux.shared.utils.CrudAction
 
 @Composable
 fun <T> RebonnteItemListBody(
@@ -49,6 +48,8 @@ fun <T> RebonnteItemListBody(
     hideFab: () -> Unit = {},
     isLastPage: Boolean,
     loadNextPage: () -> Unit,
+    itemModifier: Modifier = Modifier,
+    lazyListModifier: Modifier = Modifier,
     //_ trailing lambda !
     onItemClick: (T) -> Unit
 ){
@@ -58,7 +59,7 @@ fun <T> RebonnteItemListBody(
         ) {
             //_ UiState management: Empty, Error, Loading, Success
             val cdLoadingState =
-                stringResource(oR.string.please_wait_server_connection_in_progress)
+                stringResource(R.string.please_wait_server_connection_in_progress)
             when (listUiState) {
                 is ListUiState.Loading -> {
                     hideFab()
@@ -101,49 +102,67 @@ fun <T> RebonnteItemListBody(
                         itemText = itemText,
                         onItemClick = onItemClick,
                         isLastPage = isLastPage,
-                        loadNextPage = loadNextPage
+                        loadNextPage = loadNextPage,
+                        itemModifier = itemModifier,
+                        lazyListModifier = lazyListModifier
                     )
                 }
             }
-            if (authError) SharedToast(
-                text = stringResource(R.string.an_account_is_mandatory_to_add_or_edit_a, itemLabel),
-                bottomPadding = ToastPadding.high
-            )
-            if (networkError) SharedToast(
-                text = stringResource(oR.string.network_error_check_your_internet_connection),
-                bottomPadding = ToastPadding.veryHigh
-            )
-
+            when {
+                authError -> SharedToast(
+                    text = stringResource(R.string.an_account_is_mandatory_to_add_or_edit_a, itemLabel),
+                    bottomPadding = ToastPadding.high
+                )
+                networkError -> SharedToast (
+                    text = stringResource(R.string.network_error_check_your_internet_connection),
+                    bottomPadding = ToastPadding.veryHigh
+                )
+                successfulItemCreation -> {
+                    Log.d("OM_TAG", "RebonnteListBody: successful item creation")
+                    SharedToast(
+                        text = stringResource(
+                            R.string.successfully_created,
+                            itemLabel,
+                            itemTitle(item)
+                        ),
+                        bottomPadding = ToastPadding.high
+                    )
+                }
+                successfulItemUpdate -> {
+                    Log.d("OM_TAG", "RebonnteListBody: successful item update")
+                    SharedToast(
+                        text = stringResource(
+                            R.string.successfully_edited,
+                            itemLabel,
+                            itemTitle(item)
+                        ),
+                        bottomPadding = ToastPadding.high
+                    )
+                }
+                successfulItemDeletion -> {
+                    Log.d("OM_TAG", "RebonnteListBody: successful item deletion")
+                    SharedToast(
+                        text = stringResource(
+                            R.string.successfully_deleted,
+                            itemLabel,
+                            itemTitle(item)
+                        ),
+                        bottomPadding = ToastPadding.high
+                    )
+                }
+            }
             if (actionUiState is UiState.Success) {
                 Log.d("OM_TAG", "RebonnteListBody: actionUiState is success")
                 when (itemCrudAction) {
-                    CrudAction.ADD -> {
-                        Log.d("OM_TAG", "RebonnteListBody: action is creation")
-                        SharedToast(
-                            text = stringResource(R.string.successfully_created, itemLabel, itemTitle(item)),
-                            bottomPadding = ToastPadding.high
-                        )
-                    }
-                    CrudAction.UPDATE -> {
-                        Log.d("OM_TAG", "RebonnteListBody: action is edition")
-                        SharedToast(
-                            text = stringResource(R.string.successfully_edited, itemLabel, itemTitle(item)),
-                            bottomPadding = ToastPadding.high
-                        )
-                    }
-                    CrudAction.DELETE -> {
-                        Log.d("OM_TAG", "RebonnteListBody: action is deletion")
-                        SharedToast(
-                            text = stringResource(R.string.successfully_deleted, itemLabel, itemTitle(item)),
-                            bottomPadding = ToastPadding.high
-                        )
-                    }
+                    CrudAction.ADD -> showSuccessfulItemCreationToast()
+                    CrudAction.UPDATE -> showSuccessfulItemUpdateToast()
+                    CrudAction.DELETE -> showSuccessfulItemDeletionToast()
                     else -> {Log.d("OM_TAG", "RebonnteListBody: no CrudAction set")}
                 }
-                reloadItemList()
-                resetUiState()
                 resetItemCrudAction?.invoke()
-            }
+                resetUiState()
+                reloadItemList()
+            } else { Log.d("OM_TAG", "RebonnteItemListBody: actionUiState is $actionUiState")}
         }
     }
 }

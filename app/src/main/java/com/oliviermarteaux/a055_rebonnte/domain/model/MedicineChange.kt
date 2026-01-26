@@ -2,7 +2,8 @@ package com.oliviermarteaux.a055_rebonnte.domain.model
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.oliviermarteaux.a055_rebonnte.R
+import com.google.firebase.firestore.Exclude
+import com.oliviermarteaux.shared.compose.R
 import com.oliviermarteaux.shared.extensions.toDate
 import com.oliviermarteaux.shared.extensions.toLocalDateString
 import com.oliviermarteaux.shared.extensions.toLocalTimeString
@@ -27,15 +28,19 @@ data class MedicineChange(
 
 ): Serializable {
 
+    @get:Exclude
     val localeDate: LocalDate?
         get() = date?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
 
+    @get:Exclude
     val localeDateString: String
         get() = localeDate?.toLocalDateString() ?: ""
 
+    @get:Exclude
     val localeTime: LocalTime?
         get() = time?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalTime()
 
+    @get:Exclude
     val localeTimeString: String
         get() = localeTime?.toLocalTimeString() ?: ""
 

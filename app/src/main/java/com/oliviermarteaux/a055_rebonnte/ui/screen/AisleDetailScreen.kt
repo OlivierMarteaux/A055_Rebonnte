@@ -7,26 +7,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.oliviermarteaux.a055_rebonnte.R
 import com.oliviermarteaux.a055_rebonnte.domain.model.Medicine
 import com.oliviermarteaux.a055_rebonnte.ui.composable.RebonnteItemListBody
 import com.oliviermarteaux.a055_rebonnte.ui.navigation.RebonnteScreen
-import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.AisleViewModel
-import com.oliviermarteaux.a055_rebonnte.ui.viewModel.CrudAction
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineListViewModel
 import com.oliviermarteaux.a055_rebonnte.ui.viewModel.MedicineViewModel
-import com.oliviermarteaux.localshared.composables.SharedScaffold
+import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
+import com.oliviermarteaux.shared.compose.R
+import com.oliviermarteaux.shared.utils.CrudAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AisleDetailScreen(
     modifier: Modifier = Modifier,
-    aisleViewModel: AisleViewModel,
     medicineListViewModel: MedicineListViewModel,
     medicineViewModel: MedicineViewModel,
+    aisleViewModel: AisleViewModel,
     navigateBack: () -> Unit = {},
     navigateToAddOrEditMedicineScreen: () -> Unit
 ) {
@@ -35,14 +34,11 @@ fun AisleDetailScreen(
         val cdContainer = stringResource(R.string.aisle)
         val cdItem = stringResource(R.string.medicine)
         val cdItems = stringResource(R.string.medicines)
-        val cdItemAction: String = run {
-            resetAddOrEditMedicineUiState()
-            when (medicineCrudAction) {
-                CrudAction.ADD -> stringResource(R.string.successfully_created, cdItem, medicine.name)
-                CrudAction.UPDATE -> stringResource(R.string.successfully_edited, cdItem, medicine.name)
-                CrudAction.DELETE -> stringResource(R.string.successfully_deleted, cdItem, medicine.name)
-                else -> ""
-            }
+        val cdItemAction: String = when (medicineCrudAction) {
+            CrudAction.ADD -> stringResource(R.string.successfully_created, cdItem, medicine.name)
+            CrudAction.UPDATE -> stringResource(R.string.successfully_edited, cdItem, medicine.name)
+            CrudAction.DELETE -> stringResource(R.string.successfully_deleted, cdItem, medicine.name)
+            else -> ""
         }
         val cdScreen = stringResource(
             R.string.you_are_on_the_screen_here_you_can_browse_all_the_in_this,
@@ -54,7 +50,7 @@ fun AisleDetailScreen(
         SharedScaffold(
             title = stringResource(RebonnteScreen.AisleDetail.titleRes),
             screenContentDescription = cdScreen,
-            onBackClick = navigateBack,
+            onBackClick = { navigateBack() },
             // top app bar
             topAppBarModifier = Modifier.padding(horizontal = SharedPadding.small),
             //_ semantic state
@@ -62,8 +58,7 @@ fun AisleDetailScreen(
             semanticStateText = cdItemAction
         ) { contentPadding ->
             with(medicineListViewModel) {
-                with(aisleViewModel) {
-
+                with (aisleViewModel) {
                     LaunchedEffect(medicineListUiState) {
                         Log.i(
                             "OM_TAG",
@@ -78,21 +73,20 @@ fun AisleDetailScreen(
                         listUiState = medicineListUiState,
                         listViewModel = medicineListViewModel,
                         itemLabel = stringResource(R.string.medicine),
-                        itemList = medicineList/*.filter { it.aisle == aisle }*/,
+                        itemList = medicineList,
                         item = medicine,
                         itemId = Medicine::id,
-                        itemTitle = Medicine::name ,
+                        itemTitle = Medicine::name,
                         itemText = { medicine: Medicine ->
-                            stringResource(R.string.stock, medicine.stock)
-                                   },
-                        reloadItemList = ::loadFirstPage,
+                            stringResource(R.string.stock_value, medicine.stock)
+                        },
+                        reloadItemList = { filterMedicineByAisleId(aisle.id) },
                         actionUiState = addOrEditMedicineUiState,
                         itemCrudAction = medicineCrudAction,
                         resetItemCrudAction = ::resetMedicineCrudAction,
                         resetUiState = ::resetAddOrEditMedicineUiState,
                         isLastPage = isLastPage,
                         loadNextPage = ::loadNextPage
-
                     ) { medicine ->
                         selectMedicine(medicine)
                         switchToMedicineEditionMode()

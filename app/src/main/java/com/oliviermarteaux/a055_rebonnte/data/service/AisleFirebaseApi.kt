@@ -5,10 +5,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.oliviermarteaux.a055_rebonnte.domain.model.Aisle
-import com.oliviermarteaux.a055_rebonnte.ui.PagedList
-import kotlinx.coroutines.channels.awaitClose
+import com.oliviermarteaux.shared.firebase.firestore.utils.PagedList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -55,33 +53,33 @@ class AisleFirebaseApi: AisleApi {
         emit(Result.failure(e))
     }
     
-    override fun getAislesSortedByDescTimestamp(): Flow<Result<List<Aisle>>> = callbackFlow {
-
-        // throw IllegalStateException("Forced exception for testing")
-
-        val listenerRegistration = aislesCollection
-            .orderBy("timestamp", Query.Direction.DESCENDING)
-            .addSnapshotListener { snapshot, error ->
-                when {
-                    error != null -> {
-                        Log.e("OM_TAG", "AisleFirebaseApi: getAislesSortedByDescTimestamp(): Firestore listener error: ${error.message}", error)
-                        trySend(Result.failure(error))
-                    }
-
-                    snapshot != null -> {
-                        val aisles = snapshot.documents.mapNotNull { doc ->
-                            doc.toObject(Aisle::class.java)?.copy(id = doc.id)
-                        }
-                        trySend(Result.success(aisles))
-                    }
-                }
-            }
-        awaitClose { listenerRegistration.remove() }
-    }.catch { e ->
-        // catches coroutine/flow cancellation or unexpected exceptions
-        Log.e("OM_TAG", "AisleFirebaseApi: getAislesSortedByDescTimestamp(): Flow exception: ${e.message}", e)
-        emit(Result.failure(e))
-    }
+//    override fun getAislesSortedByDescTimestamp(): Flow<Result<List<Aisle>>> = callbackFlow {
+//
+//        // throw IllegalStateException("Forced exception for testing")
+//
+//        val listenerRegistration = aislesCollection
+//            .orderBy("timestamp", Query.Direction.DESCENDING)
+//            .addSnapshotListener { snapshot, error ->
+//                when {
+//                    error != null -> {
+//                        Log.e("OM_TAG", "AisleFirebaseApi: getAislesSortedByDescTimestamp(): Firestore listener error: ${error.message}", error)
+//                        trySend(Result.failure(error))
+//                    }
+//
+//                    snapshot != null -> {
+//                        val aisles = snapshot.documents.mapNotNull { doc ->
+//                            doc.toObject(Aisle::class.java)?.copy(id = doc.id)
+//                        }
+//                        trySend(Result.success(aisles))
+//                    }
+//                }
+//            }
+//        awaitClose { listenerRegistration.remove() }
+//    }.catch { e ->
+//        // catches coroutine/flow cancellation or unexpected exceptions
+//        Log.e("OM_TAG", "AisleFirebaseApi: getAislesSortedByDescTimestamp(): Flow exception: ${e.message}", e)
+//        emit(Result.failure(e))
+//    }
 
     override suspend fun addAisle(aisle: Aisle): Result<Unit> = runCatching {
 
