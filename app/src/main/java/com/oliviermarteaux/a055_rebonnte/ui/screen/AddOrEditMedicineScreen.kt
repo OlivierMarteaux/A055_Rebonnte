@@ -137,19 +137,54 @@ fun AddScreenBody(
     aisleListViewModel: AisleListViewModel,
     medicineCrudAction: CrudAction,
 ) {
-    val configuration = LocalConfiguration.current
-    val orientation = configuration.orientation
-    val isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isLandscape =
+        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    if(!isLandscape){
+    val stockError = isStockError(medicine, sourceMedicine, medicineCrudAction)
+    val saveEnabled = isSaveEnabled(medicine, sourceMedicine, medicineCrudAction)
+
+    if (isLandscape) {
+        Row(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = SharedPadding.large)
+        ) {
+            Column(Modifier.weight(1f)) {
+                AddScreenTextForm(
+                    medicine = medicine,
+                    updateMedicineName = updateMedicineName,
+                    updateMedicineStock = updateMedicineStock,
+                    updateMedicineAisle = updateMedicineAisle,
+                    aisleListViewModel = aisleListViewModel,
+                    medicineCreation = medicineCrudAction == CrudAction.ADD,
+                    isStockError = stockError
+                )
+
+                MedicineSaveButton(
+                    action = medicineCrudAction,
+                    enabled = saveEnabled,
+                    onAdd = addMedicine,
+                    onUpdate = updateMedicine
+                )
+            }
+
+            SpacerLarge()
+
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                MedicineChangeRecord(medicine)
+            }
+        }
+    } else {
         Column(
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(bottom = SharedPadding.xxl)
                 .padding(horizontal = SharedPadding.large),
-    //            .let { if (isLandscape) it.verticalScroll(rememberScrollState()) else it},
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AddScreenTextForm(
                 medicine = medicine,
@@ -158,118 +193,18 @@ fun AddScreenBody(
                 updateMedicineAisle = updateMedicineAisle,
                 aisleListViewModel = aisleListViewModel,
                 medicineCreation = medicineCrudAction == CrudAction.ADD,
-                isStockError = medicine.stock.toString().isEmpty()
-                        && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
+                isStockError = stockError
             )
 
-            RebonnteSaveButton(
-                onClick = {
-                    when (medicineCrudAction) {
-                        CrudAction.ADD -> {
-                            Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: AddMedicine()")
-                            addMedicine()
-                        }
-
-                        CrudAction.UPDATE -> {
-                            Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: UpdateMedicine()")
-                            updateMedicine()
-                        }
-
-                        else -> {}
-                    }
-                },
-                enabled = (
-                        medicine.name.isNotEmpty()
-                                && medicine.aisle.name.isNotEmpty()
-                                && medicine.stock.toString().isNotEmpty()
-                                && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
-                        )
+            MedicineSaveButton(
+                action = medicineCrudAction,
+                enabled = saveEnabled,
+                onAdd = addMedicine,
+                onUpdate = updateMedicine
             )
+
             SpacerLarge()
-            TextTitleLarge(text = stringResource(R.string.change_record))
-            SpacerMedium()
-
-            with(medicine) {
-                RebonnteItemList(
-                    itemId = MedicineChange::id,
-                    itemList = changeRecord,
-                    getItemTitle = MedicineChange::getTitle,
-                    itemText = MedicineChange::getDescription,
-                    isLastPage = true,
-                    loadNextPage = {}
-                )
-            }
-        }
-    } else {
-        Row(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(bottom = SharedPadding.small)
-                .padding(horizontal = SharedPadding.large),
-            //            .let { if (isLandscape) it.verticalScroll(rememberScrollState()) else it},
-        ) {
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                AddScreenTextForm(
-                    medicine = medicine,
-                    updateMedicineName = updateMedicineName,
-                    updateMedicineStock = updateMedicineStock,
-                    updateMedicineAisle = updateMedicineAisle,
-                    aisleListViewModel = aisleListViewModel,
-                    medicineCreation = medicineCrudAction == CrudAction.ADD,
-                    isStockError = medicine.stock.toString().isEmpty()
-                            && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
-                )
-
-                RebonnteSaveButton(
-                    onClick = {
-                        when (medicineCrudAction) {
-                            CrudAction.ADD -> {
-                                Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: AddMedicine()")
-                                addMedicine()
-                            }
-
-                            CrudAction.UPDATE -> {
-                                Log.d(
-                                    "OM_TAG",
-                                    "AddScreenBody::AddScreenSaveButton: UpdateMedicine()"
-                                )
-                                updateMedicine()
-                            }
-
-                            else -> {}
-                        }
-                    },
-                    enabled = (
-                            medicine.name.isNotEmpty()
-                                    && medicine.aisle.name.isNotEmpty()
-                                    && medicine.stock.toString().isNotEmpty()
-                                    && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
-                            )
-                )
-                SpacerLarge()
-            }
-            SpacerLarge()
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.weight(1f)
-            ) {
-                TextTitleLarge(text = stringResource(R.string.change_record))
-                SpacerMedium()
-
-                with(medicine) {
-                    RebonnteItemList(
-                        itemId = MedicineChange::id,
-                        itemList = changeRecord,
-                        getItemTitle = MedicineChange::getTitle,
-                        itemText = MedicineChange::getDescription,
-                        isLastPage = true,
-                        loadNextPage = {}
-                    )
-                }
-            }
+            MedicineChangeRecord(medicine)
         }
     }
 }
@@ -399,3 +334,214 @@ fun AddScreenTextForm(
         }
     }
 }
+
+@Composable
+private fun MedicineChangeRecord(medicine: Medicine) {
+    TextTitleLarge(text = stringResource(R.string.change_record))
+    SpacerMedium()
+
+    RebonnteItemList(
+        itemId = MedicineChange::id,
+        itemList = medicine.changeRecord,
+        getItemTitle = MedicineChange::getTitle,
+        itemText = MedicineChange::getDescription,
+        isLastPage = true,
+        loadNextPage = {}
+    )
+}
+
+@Composable
+private fun MedicineSaveButton(
+    action: CrudAction,
+    enabled: Boolean,
+    onAdd: () -> Unit,
+    onUpdate: () -> Unit
+) {
+    RebonnteSaveButton(
+        enabled = enabled,
+        onClick = {
+            when (action) {
+                CrudAction.ADD -> {
+                    Log.d("OM_TAG", "AddScreenBody::SaveButton: Add")
+                    onAdd()
+                }
+                CrudAction.UPDATE -> {
+                    Log.d("OM_TAG", "AddScreenBody::SaveButton: Update")
+                    onUpdate()
+                }
+                else -> Unit
+            }
+        }
+    )
+}
+
+private fun isStockError(
+    medicine: Medicine,
+    sourceMedicine: Medicine,
+    action: CrudAction
+): Boolean =
+    medicine.stock.toString().isEmpty() &&
+            (action != CrudAction.UPDATE || medicine.stock != sourceMedicine.stock)
+
+private fun isSaveEnabled(
+    medicine: Medicine,
+    sourceMedicine: Medicine,
+    action: CrudAction
+): Boolean =
+    medicine.name.isNotEmpty() &&
+            medicine.aisle.name.isNotEmpty() &&
+            medicine.stock.toString().isNotEmpty() &&
+            (action != CrudAction.UPDATE || medicine.stock != sourceMedicine.stock)
+
+//
+//@Composable
+//fun AddScreenBody(
+//    medicine: Medicine,
+//    sourceMedicine: Medicine,
+//    modifier: Modifier = Modifier,
+//    updateMedicineName: (String) -> Unit,
+//    addMedicine: () -> Unit,
+//    updateMedicine: () -> Unit,
+//    paddingValues: PaddingValues,
+//    updateMedicineStock: (Int) -> Unit,
+//    updateMedicineAisle: (Aisle) -> Unit,
+//    aisleListViewModel: AisleListViewModel,
+//    medicineCrudAction: CrudAction,
+//) {
+//    val configuration = LocalConfiguration.current
+//    val orientation = configuration.orientation
+//    val isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE
+//
+//    if(!isLandscape){
+//        Column(
+//            modifier = modifier
+//                .fillMaxSize()
+//                .padding(paddingValues)
+//                .padding(bottom = SharedPadding.xxl)
+//                .padding(horizontal = SharedPadding.large),
+//    //            .let { if (isLandscape) it.verticalScroll(rememberScrollState()) else it},
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//        ) {
+//            AddScreenTextForm(
+//                medicine = medicine,
+//                updateMedicineName = updateMedicineName,
+//                updateMedicineStock = updateMedicineStock,
+//                updateMedicineAisle = updateMedicineAisle,
+//                aisleListViewModel = aisleListViewModel,
+//                medicineCreation = medicineCrudAction == CrudAction.ADD,
+//                isStockError = medicine.stock.toString().isEmpty()
+//                        && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
+//            )
+//
+//            RebonnteSaveButton(
+//                onClick = {
+//                    when (medicineCrudAction) {
+//                        CrudAction.ADD -> {
+//                            Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: AddMedicine()")
+//                            addMedicine()
+//                        }
+//
+//                        CrudAction.UPDATE -> {
+//                            Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: UpdateMedicine()")
+//                            updateMedicine()
+//                        }
+//
+//                        else -> {}
+//                    }
+//                },
+//                enabled = (
+//                        medicine.name.isNotEmpty()
+//                                && medicine.aisle.name.isNotEmpty()
+//                                && medicine.stock.toString().isNotEmpty()
+//                                && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
+//                        )
+//            )
+//            SpacerLarge()
+//            TextTitleLarge(text = stringResource(R.string.change_record))
+//            SpacerMedium()
+//
+//            with(medicine) {
+//                RebonnteItemList(
+//                    itemId = MedicineChange::id,
+//                    itemList = changeRecord,
+//                    getItemTitle = MedicineChange::getTitle,
+//                    itemText = MedicineChange::getDescription,
+//                    isLastPage = true,
+//                    loadNextPage = {}
+//                )
+//            }
+//        }
+//    } else {
+//        Row(
+//            modifier = modifier
+//                .fillMaxSize()
+//                .padding(paddingValues)
+//                .padding(bottom = SharedPadding.small)
+//                .padding(horizontal = SharedPadding.large),
+//            //            .let { if (isLandscape) it.verticalScroll(rememberScrollState()) else it},
+//        ) {
+//            Column(
+//                modifier = Modifier.weight(1f)
+//            ) {
+//                AddScreenTextForm(
+//                    medicine = medicine,
+//                    updateMedicineName = updateMedicineName,
+//                    updateMedicineStock = updateMedicineStock,
+//                    updateMedicineAisle = updateMedicineAisle,
+//                    aisleListViewModel = aisleListViewModel,
+//                    medicineCreation = medicineCrudAction == CrudAction.ADD,
+//                    isStockError = medicine.stock.toString().isEmpty()
+//                            && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
+//                )
+//
+//                RebonnteSaveButton(
+//                    onClick = {
+//                        when (medicineCrudAction) {
+//                            CrudAction.ADD -> {
+//                                Log.d("OM_TAG", "AddScreenBody::AddScreenSaveButton: AddMedicine()")
+//                                addMedicine()
+//                            }
+//
+//                            CrudAction.UPDATE -> {
+//                                Log.d(
+//                                    "OM_TAG",
+//                                    "AddScreenBody::AddScreenSaveButton: UpdateMedicine()"
+//                                )
+//                                updateMedicine()
+//                            }
+//
+//                            else -> {}
+//                        }
+//                    },
+//                    enabled = (
+//                            medicine.name.isNotEmpty()
+//                                    && medicine.aisle.name.isNotEmpty()
+//                                    && medicine.stock.toString().isNotEmpty()
+//                                    && if (medicineCrudAction == CrudAction.UPDATE) medicine.stock != sourceMedicine.stock else true
+//                            )
+//                )
+//                SpacerLarge()
+//            }
+//            SpacerLarge()
+//            Column(
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//                modifier = Modifier.weight(1f)
+//            ) {
+//                TextTitleLarge(text = stringResource(R.string.change_record))
+//                SpacerMedium()
+//
+//                with(medicine) {
+//                    RebonnteItemList(
+//                        itemId = MedicineChange::id,
+//                        itemList = changeRecord,
+//                        getItemTitle = MedicineChange::getTitle,
+//                        itemText = MedicineChange::getDescription,
+//                        isLastPage = true,
+//                        loadNextPage = {}
+//                    )
+//                }
+//            }
+//        }
+//    }
+//}
+//
