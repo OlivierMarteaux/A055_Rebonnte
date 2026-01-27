@@ -38,7 +38,7 @@ class EditMedicineSteps(private val composeRuleHolder: ComposeRuleHolder) {
                 if (texts == null || texts.size < 2) return@SemanticsMatcher false
 
                 val stockText = texts[1].text // second text
-                println(">>> StockText = $stockText") // visible in Gradle
+                println("OM_TAG >>> StockText = $stockText") // visible in Gradle
                 !stockText.contains("10")
             })
 //        composeRule.waitUntil(timeout) {

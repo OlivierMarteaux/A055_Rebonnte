@@ -94,3 +94,14 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: ./gradlew sonar --info
+
+      # Step 1 — Dump Logcat to a file after tests
+      - name: Dump logcat to file
+        run: adb logcat -d > logcat.txt
+
+      # Step 2 — Upload Logcat as a CI artifact
+      - name: Upload Logcat artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: logcat
+          path: logcat.txt
