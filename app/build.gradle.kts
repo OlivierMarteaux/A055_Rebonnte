@@ -22,25 +22,30 @@ configurations.all {
 }
 
 // SonarQube Cloud properties
-//sonarqube {
-//    properties {
-//        property("sonar.projectKey", "OlivierMarteaux_A055_Rebonnte")
-//        property("sonar.organization", "oliviermarteaux")
-//        property("sonar.host.url", "https://sonarcloud.io")
-//        property("sonar.gradle.skipCompile", true)
-//        property("sonar.coverage.jacoco.xmlReportPaths","build/reports/jacoco/test/jacocoTestReport.xml")
-//        property("sonar.androidLint.reportPaths","build/reports/lint-results-debug.xml")
-//    }
-//}
+sonarqube {
+    properties {
+        property("sonar.token", System.getenv("SONAR_TOKEN"))
+        property("sonar.projectKey", "OlivierMarteaux_A055_Rebonnte")
+        property("sonar.organization", "oliviermarteaux")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.gradle.skipCompile", true)
+        property("sonar.coverage.jacoco.xmlReportPaths","build/reports/jacoco/test/jacocoTestReport.xml")
+        property("sonar.androidLint.reportPaths","build/reports/lint-results-debug.xml")
+    }
+}
 
 tasks.named("sonar") {
     dependsOn(
-        "lintDebug", "jacocoTestReport"
+        "ensureEmulator","lintDebug", "jacocoTestReport"
     )
 }
 
 // Specific for JaCoCo
 tasks.withType<Test> {
+    reports {
+        junitXml.required.set(true)
+        html.required.set(true)
+    }
     extensions.configure(JacocoTaskExtension::class) {
         isIncludeNoLocationClasses = true
         excludes = listOf("jdk.internal.*")
@@ -62,18 +67,6 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
-//        // For GoogleMaps API
-//        val localProperties = Properties()
-//        val localPropertiesFile = rootProject.file("local.properties")
-//        if (localPropertiesFile.exists()) {
-//            localPropertiesFile.inputStream().use { localProperties.load(it) }
-//        }
-//        val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY") ?: ""
-//        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
-
-        // choose test runner
-//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner = "com.oliviermarteaux.a055_rebonnte.test.MyCucumberTestRunner"
     }
 
@@ -94,7 +87,7 @@ android {
     }
 
     //_ for Firebase App Distribution via Github Action: retrieve github secrets for signing keystore
-//    signingConfigs {
+    signingConfigs {
 //        create("release") {
 //            val keystorePath = System.getenv("KEYSTORE_PATH")
 //
@@ -105,12 +98,22 @@ android {
 //                keyPassword = System.getenv("KEY_PASSWORD")
 //            }
 //        }
-//    }
+        create("release") {
+            val keystorePath = System.getenv("KEYSTORE_PATH")
+
+            if (!keystorePath.isNullOrBlank()) {
+                storeFile = file(keystorePath)
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
 
     buildTypes {
         release {
 //            applicationIdSuffix = ".release"
-//            signingConfig = signingConfigs.getByName("release")//_ force assembleRelease to provide signed APK
+            signingConfig = signingConfigs.getByName("release")//_ force assembleRelease to provide signed APK
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -175,12 +178,35 @@ val androidExtension = extensions.getByType<BaseExtension>()
 val jacocoTestReport by tasks.registering(JacocoReport::class) {
     dependsOn(/*"clean" , */"ensureEmulator", "testDebugUnitTest", "createDebugCoverageReport")
     mustRunAfter(
+        "compileReleaseJavaWithJavac",
+        "hiltAggregateDepsRelease",
+        "hiltJavaCompileRelease",
+        "kspReleaseKotlin",
+        "injectCrashlyticsMappingFileIdRelease",
+        "mergeReleaseAssets",
+        "transformReleaseClassesWithAsm",
+        "compressReleaseAssets",
+        "minifyReleaseWithR8",
+        "checkReleaseDuplicateClasses",
+        "mergeReleaseJniLibFolders",
+        "mergeReleaseJavaResource",
+        "processReleaseJavaRes",
+        "lintVitalAnalyzeRelease",
+        "generateReleaseLintVitalReportModel",
+        "mergeReleaseNativeLibs",
+        "extractReleaseNativeSymbolTables",
+        "stripReleaseDebugSymbols",
+        "buildKotlinToolingMetadata",
         "lintDebug",
         "lintAnalyzeDebug",
         "lintAnalyzeDebugAndroidTest",
         "generateDebugLintReportModel",
         "generateDebugAndroidTestLintModel",
-        "extractProguardFiles"
+        "extractProguardFiles",
+        "compileReleaseArtProfile",
+        "convertShrunkResourcesToBinaryRelease",
+        "optimizeReleaseResources",
+        "packageRelease"
     )
     group = "Reporting"
     description = "Generate Jacoco coverage reports"
@@ -217,6 +243,12 @@ val jacocoTestReport by tasks.registering(JacocoReport::class) {
     executionData.setFrom(fileTree(buildDir) {
         include("**/*.exec", "**/*.ec")
     })
+//    executionData.setFrom(
+//        files(
+//            "$buildDir/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+//            "$buildDir/outputs/code_coverage/debugAndroidTest/connected/**/*.ec"
+//        )
+//    )
 
     doLast {
         println()

@@ -30,7 +30,7 @@
 ###########################################
 # Project Firebase Firestore Models
 ###########################################
--keep class com.oliviermarteaux.shared.firebase.firestore.domain.model.** {
+-keep class com.oliviermarteaux.a055_rebonnte.domain.model.** {
     <fields>;
     <methods>;
 }
