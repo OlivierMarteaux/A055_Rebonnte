@@ -12,7 +12,7 @@ class EditMedicineSteps(private val composeRuleHolder: ComposeRuleHolder) {
 
     @And("I should see the edited medicine with the updated stock")
     fun iShouldSeeMedicineWithUpdatedStock() {
-        Thread.sleep(2000)
+        //Thread.sleep(2000)
 
         // Check that the first events are visible
         composeRule.onNodeWithText("Paracetamol").assertIsDisplayed()
