@@ -36,7 +36,7 @@ sonarqube {
 
 tasks.named("sonar") {
     dependsOn(
-        "lintDebug", "jacocoTestReport"
+        "ensureEmulator","lintDebug", "jacocoTestReport"
     )
 }
 
