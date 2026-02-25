@@ -133,6 +133,8 @@ To install the Rebonnte application on your physical Android device:
 ## 👨‍💼 Author
 
 _Olivier Marteaux_  
+https://oliviermarteaux.dev  
+  
 Former aerospace engineer turned Android developer.
 
 Read more about my transition on [LinkedIn](https://linkedin.com/in/olivier-marteaux).  

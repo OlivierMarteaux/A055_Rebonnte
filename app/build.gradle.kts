@@ -12,9 +12,11 @@ plugins {
     // Add the dependency for the Google services Gradle plugin for Firebase authentication
     alias(libs.plugins.googleservices)
     alias(libs.plugins.crashlytics) // firebase crashlytics
+    // sonar fix: force compatible Sonar plugin version - Do NOT use latest blindly - to avoid dependency conflict
     id("org.sonarqube") version "4.4.1.3373" // SonarCloud CI/CD
 }
 
+// sonar fix: force commons-compress dependency version to avoid dependency conflict (bulletproof fix): This eliminates the runtime mismatch.
 configurations.all {
     resolutionStrategy {
         force("org.apache.commons:commons-compress:1.25.0")
@@ -88,16 +90,6 @@ android {
 
     //_ for Firebase App Distribution via Github Action: retrieve github secrets for signing keystore
     signingConfigs {
-//        create("release") {
-//            val keystorePath = System.getenv("KEYSTORE_PATH")
-//
-//            if (!keystorePath.isNullOrBlank()) {
-//                storeFile = file(keystorePath)
-//                storePassword = System.getenv("KEYSTORE_PASSWORD")
-//                keyAlias = System.getenv("KEY_ALIAS")
-//                keyPassword = System.getenv("KEY_PASSWORD")
-//            }
-//        }
         create("release") {
             val keystorePath = System.getenv("KEYSTORE_PATH")
 
@@ -340,15 +332,14 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
 
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.navigation.compose) // Navigation
-    implementation(libs.material.icons.extended) // Icons (full material library)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx) // usage of lifecycleScope
+    implementation(libs.androidx.navigation.compose) // Navigation
+    implementation(libs.material.icons.extended) // Icons (full material library)
 
     //_ Preferences DataStore
     implementation(libs.datastore.preferences)
